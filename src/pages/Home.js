@@ -72,7 +72,7 @@ function Home() {
   }, [])
 
   const shortData = data.slice(0, 4);
-  const instaData = data.slice(5, 9);
+  const instaData = data.slice(4, 8);
 
   return (
     <>

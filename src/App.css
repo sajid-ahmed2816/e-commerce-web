@@ -234,18 +234,27 @@ section.instagram .row .col-xl-3 {
   margin-block: 10px;
 }
 
-.cart-btn {
+.col-xl-3 >* .cart-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
   background: #1a1a1a;
   color: #fff;
+  /* opacity: 0; */
   display: none;
-  transition: absolute 0.3s ease-in-out, bottom 0.3s ease-in-out;
 }
 
-.col-xl-3:hover >* .cart-btn {
+.col-xl-3 >*:hover .cart-btn {
   display: block;
   position: absolute;
+  /* opacity: 1; */
   bottom: 30%;
+}
+
+.des-pg-cart-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: #fff;
 }
