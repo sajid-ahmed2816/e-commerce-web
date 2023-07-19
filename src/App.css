@@ -98,6 +98,7 @@ section.hero >* p span {
   height: 200px;
   width: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 
 section.categories>* .col-md-4 {
@@ -138,23 +139,14 @@ section.product-cards .row .col-xl-3 {
   margin-block: 10px;
 }
 
+section.product-cards .row .col-xl-3 >* {
+  cursor: pointer;
+}
+
 .btn-container {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.cusBtn {
-  padding: 10px;
-  display: none;
-  transition: top 0.3s ease-in-out;
-  top: 40%;
-}
-
-.col-xl-3:hover .cusBtn {
-  display: block;
-  position: absolute;
-  text-align: center;
 }
 
 .instagram {
@@ -236,4 +228,24 @@ section.instagram .row .col-xl-3 {
 
 .all-products .col-xl-3 {
   margin-block: 10px;
+}
+
+.women-section .col-xl-3 {
+  margin-block: 10px;
+}
+
+.cart-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: #fff;
+  display: none;
+  transition: absolute 0.3s ease-in-out, bottom 0.3s ease-in-out;
+}
+
+.col-xl-3:hover >* .cart-btn {
+  display: block;
+  position: absolute;
+  bottom: 30%;
 }

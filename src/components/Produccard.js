@@ -1,4 +1,5 @@
 import Card from 'react-bootstrap/Card';
+import Cartbutton from './Cartbutton';
 
 function ProductCard(props) {
   let { CardTitle, src, Price, onClick } = props
@@ -28,7 +29,7 @@ function ProductCard(props) {
           ${Price}
         </Card.Text>
         <div className='btn-container'>
-          <button className='cusBtn' onClick={onClick}>Add to Cart</button>
+          <Cartbutton onClick={onClick}/>
         </div>
       </Card.Body>
     </Card>

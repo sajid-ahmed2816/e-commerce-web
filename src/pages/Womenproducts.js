@@ -29,7 +29,7 @@ function Womenproducts() {
 
     useEffect(() => {
         getProducts()
-    }, []);
+    });
 
     console.log(data)
 
