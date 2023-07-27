@@ -258,3 +258,11 @@ section.instagram .row .col-xl-3 {
   background: #1a1a1a;
   color: #fff;
 }
+
+.cart-table >* table thead tr{
+  display: flex;
+}
+
+.cart-table >* table thead tr th td{
+  width: calc(250px);
+}
