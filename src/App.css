@@ -259,10 +259,37 @@ section.instagram .row .col-xl-3 {
   color: #fff;
 }
 
-.cart-table >* table thead tr{
+.cart-table >* table{
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #000;
 }
 
-.cart-table >* table thead tr th td{
-  width: calc(250px);
+.cart-table >* table thead tr{
+  display: flex;
+  border-bottom: 1px solid #000;
+}
+
+.cart-table >* table thead tr th{
+  width: calc(223px);
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
+.cart-table >* table tbody tr{
+  display: flex;
+  align-items: center;
+}
+
+.cart-table >* table tbody tr td{
+  width: calc(223px);
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
+.cart-table >* table tbody tr >* p{
+  margin: 0 !important;
 }
