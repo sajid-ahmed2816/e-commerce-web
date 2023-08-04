@@ -101,7 +101,6 @@ function Cart() {
           </table>
         </div>
       </section>
-      <p>Total Price: ${getTotalPrice()}</p>
 
       <Footer />
     </>

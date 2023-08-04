@@ -240,15 +240,21 @@ section.instagram .row .col-xl-3 {
   border-radius: 6px;
   background: #1a1a1a;
   color: #fff;
-  /* opacity: 0; */
   display: none;
+  transition: color .2s ease-in-out, background .2s ease-in-out;
 }
 
 .col-xl-3 >*:hover .cart-btn {
   display: block;
   position: absolute;
-  /* opacity: 1; */
   bottom: 30%;
+}
+
+.cart-btn:active {
+  background: transparent;
+  color: #1a1a1a;
+  border: 1px solid #1a1a1a;
+  font-weight: 500;
 }
 
 .des-pg-cart-btn {
