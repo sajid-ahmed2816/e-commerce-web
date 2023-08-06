@@ -3,6 +3,8 @@ import Footer from "../components/Footer";
 import { useSelector, useDispatch } from "react-redux";
 import { remove } from "../config/redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../App.css";
 
 function Cart() {
@@ -48,6 +50,10 @@ function Cart() {
     }, 0);
   };
 
+  const deliveryCharges = getTotalPrice() !== 0 ? 100.00 : 0;
+
+  const grandTotal = getTotalPrice() === 0 ? 0 : getTotalPrice() + deliveryCharges;
+
   return (
     <>
       <Header />
@@ -58,11 +64,10 @@ function Cart() {
           <table>
             <thead>
               <tr>
-                <th></th>
                 <th>Product</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Subtotal</th>
+                <th>Sub Total</th>
               </tr>
             </thead>
             <tbody>
@@ -70,13 +75,14 @@ function Cart() {
                 cartData.map((item) => (
                   <tr key={item.id}>
                     <td>
-                      <button onClick={() => handleRemove(item.id)}>Remove from Cart</button>
+                      <button className="del-item-btn" onClick={() => handleRemove(item.id)}>
+                        <FontAwesomeIcon icon={faTrash}/>
+                      </button>
+                      <img src={item.image} alt="product" width="80px" />
+                      <p>{item.title}</p>
                     </td>
                     <td>
-                      <img src={item.image} alt="product" width="50px" />
-                    </td>
-                    <td>
-                      <p><b>$</b>{item.price}</p>
+                      <p>${item.price}</p>
                     </td>
                     <td>
                       <p>
@@ -86,7 +92,7 @@ function Cart() {
                       </p>
                     </td>
                     <td>
-                      <p><b>$</b>{item.price * (itemQuantities[item.id] || 0)}</p>
+                      <p>${item.price * (itemQuantities[item.id] || 0)}</p>
                     </td>
                   </tr>
                 ))
@@ -99,6 +105,41 @@ function Cart() {
               )}
             </tbody>
           </table>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="promocode-sec">
+                <p className="promocode-sec-heading">Payment Method</p>
+                <select className="method-selector" onChange={(e)=>e.target.value}>
+                  <option value=""></option>
+                  <option value="cash">Cash</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="checkout-sec">
+                <p className="checkout-sec-heading">Cart Total</p>
+                <table className="checkout-table">
+                  <tbody className="checkout-table-body">
+                    <tr>
+                      <td>Sub Total</td>
+                      <td>${getTotalPrice()}</td>
+                    </tr>
+                    <tr>
+                      <td>Delivery Charges</td>
+                      <td>${deliveryCharges}</td>
+                    </tr>
+                    <tr>
+                      <td>Grand Total</td>
+                      <td>${grandTotal}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="order-btn-container">
+                  <button className="order-btn">Place Order</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
