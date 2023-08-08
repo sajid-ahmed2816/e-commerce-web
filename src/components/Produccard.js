@@ -21,7 +21,7 @@ function ProductCard(props) {
           {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
-            width: '190px',
+            width: '230px',
             overflow: 'hidden'
           }
         }>{CardTitle}</Card.Title>

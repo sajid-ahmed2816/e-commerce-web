@@ -71,8 +71,16 @@ function Home() {
     getProducts()
   }, [])
 
+  // const shortData = []
   const shortData = data.slice(0, 4);
   const instaData = data.slice(4, 8);
+
+  // let item1 = data.filter(x => x.id === 2)
+  // let item2 = data.filter(x => x.id === 8)
+  // let item3 = data.filter(x => x.id === 14)
+  // let item4 = data.filter(x => x.id === 20)
+
+  // shortData.push(item1, item2, item3, item4)
 
   return (
     <>
@@ -180,6 +188,51 @@ function Home() {
                 />
               </div>
             )}
+            {/* {shortData.map((x, i) => 
+              <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
+                <ProductCard
+                  Price={x.price}
+                  id={x.id}
+                  CardTitle={x.title}
+                  src={x.image}
+                  onClick={() => handleAdd(x)}
+                />
+              </div>
+            )} */}
+          </div>
+        </div>
+      </section>
+
+      <section className="product-cards">
+        <div className="container">
+          <div className='d-flex p-3 justify-content-center align-items-center'>
+            <h2>
+              Featured Products You Like
+            </h2>
+          </div>
+          <div className="row">
+            {shortData.map((x, i) =>
+              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i} onClick={() => handleSelectAdd(x)}>
+                <ProductCard
+                  Price={x.price}
+                  id={x.id}
+                  CardTitle={x.title}
+                  src={x.image}
+                  onClick={() => handleAdd(x)}
+                />
+              </div>
+            )}
+            {/* {shortData.map((x, i) => 
+              <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
+                <ProductCard
+                  Price={x.price}
+                  id={x.id}
+                  CardTitle={x.title}
+                  src={x.image}
+                  onClick={() => handleAdd(x)}
+                />
+              </div>
+            )} */}
           </div>
         </div>
       </section>
