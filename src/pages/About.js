@@ -1,6 +1,5 @@
-import React from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function About() {
   return (
@@ -11,7 +10,7 @@ function About() {
         <div className='container'>
           <div className='row'>
             <div className='col-md-12'>
-              <div className='blog-1'>
+              <div className='blog-1 animate-slideFromTop'>
                 <div className='row'>
                   <div className='col-md-8'>
                     <div className='blog-para'>
@@ -28,7 +27,7 @@ function About() {
                   <div className='col-md-4'>
                     <figure className='blog-img'>
                       <img 
-                        src='https://www.realmenrealstyle.com/wp-content/uploads/2013/07/Style-Tips-For-Tall-Men.jpg'
+                        src='https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-842811.jpg&fm=jpg'
                         alt='men'
                         width='100%'
                       />
@@ -36,12 +35,12 @@ function About() {
                   </div>
                 </div>
               </div>
-              <div className='blog-2'>
+              <div className='blog-2 animate-slideFromLeft'>
                 <div className='row'>
                   <div className='col-md-4'>
                     <figure className='blog-img'>
                       <img
-                        src='https://img.freepik.com/free-photo/positive-woman-stylish-outfit-moves-pink-background-pretty-woman-white-blouse-red-high-heels-is-smiling-camera_197531-18611.jpg?w=2000'
+                        src='https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-974911.jpg&fm=jpg'
                         alt='women'
                         width='100%'
                       />
@@ -61,7 +60,7 @@ function About() {
                   </div>
                 </div>
               </div>
-              <div className='blog-3'>
+              <div className='blog-3 animate-slideFromRight'>
               <div className='row'>
                   <div className='col-md-8'>
                     <div className='blog-para'>
@@ -78,7 +77,7 @@ function About() {
                   <div className='col-md-4'>
                     <figure className='blog-img'>
                       <img 
-                        src='https://www.realmenrealstyle.com/wp-content/uploads/2013/07/Style-Tips-For-Tall-Men.jpg'
+                        src='https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg'
                         alt='men'
                         width='100%'
                       />
@@ -86,12 +85,12 @@ function About() {
                   </div>
                 </div>
               </div>
-              <div className='blog-4'>
+              <div className='blog-4 animate-slideFromBottom'>
               <div className='row'>
                   <div className='col-md-4'>
                     <figure className='blog-img'>
                       <img
-                        src='https://img.freepik.com/free-photo/positive-woman-stylish-outfit-moves-pink-background-pretty-woman-white-blouse-red-high-heels-is-smiling-camera_197531-18611.jpg?w=2000'
+                        src='https://images.pexels.com/photos/213162/pexels-photo-213162.jpeg?cs=srgb&dl=pexels-photomix-company-213162.jpg&fm=jpg'
                         alt='women'
                         width='100%'
                       />

@@ -413,6 +413,13 @@ section.cart-table >* button.order-btn {
   padding: 10px 20px;
 }
 
+section.about-sec >* .blog-1, 
+section.about-sec >* .blog-2,
+section.about-sec >* .blog-3,
+section.about-sec >* .blog-4 {
+  margin-block: 50px;
+}
+
 section.about-sec >* .blog-para {
   height: 100%;
   display: flex;
@@ -421,4 +428,61 @@ section.about-sec >* .blog-para {
 
 section.about-sec >* p {
   line-height: 38px;
+  margin: 0;
+}
+
+section.about-sec >* figure {
+  margin: 0;
+}
+
+@keyframes slideFromTop {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideFromBottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slideFromTop {
+  animation: slideFromTop 1s ease-in-out;
+}
+
+.animate-slideFromRight {
+  animation: slideFromRight 2s ease-in-out;
+}
+
+.animate-slideFromLeft {
+  animation: slideFromLeft 3s ease-in-out;
+}
+
+.animate-slideFromBottom {
+  animation: slideFromBottom 3s ease-in-out;
 }
