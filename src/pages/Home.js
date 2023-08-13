@@ -14,10 +14,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 function Home() {
   const [index, setIndex] = useState(0);
   const [data, setData] = useState([]);
+  const [shortData, setShortData] = useState([]);
+  const [randomData, setRandomData] = useState([]);
+  const [instaData, setInstaData] = useState([]);
+  
   let imgsArr = [
-    "https://www.realmenrealstyle.com/wp-content/uploads/2013/07/Style-Tips-For-Tall-Men.jpg",
-    "https://content.api.news/v3/images/bin/9e887bb6e1921efa8550896c0840a3e3",
-    "https://img.freepik.com/free-photo/positive-woman-stylish-outfit-moves-pink-background-pretty-woman-white-blouse-red-high-heels-is-smiling-camera_197531-18611.jpg?w=2000"
+    "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-842811.jpg&fm=jpg",
+    "https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-974911.jpg&fm=jpg",
+    "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg",
+    "https://images.pexels.com/photos/213162/pexels-photo-213162.jpeg?cs=srgb&dl=pexels-photomix-company-213162.jpg&fm=jpg"
   ];
   let url = 'https://fakestoreapi.com/products'
   const dispatch = useDispatch();
@@ -31,7 +36,28 @@ function Home() {
     axios.get(url)
       .then((res) => {
         setData([...data, ...res.data])
-        console.log(data)
+        console.log(data);
+
+        let item1 = res.data.find(x => x.id === 2);
+        let item2 = res.data.find(x => x.id === 7);
+        let item3 = res.data.find(x => x.id === 14);
+        let item4 = res.data.find(x => x.id === 20);
+
+        setRandomData([...randomData, item1, item2, item3, item4]);
+        
+        let shDtItem1 = res.data.find(x => x.id === 3);
+        let shDtItem2 = res.data.find(x => x.id === 4);
+        let shDtItem3 = res.data.find(x => x.id === 15);
+        let shDtItem4 = res.data.find(x => x.id === 16);
+
+        setShortData([...shortData, shDtItem1, shDtItem2, shDtItem3, shDtItem4]);
+
+        let instaItem1 = res.data.find(x => x.id === 1);
+        let instaItem2 = res.data.find(x => x.id === 8);
+        let instaItem3 = res.data.find(x => x.id === 12);
+        let instaItem4 = res.data.find(x => x.id === 17);
+
+        setInstaData([...instaData, instaItem1, instaItem2, instaItem3, instaItem4]);
       })
       .catch((err) => {
         console.log(err)
@@ -54,6 +80,10 @@ function Home() {
     navigate('/category/womenwear')
   }
 
+  const handleElectronicCategory = () => {
+    navigate('/category/electronics')
+  }
+
   const handleSelectAdd = (data) => {
     navigate(`/description/${data.id}`, 
       { 
@@ -68,26 +98,15 @@ function Home() {
   }
 
   useEffect(() => {
-    getProducts()
+    getProducts();
   }, [])
 
-  // const shortData = []
-  const shortData = data.slice(0, 4);
-  const instaData = data.slice(4, 8);
-
-  // let item1 = data.filter(x => x.id === 2)
-  // let item2 = data.filter(x => x.id === 8)
-  // let item3 = data.filter(x => x.id === 14)
-  // let item4 = data.filter(x => x.id === 20)
-
-  // shortData.push(item1, item2, item3, item4)
+  console.log(randomData)
 
   return (
     <>
       {/* Header Section */}
-      <header>
-        <Header />
-      </header>
+      <Header />
 
       {/* Hero Section */}
 
@@ -125,10 +144,26 @@ function Home() {
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
+              <img
+                className="d-block"
+                src={imgsArr[2]}
+                alt="Third slide"
+              />
+
+            <Carousel.Caption>
+              <p>
+                <Button onClick={handleHeroButton}/>
+                <span>
+                  A perfect choice for your fashion standard.  
+                </span> 
+              </p>
+            </Carousel.Caption>
+          </Carousel.Item>
+          <Carousel.Item>
             <img
               className="d-block"
-              src={imgsArr[2]}
-              alt="Third slide"
+              src={imgsArr[3]}
+              alt="Fourth slide"
             />
 
             <Carousel.Caption>
@@ -148,19 +183,24 @@ function Home() {
       <section className="categories">
         <div className="container">
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-3">
               <div onClick={handleMenCategory}>
                 <img src={imgsArr[0]} alt="" />
               </div>
             </div>
-            <div className="col-md-4">
-              <div onClick={handleAccessoriesCategory}>
+            <div className="col-md-3">
+              <div onClick={handleWomenCategory}>
                 <img src={imgsArr[1]} alt="" />
               </div>
             </div>
-            <div className="col-md-4">
-              <div onClick={handleWomenCategory}>
+            <div className="col-md-3">
+              <div onClick={handleAccessoriesCategory}>
                 <img src={imgsArr[2]} alt="" />
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div onClick={handleElectronicCategory}>
+                <img src={imgsArr[3]} alt="" />
               </div>
             </div>
           </div>
@@ -172,11 +212,11 @@ function Home() {
       <section className="product-cards">
         <div className="container">
           <div className='d-flex p-3 justify-content-center align-items-center'>
-            <h2>
+            <h1>
               Hot Products Selling on Demand
-            </h2>
+            </h1>
           </div>
-          <div className="row">
+          <div className="row my-5">
             {shortData.map((x, i) =>
               <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i} onClick={() => handleSelectAdd(x)}>
                 <ProductCard
@@ -188,65 +228,45 @@ function Home() {
                 />
               </div>
             )}
-            {/* {shortData.map((x, i) => 
-              <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
-                <ProductCard
-                  Price={x.price}
-                  id={x.id}
-                  CardTitle={x.title}
-                  src={x.image}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
-            )} */}
-          </div>
-        </div>
-      </section>
-
-      <section className="product-cards">
-        <div className="container">
-          <div className='d-flex p-3 justify-content-center align-items-center'>
-            <h2>
-              Featured Products You Like
-            </h2>
-          </div>
-          <div className="row">
-            {shortData.map((x, i) =>
-              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i} onClick={() => handleSelectAdd(x)}>
-                <ProductCard
-                  Price={x.price}
-                  id={x.id}
-                  CardTitle={x.title}
-                  src={x.image}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
-            )}
-            {/* {shortData.map((x, i) => 
-              <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
-                <ProductCard
-                  Price={x.price}
-                  id={x.id}
-                  CardTitle={x.title}
-                  src={x.image}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
-            )} */}
           </div>
         </div>
       </section>
 
       {/* Products Card Section */}
+
+      <section className="product-cards">
+        <div className="container">
+          <div className='d-flex p-3 justify-content-center align-items-center'>
+            <h1>
+              Featured Products You Like
+            </h1>
+          </div>
+          <div className="row my-5">
+            {randomData.map((x, i) =>
+              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i} onClick={() => handleSelectAdd(x)}>
+                <ProductCard
+                  Price={x.price}
+                  id={x.id}
+                  CardTitle={x.title}
+                  src={x.image}
+                  onClick={() => handleAdd(x)}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Instagram Section */}
 
       <section className="instagram">
         <div className="container">
           <div className='p-5 d-flex justify-content-center align-items-center'>
-            <h2>
+            <h1>
               Gallery Of Our Featured Produts
-            </h2>
+            </h1>
           </div>
-          <div className="row">
+          <div className="row my-5">
             {instaData.map((x, i) =>
               <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                 <div className='insta-images'>
@@ -258,8 +278,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Products Card Section */}
-
+      {/* Footer Section */}
       <Footer />
     </>
   )
