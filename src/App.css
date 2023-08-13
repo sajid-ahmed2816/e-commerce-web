@@ -438,41 +438,49 @@ section.about-sec >* figure {
 @keyframes slideFromTop {
   from {
     transform: translateY(-100%);
+    opacity: 0;
   }
   to {
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
 @keyframes slideFromRight {
   from {
     transform: translateX(100%);
+    opacity: 0;
   }
   to {
     transform: translateX(0);
+    opacity: 1;
   }
 }
 
 @keyframes slideFromLeft {
   from {
     transform: translateX(-100%);
+    opacity: 0;
   }
   to {
     transform: translateX(0);
+    opacity: 1;
   }
 }
 
 @keyframes slideFromBottom {
   from {
     transform: translateY(100%);
+    opacity: 0;
   }
   to {
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
 .animate-slideFromTop {
-  animation: slideFromTop 1s ease-in-out;
+  animation: slideFromTop 1.5s ease-in-out;
 }
 
 .animate-slideFromRight {
@@ -480,9 +488,9 @@ section.about-sec >* figure {
 }
 
 .animate-slideFromLeft {
-  animation: slideFromLeft 3s ease-in-out;
+  animation: slideFromLeft 2.5s ease-in-out;
 }
 
 .animate-slideFromBottom {
-  animation: slideFromBottom 3s ease-in-out;
+  animation: slideFromBottom 3.5s ease-in-out;
 }
