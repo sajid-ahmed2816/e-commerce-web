@@ -494,3 +494,19 @@ section.about-sec >* figure {
 .animate-slideFromBottom {
   animation: slideFromBottom 3.5s ease-in-out;
 }
+
+section.stores {
+  margin-block: 70px;
+}
+
+section.stores >* .btn-map {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+section.stores >* .leaflet-touch .leaflet-control-attribution {
+  display: none;
+}
