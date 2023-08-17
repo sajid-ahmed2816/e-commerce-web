@@ -10,7 +10,35 @@ function Store() {
 
   const handleMarkerButtonClick = () => {
     // Set the marker position to a specific latitude and longitude
-    setMarkerPosition([24.9103194, 67.0583741]);
+    setMarkerPosition([24.9148784, 67.0509303]);
+  };
+  const handleMarkerButtonClick1 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9011627, 24.9011627]);
+  };
+  const handleMarkerButtonClick2 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9148784, 67.0509303]);
+  };
+  const handleMarkerButtonClick3 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9148784, 67.0509303]);
+  };
+  const handleMarkerButtonClick4 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9148784, 67.0509303]);
+  };
+  const handleMarkerButtonClick5 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9148784, 67.0509303]);
+  };
+  const handleMarkerButtonClick6 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9148784, 67.0509303]);
+  };
+  const handleMarkerButtonClick7 = () => {
+    // Set the marker position to a specific latitude and longitude
+    setMarkerPosition([24.9148784, 67.0509303]);
   };
 
   return (
@@ -37,43 +65,43 @@ function Store() {
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick1}>View on map</button>
                 </div>
                 <div className="address">
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick2}>View on map</button>
                 </div>
                 <div className="address">
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick3}>View on map</button>
                 </div>
                 <div className="address">
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick4}>View on map</button>
                 </div>
                 <div className="address">
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick5}>View on map</button>
                 </div>
                 <div className="address">
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick6}>View on map</button>
                 </div>
                 <div className="address">
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, consequatur? 
                   </p>
-                  <button className="btn-map" onClick={handleMarkerButtonClick}>View on map</button>
+                  <button className="btn-map" onClick={handleMarkerButtonClick7}>View on map</button>
                 </div>
               </div>
             </div>
