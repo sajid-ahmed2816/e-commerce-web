@@ -499,6 +499,13 @@ section.stores {
   margin-block: 70px;
 }
 
+section.stores >* .box {
+  border-top: 40px solid #adadad;
+  border-bottom: 40px solid #adadad;
+  height: 400px;
+  overflow-y: scroll;
+}
+
 section.stores >* .btn-map {
   width: 100%;
   padding: 8px;
