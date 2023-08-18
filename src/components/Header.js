@@ -30,39 +30,41 @@ function Header() {
           <FontAwesomeIcon icon={faCircleUser} style={{ color: '#fff', fontSize: '22px', display: 'flex', alignItems: 'center' }} />
         </div>
       </header>
-      <header className="header">
-        <div className="container">
-          <div className="logo">
-            Fashion Brand
+      <div className="sticky-header">
+        <header className="header">
+          <div className="container">
+            <div className="logo">
+              Fashion Brand
+            </div>
+            <hr />
+            <Navbar expand="lg" className="navbar">
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <ul className="navlinks">
+                  <li className="navitem">
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li className="navitem">
+                    <Link to="/about">About</Link>
+                  </li>
+                  <li className="navitem">
+                    <Link to="/products">Products</Link>
+                  </li>
+                  <li className="navitem">
+                    <Link to="/store">Stores</Link>
+                  </li>
+                  <li className="navitem">
+                    <input type="text" />
+                    <button className="search-btn">
+                      <FontAwesomeIcon icon={faSearch} style={{ color: 'gray' }} />
+                    </button>
+                  </li>
+                </ul>
+              </Navbar.Collapse>
+            </Navbar>
           </div>
-          <hr />
-          <Navbar expand="lg" className="navbar">
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <ul className="navlinks">
-                <li className="navitem">
-                  <Link to="/">Home</Link>
-                </li>
-                <li className="navitem">
-                  <Link to="/about">About</Link>
-                </li>
-                <li className="navitem">
-                  <Link to="/products">Products</Link>
-                </li>
-                <li className="navitem">
-                  <Link to="/store">Stores</Link>
-                </li>
-                <li className="navitem">
-                  <input type="text" />
-                  <button className="search-btn">
-                    <FontAwesomeIcon icon={faSearch} style={{ color: 'gray' }} />
-                  </button>
-                </li>
-              </ul>
-            </Navbar.Collapse>
-          </Navbar>
-        </div>
-      </header>
+        </header>
+      </div>
     </>
   );
 }

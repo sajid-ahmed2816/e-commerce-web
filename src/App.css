@@ -17,7 +17,16 @@
   margin: 0 !important;
 }
 
-.header {
+.sticky-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
+  background: #fff;
+}
+
+section.header {
   display: flex;
   flex-direction: column;
   justify-content: center;
