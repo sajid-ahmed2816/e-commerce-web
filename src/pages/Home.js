@@ -113,11 +113,13 @@ function Home() {
       <section className="hero">
         <Carousel activeIndex={index} onSelect={handleSelect} className="slider">
           <Carousel.Item>
-            <img
-              className="d-block"
-              src={imgsArr[0]}
-              alt="First slide"
-            />
+            <div className='overlay'>
+              <img
+                className="d-block"
+                src={imgsArr[0]}
+                alt="First slide"
+              />
+            </div>
             <Carousel.Caption>
               <p>
                 <Button onClick={handleHeroButton}/>
@@ -128,11 +130,13 @@ function Home() {
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
-            <img
-              className="d-block"
-              src={imgsArr[1]}
-              alt="Second slide"
-            />
+            <div className='overlay'>
+              <img
+                className="d-block"
+                src={imgsArr[1]}
+                alt="Second slide"
+              />
+            </div>
 
             <Carousel.Caption>
               <p>
@@ -144,11 +148,13 @@ function Home() {
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
+            <div className='overlay'>
               <img
                 className="d-block"
                 src={imgsArr[2]}
                 alt="Third slide"
               />
+            </div>
 
             <Carousel.Caption>
               <p>
@@ -160,11 +166,13 @@ function Home() {
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
-            <img
-              className="d-block"
-              src={imgsArr[3]}
-              alt="Fourth slide"
-            />
+            <div className='overlay'>
+              <img
+                className="d-block"
+                src={imgsArr[3]}
+                alt="Fourth slide"
+              />
+            </div>
 
             <Carousel.Caption>
               <p>
