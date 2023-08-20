@@ -17,4 +17,4 @@ function Cartbutton(props) {
   )
 }
 
-export default Cartbutton
+export default Cartbutton;

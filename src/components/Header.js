@@ -49,6 +49,12 @@ function Header() {
                   </li>
                   <li className="navitem">
                     <Link to="/products">Products</Link>
+                    <ul className="product-submenu">
+                      <li>Men's Clothing</li>
+                      <li>Women's Clothing</li>
+                      <li>Jewellery</li>
+                      <li>Electronics</li>
+                    </ul>
                   </li>
                   <li className="navitem">
                     <Link to="/store">Stores</Link>

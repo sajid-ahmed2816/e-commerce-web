@@ -56,7 +56,7 @@ function Product() {
     <>
       <Header />
       <div className="container">
-        <div className="row all-products">
+        <div className="row all-products mt-5">
 
           <h2 className='p-4 text-center display-5'>Men's Clothing</h2>
           {menWear.map((x, i) =>

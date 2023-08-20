@@ -101,7 +101,7 @@ function Home() {
     getProducts();
   }, [])
 
-  console.log(randomData)
+  console.log(data)
 
   return (
     <>
@@ -220,7 +220,7 @@ function Home() {
       <section className="product-cards">
         <div className="container">
           <div className='d-flex p-3 justify-content-center align-items-center'>
-            <h1>
+            <h1 className='display-4'>
               Hot Products Selling on Demand
             </h1>
           </div>
@@ -245,7 +245,7 @@ function Home() {
       <section className="product-cards">
         <div className="container">
           <div className='d-flex p-3 justify-content-center align-items-center'>
-            <h1>
+            <h1 className='display-4'>
               Featured Products You Like
             </h1>
           </div>
@@ -270,7 +270,7 @@ function Home() {
       <section className="instagram">
         <div className="container">
           <div className='p-5 d-flex justify-content-center align-items-center'>
-            <h1>
+            <h1 className='display-4'>
               Gallery Of Our Featured Produts
             </h1>
           </div>
