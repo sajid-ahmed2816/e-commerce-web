@@ -59,7 +59,9 @@ function Cart() {
       <Header />
 
       {/* Cart items table */}
-      <section className="cart-table">
+      {cartData.length === 0 
+      ? <div>Your cart is empty</div> 
+      : <section className="cart-table">
         <div className="container">
           <table>
             <thead>
@@ -141,8 +143,8 @@ function Cart() {
             </div>
           </div>
         </div>
-      </section>
-
+        </section>
+      }
       <Footer />
     </>
   );

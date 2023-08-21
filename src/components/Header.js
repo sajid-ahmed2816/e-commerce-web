@@ -50,10 +50,10 @@ function Header() {
                   <li className="navitem">
                     <Link to="/products">Products</Link>
                     <ul className="product-submenu">
-                      <li>Men's Clothing</li>
-                      <li>Women's Clothing</li>
-                      <li>Jewellery</li>
-                      <li>Electronics</li>
+                      <li><Link to="/category/menwear">Men's Clothing</Link></li>
+                      <li><Link to="/category/womenwear">Women's Clothing</Link></li>
+                      <li><Link to="/category/accessories">Jewelery</Link></li>
+                      <li><Link to="/category/electronics">Electronics</Link></li>
                     </ul>
                   </li>
                   <li className="navitem">

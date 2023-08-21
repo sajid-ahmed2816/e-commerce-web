@@ -63,18 +63,28 @@ hr {
   color: #000;
 }
 
-.navbar .navlinks .navitem .product-submenu {
+.navlinks .navitem .product-submenu {
   display: none;
+  position: absolute;
+  left: 0;
+  background: #fff;
+  width: 100%;
+  z-index: 1;
+  padding: 20px;
 }
 
-.navbar .navlinks .navitem:hover .product-submenu {
+.navlinks .navitem .product-submenu li {
+  list-style: none;
+  padding: 5px;
+}
+
+.navlinks .navitem:hover .product-submenu {
   display: block;
-  position: absolute;
-  top: 70%;
-  left: 38%;
 }
 
 .navbar .navlinks .navitem {
+  overflow: hidden;
+  float: left;
   list-style-type: none;
   font-size: 14px;
 }
