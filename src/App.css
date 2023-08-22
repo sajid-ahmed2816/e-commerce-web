@@ -61,6 +61,9 @@ hr {
 .navbar .navlinks a {
   text-decoration: none;
   color: #000;
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
 .navlinks .navitem .product-submenu {
@@ -283,7 +286,7 @@ section.instagram .row .col-xl-3 {
   margin-block: 10px;
 }
 
- @keyframes slideInLeft {
+@keyframes slideInLeft {
   0% {
     transform: translateX(-50%);
     opacity: 0;
@@ -294,7 +297,26 @@ section.instagram .row .col-xl-3 {
   }
 }
 
-.col-xl-3 >* .cart-btn {
+@keyframes slideInRight {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.col-xl-3 .card-container {
+  box-shadow: 1px 0px 15px 2px #e4e4e49a; 
+  border: none;
+  border-radius: 10px;
+}
+
+.col-xl-3 .card-container .card {
+  border: none;
+}
+
+.col-xl-3 .card-container .cart-btn  {
   height: 40px;
   width: 40px;
   border: none;
@@ -302,21 +324,20 @@ section.instagram .row .col-xl-3 {
   background: #1a1a1a;
   color: #fff;
   display: none;
+  position: absolute;
   animation-name: slideInRight;
-  animation-duration: 0.2s;
+  animation-duration: 0.1s;
   animation-timing-function: ease-in-out;
   transition: color .2s ease-in-out, background .2s ease-in-out;
 }
 
-.col-xl-3 >*:hover .cart-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
+.col-xl-3 .card-container:hover .cart-btn {
+  display: block;
   bottom: 82%;
   left: 5%;
-  /* left: -140px;  Adjust this value according to your design */
   animation-name: slideInLeft;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in-out;
 }
 
 .cart-btn:active {

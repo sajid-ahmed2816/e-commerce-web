@@ -191,22 +191,29 @@ function Home() {
       <section className="categories">
         <div className="container">
           <div className="row">
-            <div className="col-md-3">
+            <div className="col-md-12">
+              <div className="head text-center my-5">
+                <h1 className='display-4'>
+                  Purchase by category
+                </h1>
+              </div>
+            </div>
+            <div className="col-md-3 my-5">
               <div onClick={handleMenCategory}>
                 <img src={imgsArr[0]} alt="" />
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3 my-5">
               <div onClick={handleWomenCategory}>
                 <img src={imgsArr[1]} alt="" />
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3 my-5">
               <div onClick={handleAccessoriesCategory}>
                 <img src={imgsArr[2]} alt="" />
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3 my-5">
               <div onClick={handleElectronicCategory}>
                 <img src={imgsArr[3]} alt="" />
               </div>
@@ -224,16 +231,18 @@ function Home() {
               Hot Products Selling on Demand
             </h1>
           </div>
-          <div className="row my-5">
+          <div className="row mb-5">
             {shortData.map((x, i) =>
-              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i} onClick={() => handleSelectAdd(x)}>
-                <ProductCard
-                  Price={x.price}
-                  id={x.id}
-                  CardTitle={x.title}
-                  src={x.image}
-                  onClick={() => handleAdd(x)}
-                />
+              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5" key={i} onClick={() => handleSelectAdd(x)}>
+                <div className='card-container'>
+                  <ProductCard
+                    Price={x.price}
+                    id={x.id}
+                    CardTitle={x.title}
+                    src={x.image}
+                    onClick={() => handleAdd(x)}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -249,16 +258,18 @@ function Home() {
               Featured Products You Like
             </h1>
           </div>
-          <div className="row my-5">
+          <div className="row mb-5">
             {randomData.map((x, i) =>
-              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i} onClick={() => handleSelectAdd(x)}>
-                <ProductCard
-                  Price={x.price}
-                  id={x.id}
-                  CardTitle={x.title}
-                  src={x.image}
-                  onClick={() => handleAdd(x)}
-                />
+              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5" key={i} onClick={() => handleSelectAdd(x)}>
+                <div className="card-container">
+                  <ProductCard
+                    Price={x.price}
+                    id={x.id}
+                    CardTitle={x.title}
+                    src={x.image}
+                    onClick={() => handleAdd(x)}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -292,4 +303,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Home;

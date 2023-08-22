@@ -6,6 +6,7 @@ import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import "../App.css"
 
 function Header() {
@@ -48,7 +49,7 @@ function Header() {
                     <Link to="/about">About</Link>
                   </li>
                   <li className="navitem">
-                    <Link to="/products">Products</Link>
+                    <Link to="/products">Products <FontAwesomeIcon icon={faAngleDown} style={{fontSize: "10px"}}/></Link>
                     <ul className="product-submenu">
                       <li><Link to="/category/menwear">Men's Clothing</Link></li>
                       <li><Link to="/category/womenwear">Women's Clothing</Link></li>
