@@ -307,9 +307,14 @@ section.instagram .row .col-xl-3 {
 }
 
 .col-xl-3 .card-container {
-  box-shadow: 1px 0px 15px 2px #e4e4e49a; 
+  box-shadow: 1px 0px 15px 5px #e4e4e4dc; 
   border: none;
   border-radius: 10px;
+  transition: box-shadow .2s ease-out;
+}
+
+.col-xl-3 .card-container:hover {
+  box-shadow: 1px 0px 8px 2px #1a1a1a77;
 }
 
 .col-xl-3 .card-container .card {

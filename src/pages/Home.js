@@ -194,7 +194,7 @@ function Home() {
             <div className="col-md-12">
               <div className="head text-center my-5">
                 <h1 className='display-4'>
-                  Purchase by category
+                  Shop by category
                 </h1>
               </div>
             </div>
