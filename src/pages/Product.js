@@ -56,53 +56,61 @@ function Product() {
     <>
       <Header />
       <div className="container">
-        <div className="row all-products mt-5">
+        <div className="row all-products my-5">
 
-          <h2 className='p-4 text-center display-5'>Men's Clothing</h2>
+          <h2 className='p-4 my-5 text-center display-5'>Men's Clothing</h2>
           {menWear.map((x, i) =>
             <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
-              <ProductCard
-                id={x.id}
-                src={x.image}
-                Price={x.price}
-                CardTitle={x.title}
-              />
+              <div className='card-container'>
+                <ProductCard
+                  id={x.id}
+                  src={x.image}
+                  Price={x.price}
+                  CardTitle={x.title}
+                />
+              </div>
             </div>
           )}
 
-          <h2 className='p-4 text-center display-5'>Women's Clothing</h2>
+          <h2 className='p-4 my-5 text-center display-5'>Women's Clothing</h2>
           {womenWear.map((x, i) => 
             <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
-              <ProductCard 
-                id={x.id}
-                src={x.image}
-                Price={x.price}
-                CardTitle={x.title}
-              />
+              <div className='card-container'>
+                <ProductCard 
+                  id={x.id}
+                  src={x.image}
+                  Price={x.price}
+                  CardTitle={x.title}
+                />
+              </div>
             </div>
           )}
 
-          <h2 className='p-4 text-center display-5'>Jeweleries</h2>
+          <h2 className='p-4 my-5 text-center display-5'>Jeweleries</h2>
           {jewelery.map((x, i) => 
             <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
-              <ProductCard 
-                id={x.id}
-                src={x.image}
-                Price={x.price}
-                CardTitle={x.title}
-              />
+              <div className='card-container'>
+                <ProductCard 
+                  id={x.id}
+                  src={x.image}
+                  Price={x.price}
+                  CardTitle={x.title}
+                />
+              </div>
             </div>
           )}
 
-          <h2 className='p-4 text-center display-5'>Electronics</h2>
+          <h2 className='p-4 my-5 text-center display-5'>Electronics</h2>
           {electronic.map((x, i) => 
             <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
-              <ProductCard 
-                id={x.id}
-                src={x.image}
-                Price={x.price}
-                CardTitle={x.title}
-              />
+              <div className='card-container'>
+                <ProductCard 
+                  id={x.id}
+                  src={x.image}
+                  Price={x.price}
+                  CardTitle={x.title}
+                />
+              </div>
             </div>
           )}
 
@@ -113,4 +121,4 @@ function Product() {
   )
 }
 
-export default Product
+export default Product;

@@ -37,15 +37,17 @@ function Accessories() {
     <>
     <Header />
         <div className="container">
-        <div className="row">
+        <div className="row py-5">
             {data.map((x, i) => (
                 <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-                    <ProductCard 
-                      CardTitle={x.title}
-                      src={x.image}
-                      price={x.price}
-                      onClick={()=>handleAdd(x)}
-                    />
+                    <div className="card-container">
+                        <ProductCard 
+                        CardTitle={x.title}
+                        src={x.image}
+                        price={x.price}
+                        onClick={()=>handleAdd(x)}
+                        />
+                    </div>
                 </div>
             ))}
         </div>

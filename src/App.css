@@ -24,7 +24,7 @@
   width: 100%;
   z-index: 1001;
   background: #fff;
-  box-shadow: 1px 1px 15px 1px #a0a0a0;
+  box-shadow: 1px 1px 15px #2525253a;
 }
 
 section.header {
@@ -280,7 +280,7 @@ section.instagram .row .col-xl-3 {
   margin-block: 10px;
 }
 
-.women-section .col-xl-3 {
+.women-section .col-xl-3, .elec-section .col-xl-3 {
   margin-block: 10px;
 }
 

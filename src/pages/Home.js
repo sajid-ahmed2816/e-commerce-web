@@ -285,7 +285,7 @@ function Home() {
               Gallery Of Our Featured Produts
             </h1>
           </div>
-          <div className="row my-5">
+          <div className="row mb-5">
             {imgsArr.map((x, i) =>
               <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                 <div className='insta-images'>
