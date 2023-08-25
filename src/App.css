@@ -24,6 +24,7 @@
   width: 100%;
   z-index: 1001;
   background: #fff;
+  box-shadow: 1px 1px 15px 1px #a0a0a0;
 }
 
 section.header {
@@ -202,14 +203,12 @@ section.product-cards .row .col-xl-3 >* p.card-text {
 }
 
 .instagram {
+  background-color: #e6f3ff;
   padding: 20px;
 }
 
 section.instagram .insta-images img {
-  background: transparent;
-  height: 200px;
-  width: 200px;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 section.instagram .row .col-xl-3 {
@@ -220,7 +219,6 @@ section.instagram .row .col-xl-3 {
 
 .footer {
   background: #a7a5a5a1;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }

@@ -286,10 +286,10 @@ function Home() {
             </h1>
           </div>
           <div className="row my-5">
-            {instaData.map((x, i) =>
+            {imgsArr.map((x, i) =>
               <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                 <div className='insta-images'>
-                  <img src={x.image} alt="" />
+                  <img src={x} alt="" width="100%" height="300px"/>
                 </div>
               </div>
             )}
