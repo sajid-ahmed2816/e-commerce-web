@@ -7,18 +7,22 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 import "../App.css"
 
 function Header() {
+
+  const cartItems = useSelector((state) => state.Cart);
+
   return (
     <>
       <header className="announcement-bar">
         <div className="d-flex align-items-center px-3 gap-3">
           <a href="https://www.facebook.com" target="_new">
-            <FontAwesomeIcon icon={faSquareFacebook} style={{ color: '#fff', fontSize: '22px', display: 'flex', alignItems: 'center' }} />
+            <FontAwesomeIcon icon={faSquareFacebook} style={{ color: '#fff', fontSize: '23px', display: 'flex', alignItems: 'center' }} />
           </a>
           <a href="https://www.instagram.com" target="_new">
-            <FontAwesomeIcon icon={faInstagram} style={{ color: '#fff', fontSize: '24px', display: 'flex', alignItems: 'center' }} />
+            <FontAwesomeIcon icon={faInstagram} style={{ color: '#fff', fontSize: '25px', display: 'flex', alignItems: 'center' }} />
           </a>
         </div>
         <div className="d-flex align-items-center px-3 greeting">
@@ -26,7 +30,13 @@ function Header() {
         </div>
         <div className="d-flex align-items-center px-3 gap-3">
           <Link to="/cart">
-            <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#fff', fontSize: '20px', display: 'flex', alignItems: 'center' }} />
+            <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#fff', fontSize: '21px', display: 'flex', alignItems: 'center' }} />
+            {cartItems.length > 0 
+            ? <span className="counter-container">
+                <span className="cartItems-length">{cartItems.length}</span>
+              </span>
+            : <span style={{display: "none"}}></span>  
+            }
           </Link>
           <FontAwesomeIcon icon={faCircleUser} style={{ color: '#fff', fontSize: '22px', display: 'flex', alignItems: 'center' }} />
         </div>

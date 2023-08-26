@@ -5,11 +5,13 @@ import { remove } from "../config/redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 function Cart() {
   const cartData = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [itemQuantities, setItemQuantities] = useState(() =>
     cartData.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
@@ -20,6 +22,10 @@ function Cart() {
     const defaultQuantities = cartData.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {});
     setItemQuantities((prevQuantities) => ({ ...prevQuantities, ...defaultQuantities }));
   }, [cartData]);
+
+  const handleNavigate = () => {
+    navigate('/products');
+  }
 
   const handleRemove = (id) => {
     dispatch(remove(id));
@@ -60,7 +66,12 @@ function Cart() {
 
       {/* Cart items table */}
       {cartData.length === 0 
-      ? <div>Your cart is empty</div> 
+      ? <div className="emptyMessage-container">
+          <h2 className="emptyCart-message display-6">
+            Your cart is empty
+          </h2>
+          <button onClick={handleNavigate} className="emptyCart-btn">See all categories</button>
+        </div> 
       : <section className="cart-table">
         <div className="container">
           <table>
