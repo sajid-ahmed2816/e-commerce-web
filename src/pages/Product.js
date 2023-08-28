@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import ProductCard from '../components/Produccard'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { add } from '../config/redux/reducer/cartSlice';
 import '../App.css'
 
 function Product() {
@@ -14,6 +16,7 @@ function Product() {
   const [electronic, setElectronics] = useState([]);
   let url = "https://fakestoreapi.com/products";
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSelectAdd = (data) => {
     navigate(`/description/${data.id}`, 
@@ -21,6 +24,10 @@ function Product() {
         state: { product: data } 
       }
     );
+  }
+
+  const handleAdd = (product) => {
+    dispatch(add(product));
   }
 
   function getProducts() {
@@ -67,6 +74,7 @@ function Product() {
                   src={x.image}
                   Price={x.price}
                   CardTitle={x.title}
+                  onClick={() => handleAdd(x)}
                 />
               </div>
             </div>
@@ -81,6 +89,7 @@ function Product() {
                   src={x.image}
                   Price={x.price}
                   CardTitle={x.title}
+                  onClick={() => handleAdd(x)}
                 />
               </div>
             </div>
@@ -95,6 +104,7 @@ function Product() {
                   src={x.image}
                   Price={x.price}
                   CardTitle={x.title}
+                  onClick={() => handleAdd(x)}
                 />
               </div>
             </div>
@@ -109,6 +119,7 @@ function Product() {
                   src={x.image}
                   Price={x.price}
                   CardTitle={x.title}
+                  onClick={() => handleAdd(x)}
                 />
               </div>
             </div>

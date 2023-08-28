@@ -74,7 +74,7 @@ function Cart() {
         </div> 
       : <section className="cart-table">
         <div className="container">
-          <table>
+          <table className="cart-table">
             <thead>
               <tr>
                 <th>Product</th>
@@ -91,7 +91,7 @@ function Cart() {
                       <button className="del-item-btn" onClick={() => handleRemove(item.id)}>
                         <FontAwesomeIcon icon={faTrash}/>
                       </button>
-                      <img src={item.image} alt="product" width="80px" />
+                      <img src={item.image} alt="product" width="50px" />
                       <p>{item.title}</p>
                     </td>
                     <td>

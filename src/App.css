@@ -421,10 +421,17 @@ section.instagram .row .col-xl-3 {
   font-weight: 600;
 }
 
-.cart-table >* table{
+.cart-table >* table.cart-table{
   display: flex;
   flex-direction: column;
   border: 1px solid #adadad;
+  margin-top: 50px;
+}
+
+.cart-table >* .checkout-table {
+  border: 1px solid #adadad;
+  display: flex;
+  flex-direction: column;
 }
 
 .cart-table >* table thead, 
@@ -440,10 +447,11 @@ section.instagram .row .col-xl-3 {
   padding: 15px;
 }
 
-.cart-table >* table tbody tr{
+.cart-table >* table.cart-table tbody tr{
   display: flex;
   align-items: center;
   width: 100%;
+  min-height: 120px;
   border-top: 1px solid #adadad;
 }
 
@@ -481,13 +489,15 @@ section.instagram .row .col-xl-3 {
   display: flex;
   border: none;
   width: 25px;
-  height: 23px;
+  height: 25px;
   border-radius: 50%;
   justify-content: center;
   align-items: center;
   background: #1a1a1a;
   color: #fff;
+  font-size: 13px;
   cursor: pointer;
+  box-shadow: 1px 1px 15px 1px #bdbdbd8e;
   transition: background .2s ease-in-out, color .2s ease-in-out;
 }
 
@@ -498,12 +508,13 @@ section.instagram .row .col-xl-3 {
 }
 
 section.cart-table >* .del-item-btn {
-  height: 40px;
-  width: 40px;
+  min-height: 40px;
+  min-width: 40px;
   border: none;
   border-radius: 50%;
   background: #1a1a1a;
   color: #fff;
+  box-shadow: 1px 1px 15px 1px #bdbdbd8e;
   transition: background .2s ease-in-out, color .2s ease-in-out;
 }
 
