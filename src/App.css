@@ -421,11 +421,12 @@ section.instagram .row .col-xl-3 {
   font-weight: 600;
 }
 
-.cart-table >* table.cart-table{
+.cart-table >* table.cart-table {
   display: flex;
   flex-direction: column;
   border: 1px solid #adadad;
   margin-top: 50px;
+  box-shadow: 1px 1px 15px 1px #d4d4d4c5;
 }
 
 .cart-table >* .checkout-table {
@@ -447,7 +448,7 @@ section.instagram .row .col-xl-3 {
   padding: 15px;
 }
 
-.cart-table >* table.cart-table tbody tr{
+.cart-table >* table.cart-table tbody tr {
   display: flex;
   align-items: center;
   width: 100%;
