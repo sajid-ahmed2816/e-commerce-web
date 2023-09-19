@@ -65,6 +65,24 @@ section.header {
   text-align: center;
 }
 
+@media screen and (max-width: 768px) {
+  .header .logo {
+    padding: 10px;
+    font-size: 16px;
+    text-align: left;
+  }
+}
+
+@media screen and (max-width: 443px) {
+  .header .logo {
+    display: none;
+  }
+
+  .sticky-header .header .container {
+    justify-content: flex-end;
+  }
+}
+
 hr {
   background: #242424;
   margin: 0 !important;
@@ -219,12 +237,38 @@ section.product-cards .row .col-xl-3 >* {
 
 section.product-cards .row .col-xl-3 >* p.card-text {
   margin-bottom: 0;
+  padding: 10px;
 }
 
 .btn-container {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.buy-btn-container {
+  width: 100%;
+}
+
+.buy-btn {
+  background-color: #000000;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+  padding: 10px 15px;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: all .2s ease-in-out;
+}
+
+.buy-btn:active {
+  border: 1px solid #000000;
+  color: #000000;
+  background-color: #ffffff;
 }
 
 .instagram {
@@ -278,21 +322,27 @@ section.instagram .row .col-xl-3 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
   }
 
   .header .navbar {
     flex-direction: row;
     justify-content: flex-end;
-    padding: 24px;
+    /* padding: 24px; */
   }
 
   .header .navbar .navlinks {
     flex-direction: column;
     align-items: flex-end;
+    min-width: 230px;
   }
 
   .header hr {
     display: none;
+  }
+
+  ul {
+    padding: 0 !important;
   }
 }
 
@@ -332,19 +382,15 @@ section.instagram .row .col-xl-3 {
 .col-xl-3 .card-container {
   box-shadow: 1px 0px 15px 5px #e4e4e4dc; 
   border: none;
-  border-radius: 10px;
-  transition: box-shadow .2s ease-out;
-}
-
-.col-xl-3 .card-container:hover {
-  box-shadow: 1px 0px 8px 2px #1a1a1a77;
+  padding: 10px;
 }
 
 .col-xl-3 .card-container .card {
   border: none;
 }
 
-.col-xl-3 .card-container .cart-btn  {
+.col-xl-3 .card-container .card .view-btn  {
+  margin-left: -60px;
   height: 40px;
   width: 40px;
   border: none;
@@ -354,28 +400,32 @@ section.instagram .row .col-xl-3 {
   display: none;
   position: absolute;
   animation-name: slideInRight;
-  animation-duration: 0.1s;
-  animation-timing-function: ease-in-out;
-  transition: color .2s ease-in-out, background .2s ease-in-out;
+  transition: all .2s ease-in-out;
 }
 
-.col-xl-3 .card-container:hover .cart-btn {
+.col-xl-3 .card-container .card:hover .view-btn {
   display: block;
   bottom: 82%;
   left: 5%;
+  margin-left: 0px;
+  transition: all ease-in-out;
   animation-name: slideInLeft;
   animation-duration: 0.2s;
   animation-timing-function: ease-in-out;
 }
 
-.btn-container .cart-btn:active {
+.btn-container .view-btn:active {
   background: transparent;
   color: #1a1a1a;
   border: 1px solid #1a1a1a;
   font-weight: 500;
 }
 
-.des-pg-cart-btn {
+.card-body {
+  padding: 0 !important;
+}
+
+.des-pg-view-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
@@ -384,7 +434,7 @@ section.instagram .row .col-xl-3 {
   transition: background .2s ease-in-out, color .2s ease-in-out;
 }
 
-.des-pg-cart-btn:active {
+.des-pg-view-btn:active {
   background: transparent;
   color: #1a1a1a;
   border: 1px solid #1a1a1a;
@@ -426,7 +476,6 @@ section.instagram .row .col-xl-3 {
   flex-direction: column;
   border: 1px solid #adadad;
   margin-top: 50px;
-  box-shadow: 1px 1px 15px 1px #d4d4d4c5;
 }
 
 .cart-table >* .checkout-table {

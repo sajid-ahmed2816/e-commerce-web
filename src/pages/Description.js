@@ -44,7 +44,7 @@ function Description() {
                 Price: ${product.price}
               </p>
 
-              <button className="my-1 des-pg-cart-btn" onClick={() => handleAdd(product)}>
+              <button className="my-1 des-pg-view-btn" onClick={() => handleAdd(product)}>
                 Add to Cart
               </button>
 

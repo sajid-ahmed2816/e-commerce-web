@@ -1,8 +1,11 @@
 import Card from 'react-bootstrap/Card';
-import Cartbutton from './Cartbutton';
+import Viewbutton from './Viewbutton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 function ProductCard(props) {
-  let { CardTitle, src, Price, onClick } = props
+  let { CardTitle, src, Price, onClick, data } = props
+
   return (
     <Card style={{ width: '16rem' }} >
       <Card.Img
@@ -22,14 +25,23 @@ function ProductCard(props) {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             width: '230px',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            padding: '0px 10px'
           }
         }>{CardTitle}</Card.Title>
         <Card.Text>
           ${Price}
         </Card.Text>
         <div className='btn-container'>
-          <Cartbutton onClick={onClick}/>
+          <Viewbutton data={data}/>
+        </div>
+        <div className='buy-btn-container'>
+          <button 
+            className='buy-btn'
+            onClick={onClick}
+          >
+            <FontAwesomeIcon icon={faCartShopping}/>Buy Now
+          </button>
         </div>
       </Card.Body>
     </Card>

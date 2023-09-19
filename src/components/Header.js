@@ -8,11 +8,22 @@ import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../App.css"
 
 function Header() {
 
+  const [text, setText] = useState('');
+  
+  const navigate = useNavigate();
+  const location = useLocation();
   const cartItems = useSelector((state) => state.Cart);
+
+  const handleSearch = (text) => {
+    navigate('/',{state: text});
+  }
+
 
   return (
     <>
@@ -71,8 +82,8 @@ function Header() {
                     <Link to="/store">Stores</Link>
                   </li>
                   <li className="navitem">
-                    <input type="text" />
-                    <button className="search-btn">
+                    <input type="text" onChange={(e) => setText(e.target.value)}/>
+                    <button className="search-btn" onClick={() => handleSearch(text)}>
                       <FontAwesomeIcon icon={faSearch} style={{ color: 'gray' }} />
                     </button>
                   </li>

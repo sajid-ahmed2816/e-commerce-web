@@ -8,6 +8,7 @@ import MenProducts from "../pages/Menproducts";
 import Accessories from "../pages/Accessories";
 import Electronics from "../pages/Electronics";
 import Womenproducts from "../pages/Womenproducts";
+import Search from "../pages/Search";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function Approuter() {
@@ -24,6 +25,7 @@ function Approuter() {
         <Route path="/store" element={<Store />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/description/:productId" element={<Description />} />
+        <Route path="/search/:producttitle" element={<Search />} />
       </Routes>
     </Router>
   )

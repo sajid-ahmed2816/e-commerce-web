@@ -5,7 +5,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { add } from '../config/redux/reducer/cartSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../components/Button';
 import axios from 'axios';
 import '../App.css';
@@ -27,6 +27,15 @@ function Home() {
   let url = 'https://fakestoreapi.com/products'
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchText = location.state;
+
+  console.log(searchText)
+
+  const search = () => {
+    let searchData = data.find((item) => item.title === searchText)
+    console.log('searchData', searchData)
+  }
 
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
@@ -36,7 +45,6 @@ function Home() {
     axios.get(url)
       .then((res) => {
         setData([...data, ...res.data])
-        console.log(data);
 
         let item1 = res.data.find(x => x.id === 2);
         let item2 = res.data.find(x => x.id === 7);
@@ -84,13 +92,13 @@ function Home() {
     navigate('/category/electronics')
   }
 
-  const handleSelectAdd = (data) => {
-    navigate(`/description/${data.id}`, 
-      { 
-        state: { product: data } 
-      }
-    );
-  }
+  // const handleSelectAdd = (data) => {
+  //   navigate(`/description/${data.id}`, 
+  //     { 
+  //       state: { product: data } 
+  //     }
+  //   );
+  // }
 
   const handleAdd = (product) => {
     dispatch(add(product));
@@ -101,12 +109,10 @@ function Home() {
     getProducts();
   }, [])
 
-  console.log(data)
-
   return (
     <>
       {/* Header Section */}
-      <Header />
+      <Header/>
 
       {/* Hero Section */}
 
@@ -233,9 +239,10 @@ function Home() {
           </div>
           <div className="row mb-5">
             {shortData.map((x, i) =>
-              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5" key={i} onClick={() => handleSelectAdd(x)}>
+              <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5" key={i}>
                 <div className='card-container'>
                   <ProductCard
+                    data={x}
                     Price={x.price}
                     id={x.id}
                     CardTitle={x.title}
@@ -302,5 +309,4 @@ function Home() {
     </>
   )
 }
-
 export default Home;
