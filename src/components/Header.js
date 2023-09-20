@@ -9,21 +9,27 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import "../App.css"
 
-function Header() {
+function Header({data}) {
+  const [text, setText] = useState("");
+  const [searchData, setSearchData] = useState([])
 
-  const [text, setText] = useState('');
-  
   const navigate = useNavigate();
-  const location = useLocation();
   const cartItems = useSelector((state) => state.Cart);
+  const productsData = data;
+  // console.log('productsData',productsData)
 
   const handleSearch = (text) => {
-    navigate('/',{state: text});
+    const filterData = productsData.filter((item) => item.category === text);
+    setSearchData([...filterData]);
+    if(searchData.length !== 0) {
+      navigate(`/search/${text}`, {state: searchData})
+    } 
   }
 
+  // console.log(searchData[0])
 
   return (
     <>

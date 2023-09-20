@@ -7,16 +7,16 @@ import "../App.css";
 
 function Description() {
   const location = useLocation();
-  const {product} = location.state || {};
+  const product = location.state || {};
   const dispatch = useDispatch();
 
   const handleAdd = (product) => {
     dispatch(add(product));
   }
 
-  if(!product) {
-    return null;
-  }
+  // if(!product) {
+  //   return null;
+  // }
   console.log(product)
   return (
     <>

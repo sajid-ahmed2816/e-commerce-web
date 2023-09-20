@@ -1,12 +1,15 @@
 import "../App.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
-function Viewbutton(props) {
-    let {data} = props
+function Viewbutton({data}) {
+    const navigate = useNavigate();
 
     const handleClick = (productData) => {
-      console.log('productData', productData)
+      // event.isPropagationStopped(() => true)
+      navigate(`/description/${productData.id}`, {state: productData})
+      // console.log(productData)
     };
 
   return (

@@ -29,7 +29,7 @@ function ProductCard(props) {
             padding: '0px 10px'
           }
         }>{CardTitle}</Card.Title>
-        <Card.Text>
+        <Card.Text style={{padding: '10px'}}>
           ${Price}
         </Card.Text>
         <div className='btn-container'>

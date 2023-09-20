@@ -15,16 +15,7 @@ function Product() {
   const [jewelery, setJewelery] = useState([]);
   const [electronic, setElectronics] = useState([]);
   let url = "https://fakestoreapi.com/products";
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const handleSelectAdd = (data) => {
-    navigate(`/description/${data.id}`, 
-      { 
-        state: { product: data } 
-      }
-    );
-  }
 
   const handleAdd = (product) => {
     dispatch(add(product));
@@ -67,9 +58,10 @@ function Product() {
 
           <h2 className='p-4 my-5 text-center display-5'>Men's Clothing</h2>
           {menWear.map((x, i) =>
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
+            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
               <div className='card-container'>
                 <ProductCard
+                  data={x}
                   id={x.id}
                   src={x.image}
                   Price={x.price}
@@ -82,9 +74,10 @@ function Product() {
 
           <h2 className='p-4 my-5 text-center display-5'>Women's Clothing</h2>
           {womenWear.map((x, i) => 
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
+            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
               <div className='card-container'>
                 <ProductCard 
+                  data={x}
                   id={x.id}
                   src={x.image}
                   Price={x.price}
@@ -97,9 +90,10 @@ function Product() {
 
           <h2 className='p-4 my-5 text-center display-5'>Jeweleries</h2>
           {jewelery.map((x, i) => 
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
+            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
               <div className='card-container'>
                 <ProductCard 
+                  data={x}
                   id={x.id}
                   src={x.image}
                   Price={x.price}
@@ -112,9 +106,10 @@ function Product() {
 
           <h2 className='p-4 my-5 text-center display-5'>Electronics</h2>
           {electronic.map((x, i) => 
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i} onClick={() => handleSelectAdd(x)}>
+            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
               <div className='card-container'>
                 <ProductCard 
+                  data={x}
                   id={x.id}
                   src={x.image}
                   Price={x.price}

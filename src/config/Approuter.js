@@ -25,7 +25,7 @@ function Approuter() {
         <Route path="/store" element={<Store />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/description/:productId" element={<Description />} />
-        <Route path="/search/:producttitle" element={<Search />} />
+        <Route path="/search/:productcategory" element={<Search />} />
       </Routes>
     </Router>
   )

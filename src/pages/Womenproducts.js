@@ -8,53 +8,57 @@ import { add } from "../config/redux/reducer/cartSlice";
 import "../App.css";
 
 function Womenproducts() {
-    const [data, setData] = useState([]);
-    let url = 'https://fakestoreapi.com/products';
-    const dispatch = useDispatch();
+  const [data, setData] = useState([]);
+  let url = "https://fakestoreapi.com/products";
+  const dispatch = useDispatch();
 
-    function getProducts() {
-        axios.get(url)
-        .then((res) => {
-            let filteredData = res.data.filter(item => item.category === "women's clothing");
-            setData([...filteredData]);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    }
+  function getProducts() {
+    axios
+      .get(url)
+      .then((res) => {
+        let filteredData = res.data.filter(
+          (item) => item.category === "women's clothing"
+        );
+        setData([...filteredData]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-    const handleAdd = (product) => {
-        dispatch(add(product));
-    }
+  const handleAdd = (product) => {
+    dispatch(add(product));
+  };
 
-    useEffect(() => {
-        getProducts()
-    });
+  useEffect(() => {
+    getProducts();
+  });
 
-    console.log(data)
+  console.log(data);
 
   return (
     <>
-    <Header />
-    <div className="container">
+      <Header />
+      <div className="container">
         <div className="row women-section py-5">
-            {data.map((x, i) => (
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-                    <div className="card-container">
-                        <ProductCard
-                        CardTitle={x.title}
-                        src={x.image}
-                        Price={x.price}
-                        onClick={()=>handleAdd(x)}
-                        />
-                    </div>
-                </div>
-            ))}
+          {data.map((x, i) => (
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+              <div className="card-container">
+                <ProductCard
+                  data={x}
+                  CardTitle={x.title}
+                  src={x.image}
+                  Price={x.price}
+                  onClick={() => handleAdd(x)}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-    </div>
-    <Footer />
+      </div>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default Womenproducts
+export default Womenproducts;

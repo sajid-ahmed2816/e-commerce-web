@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .announcement-bar {
@@ -17,10 +17,10 @@
   margin: 0 !important;
 }
 
-.announcement-bar >* a {
+.announcement-bar > * a {
   text-decoration: none;
 }
-.announcement-bar >* a .counter-container {
+.announcement-bar > * a .counter-container {
   width: 18px;
   height: 18px;
   background: red;
@@ -34,8 +34,7 @@
   justify-content: center;
 }
 
-
-.announcement-bar >* a .counter-container .cartItems-length {
+.announcement-bar > * a .counter-container .cartItems-length {
   color: #fff;
   font-size: 12px;
   margin: 0 !important;
@@ -145,13 +144,18 @@ hr {
 }
 
 .overlay::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Adjust the overlay color and opacity */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Adjust the overlay color and opacity */
 }
 
 .slider .carousel-inner .carousel-item img {
@@ -161,14 +165,14 @@ hr {
   opacity: 1;
 }
 
-section.hero >* p {
+section.hero > * p {
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-start;
   gap: 10px;
 }
 
-section.hero >* p span {
+section.hero > * p span {
   font-weight: 500;
 }
 
@@ -186,14 +190,14 @@ section.hero >* p span {
   padding: 40px;
 }
 
-.categories>* img {
+.categories > * img {
   height: 200px;
   width: 100%;
   object-fit: cover;
   cursor: pointer;
 }
 
-section.categories>* .col-md-4 {
+section.categories > * .col-md-4 {
   margin-block: 10px;
 }
 
@@ -224,20 +228,21 @@ section.categories .row .col-md-4 {
   padding: 20px;
 }
 
-section.product-cards .row .col-xl-3 {
+section.product-cards .row .col-xl-3,
+section.search > * .row .col-xl-3,
+.all-products .col-xl-3 {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-block: 10px;
 }
 
-section.product-cards .row .col-xl-3 >* {
+section.product-cards .row .col-xl-3 > * {
   cursor: pointer;
 }
 
-section.product-cards .row .col-xl-3 >* p.card-text {
+section.product-cards .row .col-xl-3 > * p.card-text {
   margin-bottom: 0;
-  padding: 10px;
 }
 
 .btn-container {
@@ -252,7 +257,7 @@ section.product-cards .row .col-xl-3 >* p.card-text {
 
 .buy-btn {
   background-color: #000000;
-  border: none;
+  border: 1px solid #000000;
   border-radius: 4px;
   outline: none;
   width: 100%;
@@ -262,13 +267,19 @@ section.product-cards .row .col-xl-3 >* p.card-text {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.buy-btn:hover {
+  border: 1px solid #000000;
+  color: #000000;
+  background-color: #ffffff;
 }
 
 .buy-btn:active {
   border: 1px solid #000000;
-  color: #000000;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #000000;
 }
 
 .instagram {
@@ -355,7 +366,8 @@ section.instagram .row .col-xl-3 {
   margin-block: 10px;
 }
 
-.women-section .col-xl-3, .elec-section .col-xl-3 {
+.women-section .col-xl-3,
+.elec-section .col-xl-3 {
   margin-block: 10px;
 }
 
@@ -380,7 +392,7 @@ section.instagram .row .col-xl-3 {
 }
 
 .col-xl-3 .card-container {
-  box-shadow: 1px 0px 15px 5px #e4e4e4dc; 
+  box-shadow: 1px 0px 15px 5px #e4e4e4dc;
   border: none;
   padding: 10px;
 }
@@ -389,7 +401,7 @@ section.instagram .row .col-xl-3 {
   border: none;
 }
 
-.col-xl-3 .card-container .card .view-btn  {
+.col-xl-3 .card-container .card .view-btn {
   margin-left: -60px;
   height: 40px;
   width: 40px;
@@ -400,7 +412,7 @@ section.instagram .row .col-xl-3 {
   display: none;
   position: absolute;
   animation-name: slideInRight;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .col-xl-3 .card-container .card:hover .view-btn {
@@ -431,7 +443,7 @@ section.instagram .row .col-xl-3 {
   border-radius: 6px;
   background: #1a1a1a;
   color: #fff;
-  transition: background .2s ease-in-out, color .2s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .des-pg-view-btn:active {
@@ -461,7 +473,7 @@ section.instagram .row .col-xl-3 {
   border-radius: 5px;
   background: #1a1a1a;
   color: #fff;
-  transition: color .2s ease-in-out;
+  transition: color 0.2s ease-in-out;
 }
 
 .emptyCart-btn:active {
@@ -471,33 +483,32 @@ section.instagram .row .col-xl-3 {
   font-weight: 600;
 }
 
-.cart-table >* table.cart-table {
+.cart-table > * table.cart-table {
   display: flex;
   flex-direction: column;
   border: 1px solid #adadad;
-  margin-top: 50px;
 }
 
-.cart-table >* .checkout-table {
+.cart-table > * .checkout-table {
   border: 1px solid #adadad;
   display: flex;
   flex-direction: column;
 }
 
-.cart-table >* table thead, 
-.cart-table >* table tbody {
+.cart-table > * table thead,
+.cart-table > * table tbody {
   width: 100%;
 }
 
-.cart-table >* table thead tr{
+.cart-table > * table thead tr {
   display: flex;
 }
 
-.cart-table >* table thead tr th{
+.cart-table > * table thead tr th {
   padding: 15px;
 }
 
-.cart-table >* table.cart-table tbody tr {
+.cart-table > * table.cart-table tbody tr {
   display: flex;
   align-items: center;
   width: 100%;
@@ -505,37 +516,37 @@ section.instagram .row .col-xl-3 {
   border-top: 1px solid #adadad;
 }
 
-.cart-table >* table thead tr th:nth-child(1),
-.cart-table >* table tbody tr td:nth-child(1) {
+.cart-table > * table thead tr th:nth-child(1),
+.cart-table > * table tbody tr td:nth-child(1) {
   width: 700px;
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.cart-table >* table thead tr th:nth-child(2),
-.cart-table >* table tbody tr td:nth-child(2),
-.cart-table >* table thead tr th:nth-child(3),
-.cart-table >* table tbody tr td:nth-child(3),
-.cart-table >* table thead tr th:nth-child(4),
-.cart-table >* table tbody tr td:nth-child(4) {
+.cart-table > * table thead tr th:nth-child(2),
+.cart-table > * table tbody tr td:nth-child(2),
+.cart-table > * table thead tr th:nth-child(3),
+.cart-table > * table tbody tr td:nth-child(3),
+.cart-table > * table thead tr th:nth-child(4),
+.cart-table > * table tbody tr td:nth-child(4) {
   width: 138px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.cart-table >* table tbody tr td{
+.cart-table > * table tbody tr td {
   padding: 15px;
 }
 
-.cart-table >* table tbody tr >* p{
+.cart-table > * table tbody tr > * p {
   margin: 0 !important;
   display: flex;
   gap: 20px;
 }
 
-.cart-table >* table tbody tr >* p span {
+.cart-table > * table tbody tr > * p span {
   display: flex;
   border: none;
   width: 25px;
@@ -548,16 +559,16 @@ section.instagram .row .col-xl-3 {
   font-size: 13px;
   cursor: pointer;
   box-shadow: 1px 1px 15px 1px #bdbdbd8e;
-  transition: background .2s ease-in-out, color .2s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.cart-table >* table tbody tr >* p span:active {
+.cart-table > * table tbody tr > * p span:active {
   background: transparent;
   color: #1a1a1a;
   border: 1px solid #1a1a1a;
 }
 
-section.cart-table >* .del-item-btn {
+section.cart-table > * .del-item-btn {
   min-height: 40px;
   min-width: 40px;
   border: none;
@@ -565,48 +576,44 @@ section.cart-table >* .del-item-btn {
   background: #1a1a1a;
   color: #fff;
   box-shadow: 1px 1px 15px 1px #bdbdbd8e;
-  transition: background .2s ease-in-out, color .2s ease-in-out;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-section.cart-table >* .del-item-btn:active {
+section.cart-table > * .del-item-btn:active {
   background: transparent;
   color: #1a1a1a;
   border: 1px solid #1a1a1a;
 }
 
-section.cart-table >* select.method-selector {
+section.cart-table > * select.method-selector {
   width: 100%;
 }
 
-section.cart-table >* .promocode-sec p.promocode-sec-heading,
-section.cart-table >* .checkout-sec p.checkout-sec-heading {
+section.cart-table > * .promocode-sec p.promocode-sec-heading,
+section.cart-table > * .checkout-sec p.checkout-sec-heading {
   font-weight: 500;
   font-size: 24px;
   margin-top: 1rem;
 }
 
-section.cart-table >* table.checkout-table {
-  padding: 10px;
-}
-
-section.cart-table >* table.checkout-table tbody.checkout-table-body tr {
+section.cart-table > * table.checkout-table tbody.checkout-table-body tr {
   border: none;
 }
 
-section.cart-table >* table.checkout-table tr {
+section.cart-table > * table.checkout-table tr {
   display: flex;
   justify-content: space-between;
   padding: 0px !important;
   padding: 10px;
 }
 
-section.cart-table >* .order-btn-container {
+section.cart-table > * .order-btn-container {
   display: flex;
   justify-content: flex-end;
   margin-top: 10px;
 }
 
-section.cart-table >* button.order-btn {
+section.cart-table > * button.order-btn {
   background: #1a1a1a;
   border: none;
   color: #fff;
@@ -614,25 +621,25 @@ section.cart-table >* button.order-btn {
   padding: 10px 20px;
 }
 
-section.about-sec >* .blog-1, 
-section.about-sec >* .blog-2,
-section.about-sec >* .blog-3,
-section.about-sec >* .blog-4 {
+section.about-sec > * .blog-1,
+section.about-sec > * .blog-2,
+section.about-sec > * .blog-3,
+section.about-sec > * .blog-4 {
   margin-block: 50px;
 }
 
-section.about-sec >* .blog-para {
+section.about-sec > * .blog-para {
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-section.about-sec >* p {
+section.about-sec > * p {
   line-height: 38px;
   margin: 0;
 }
 
-section.about-sec >* figure {
+section.about-sec > * figure {
   margin: 0;
 }
 
@@ -700,17 +707,17 @@ section.stores {
   margin-block: 70px;
 }
 
-section.stores >* .box {
+section.stores > * .box {
   height: 400px;
   overflow-y: scroll;
   box-shadow: 2px 5px 12px 2px #e4e4e4;
 }
 
-section.stores >* .box .address {
+section.stores > * .box .address {
   padding: 30px;
 }
 
-section.stores >* .btn-map {
+section.stores > * .btn-map {
   width: 100%;
   padding: 8px;
   border: none;
@@ -718,6 +725,6 @@ section.stores >* .btn-map {
   color: #fff;
 }
 
-section.stores >* .leaflet-touch .leaflet-control-attribution {
+section.stores > * .leaflet-touch .leaflet-control-attribution {
   display: none;
 }
