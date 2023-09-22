@@ -67,18 +67,27 @@ section.header {
 @media screen and (max-width: 768px) {
   .header .logo {
     padding: 10px;
-    font-size: 16px;
+    font-size: 24px;
     text-align: left;
+    display: flex;
+    align-self: flex-start;
+    min-width: 125px;
+    margin-top: 6px;
+  }
+
+  .header .navbar {
+    padding-block: 14px !important;
   }
 }
 
 @media screen and (max-width: 443px) {
-  .header .logo {
+  /* .header .logo {
     display: none;
-  }
+  } */
 
-  .sticky-header .header .container {
-    justify-content: flex-end;
+  .sticky-header .container {
+    display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -336,10 +345,17 @@ section.instagram .row .col-xl-3 {
     align-items: center;
   }
 
+  .header .logo {
+    display: flex;
+    align-self: flex-start;
+    margin-block: 6px;
+    padding: 10px;
+  }
+
   .header .navbar {
     flex-direction: row;
     justify-content: flex-end;
-    /* padding: 24px; */
+    padding-block: 20px;
   }
 
   .header .navbar .navlinks {
