@@ -6,15 +6,17 @@ import ProductCard from "../components/Produccard";
 import { Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
+import Toastify from "../components/Toastify";
 
 function Search() {
   const dispatch = useDispatch();
   const location = useLocation();
   const data = location.state;
-  console.log(data);
+  const toastify = Toastify;
 
   const handleAdd = (product) => {
     dispatch(add(product));
+    toastify.ToastifyVariants.success();
   };
   return (
     <Fragment>

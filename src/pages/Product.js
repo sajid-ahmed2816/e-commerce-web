@@ -1,12 +1,13 @@
-import Header from '../components/Header'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import ProductCard from '../components/Produccard'
-import Footer from '../components/Footer'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
-import { add } from '../config/redux/reducer/cartSlice';
-import '../App.css'
+import Header from "../components/Header";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import ProductCard from "../components/Produccard";
+import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { add } from "../config/redux/reducer/cartSlice";
+import "../App.css";
+import Toastify from "../components/Toastify";
 
 function Product() {
   const [data, setData] = useState([]);
@@ -16,50 +17,54 @@ function Product() {
   const [electronic, setElectronics] = useState([]);
   let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
+  const toastify = Toastify;
 
   const handleAdd = (product) => {
     dispatch(add(product));
-  }
+    toastify.ToastifyVariants.success();
+  };
 
   function getProducts() {
-    axios.get(url)
+    axios
+      .get(url)
       .then((res) => {
         setData([...data, ...res.data]);
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((err) => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   }
 
   useEffect(() => {
-    getProducts()
+    getProducts();
   }, []);
 
   useEffect(() => {
-    let menProducts = data.filter(item => item.category === "men's clothing");
+    let menProducts = data.filter((item) => item.category === "men's clothing");
     setMenWear([...menProducts]);
 
-    let womenProducts = data.filter(item => item.category === "women's clothing");
+    let womenProducts = data.filter(
+      (item) => item.category === "women's clothing"
+    );
     setWomenWear([...womenProducts]);
 
-    let accessories = data.filter(item => item.category === "jewelery");
+    let accessories = data.filter((item) => item.category === "jewelery");
     setJewelery([...accessories]);
 
-    let electronics = data.filter(item => item.category === "electronics");
+    let electronics = data.filter((item) => item.category === "electronics");
     setElectronics([...electronics]);
-  }, [data])
+  }, [data]);
 
   return (
     <>
       <Header />
       <div className="container">
         <div className="row all-products my-5">
-
-          <h2 className='p-4 my-5 text-center display-5'>Men's Clothing</h2>
-          {menWear.map((x, i) =>
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
-              <div className='card-container'>
+          <h2 className="p-4 my-5 text-center display-5">Men's Clothing</h2>
+          {menWear.map((x, i) => (
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+              <div className="card-container">
                 <ProductCard
                   data={x}
                   id={x.id}
@@ -70,13 +75,13 @@ function Product() {
                 />
               </div>
             </div>
-          )}
+          ))}
 
-          <h2 className='p-4 my-5 text-center display-5'>Women's Clothing</h2>
-          {womenWear.map((x, i) => 
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
-              <div className='card-container'>
-                <ProductCard 
+          <h2 className="p-4 my-5 text-center display-5">Women's Clothing</h2>
+          {womenWear.map((x, i) => (
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+              <div className="card-container">
+                <ProductCard
                   data={x}
                   id={x.id}
                   src={x.image}
@@ -86,13 +91,13 @@ function Product() {
                 />
               </div>
             </div>
-          )}
+          ))}
 
-          <h2 className='p-4 my-5 text-center display-5'>Jeweleries</h2>
-          {jewelery.map((x, i) => 
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
-              <div className='card-container'>
-                <ProductCard 
+          <h2 className="p-4 my-5 text-center display-5">Jeweleries</h2>
+          {jewelery.map((x, i) => (
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+              <div className="card-container">
+                <ProductCard
                   data={x}
                   id={x.id}
                   src={x.image}
@@ -102,13 +107,13 @@ function Product() {
                 />
               </div>
             </div>
-          )}
+          ))}
 
-          <h2 className='p-4 my-5 text-center display-5'>Electronics</h2>
-          {electronic.map((x, i) => 
-            <div className='col-xl-3 col-lg-3 col-md-6 col-sm-12' key={i}>
-              <div className='card-container'>
-                <ProductCard 
+          <h2 className="p-4 my-5 text-center display-5">Electronics</h2>
+          {electronic.map((x, i) => (
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+              <div className="card-container">
+                <ProductCard
                   data={x}
                   id={x.id}
                   src={x.image}
@@ -118,13 +123,12 @@ function Product() {
                 />
               </div>
             </div>
-          )}
-
+          ))}
         </div>
       </div>
       <Footer />
     </>
-  )
+  );
 }
 
 export default Product;

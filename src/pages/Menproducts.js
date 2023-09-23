@@ -6,11 +6,13 @@ import ProductCard from "../components/Produccard";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
 import "../App.css";
+import Toastify from "../components/Toastify";
 
 function MenProducts() {
   const [data, setData] = useState([]);
   let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
+  const toastify = Toastify;
 
   function getProducts() {
     axios
@@ -26,7 +28,7 @@ function MenProducts() {
 
   const handleAdd = (product) => {
     dispatch(add(product));
-    console.log(product);
+    toastify.ToastifyVariants.success();
   };
 
   useEffect(() => {

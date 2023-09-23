@@ -5,12 +5,14 @@ import ProductCard from "../components/Produccard";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
+import Toastify from "../components/Toastify";
 import "../App.css";
 
 function Accessories() {
   const [data, setData] = useState([]);
   let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
+  const toastify = Toastify;
 
   function getProducts() {
     axios
@@ -28,6 +30,7 @@ function Accessories() {
 
   const handleAdd = (product) => {
     dispatch(add(product));
+    toastify.ToastifyVariants.success();
   };
 
   useEffect(() => {
@@ -40,7 +43,7 @@ function Accessories() {
     <>
       <Header />
       <div className="container">
-        <div className="row py-5">
+        <div className="row accessories-section py-5">
           {data.map((x, i) => (
             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
               <div className="card-container">
