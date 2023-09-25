@@ -639,3 +639,14 @@ section.stores > * .leaflet-touch .leaflet-control-attribution {
   height: 25px;
   border-radius: 50%;
 }
+
+.progress-bar {
+  background-color: #000000 !important;
+}
+
+.progress,
+.progress-stacked {
+  padding-inline: 0 !important;
+  height: 5px !important;
+  /* background-color: #000000 !important; */
+}
