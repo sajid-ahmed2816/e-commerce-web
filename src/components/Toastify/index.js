@@ -5,6 +5,7 @@ const ToastifyVariants = {
   success: () => {
     toast.success("Product has been added to cart", {
       position: "top-center",
+      className: "toastify-success",
     });
   },
   warning: () => {

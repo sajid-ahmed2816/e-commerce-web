@@ -414,6 +414,7 @@ section.instagram .row .col-xl-3 {
   box-shadow: 1px 0px 15px 5px #e4e4e4dc;
   border: none;
   padding: 10px;
+  width: 100%;
 }
 
 .col-xl-3 .card-container .card {
@@ -649,4 +650,52 @@ section.stores > * .leaflet-touch .leaflet-control-attribution {
   padding-inline: 0 !important;
   height: 5px !important;
   /* background-color: #000000 !important; */
+}
+
+label {
+  display: flex !important;
+  align-items: end !important;
+  margin-left: 5px !important;
+}
+
+.form-check {
+  display: flex !important;
+}
+
+.form-check-input:checked {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.form-check-input {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}
+
+.order-btn:hover {
+  border: 1px solid #000000 !important;
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.order-btn:active {
+  border: 1px solid #000000 !important;
+  color: #ffffff !important;
+  background-color: #000000 !important;
+}
+
+.toastify-success {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.Toastify__close-button > svg {
+  fill: #ffffff !important;
+}
+
+.cart-table > * p.item-title {
+  width: 229px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }

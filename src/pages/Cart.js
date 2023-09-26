@@ -4,7 +4,6 @@ import {
   Container,
   Row,
   Col,
-  Button,
   Form,
   InputGroup,
   ProgressBar,
@@ -21,16 +20,12 @@ function Cart() {
   const cartData = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(cartData);
 
   const [itemQuantities, setItemQuantities] = useState(() =>
     cartData.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
   );
-  const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
 
-  console.log(itemQuantities);
   useEffect(() => {
-    // Set default quantity to 1 for products already in the cart
     const defaultQuantities = cartData.reduce(
       (acc, item) => ({ ...acc, [item.id]: 1 }),
       {}
@@ -81,17 +76,29 @@ function Cart() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [validated, setValidated] = useState(false);
-  const totalSteps = 2;
+  const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(false);
+  const [formData, setFormData] = useState({});
+  const totalSteps = 3;
   const progress = (currentStep / totalSteps) * 100;
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
+      setValidated(true);
+    } else {
+      const formDataFields = Array.from(form.elements).filter((el) => el.name);
+      const data = {};
+      formDataFields.forEach((field) => {
+        data[field.name] = field.value;
+      });
+      setFormData({ ...formData, data });
+      if (Object.keys(formData).length > 0) {
+        nextStep();
+      }
     }
-
-    setValidated(true);
   };
 
   const nextStep = () => {
@@ -103,6 +110,11 @@ function Cart() {
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      if (currentStep === 1) {
+        if (Object.keys(formData).length > 1) {
+          setFormData(!formData);
+        }
+      }
     }
   };
 
@@ -121,221 +133,309 @@ function Cart() {
       ) : (
         <section className="cart-table">
           <div className="container">
-            <div className="row">
+            <div className="row m-5">
               {/* Information Form */}
               <div className="col-md-7">
-                <div className="p-4">
+                <div className="border rounded p-4">
                   <Container>
                     <Row>
-                      <ProgressBar now={progress} />
+                      <ProgressBar className="my-2" now={progress} />
                     </Row>
                     <Row>
                       <Col>
                         {currentStep === 1 && (
-                          <div>
-                            <Form
-                              noValidate
-                              validated={validated}
-                              onSubmit={handleSubmit}
-                            >
-                              <Row className="my-3">
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom01"
-                                >
-                                  <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="First name"
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    First name required
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom02"
-                                >
-                                  <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Last name"
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Last name required
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                              </Row>
-                              <Row className="mb-3">
-                                <Form.Group
-                                  as={Col}
-                                  md="12"
-                                  controlId="validationCustomUsername"
-                                >
-                                  <InputGroup hasValidation>
-                                    <InputGroup.Text id="inputGroupPrepend">
-                                      @
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                      type="text"
-                                      placeholder="Email"
-                                      aria-describedby="inputGroupPrepend"
-                                      required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                      Please enter you email.
-                                    </Form.Control.Feedback>
-                                  </InputGroup>
-                                </Form.Group>
-                              </Row>
-                              <Row className="mb-3">
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom03"
-                                >
-                                  <Form.Control
-                                    type="number"
-                                    placeholder="Contact No."
-                                    required
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please provide a contact number.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom04"
-                                >
-                                  <Form.Control
-                                    type="numer"
-                                    placeholder="Phone No."
-                                  />
-                                </Form.Group>
-                              </Row>
-                              <Row className="mb-3">
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom05"
-                                >
-                                  <Form.Control
-                                    as={"textarea"}
-                                    rows={3}
-                                    placeholder="Billing Address"
-                                    required
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please provide billing address
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom05"
-                                >
-                                  <Form.Control
-                                    as={"textarea"}
-                                    rows={3}
-                                    placeholder="Shipping Address"
-                                    required
-                                    disabled={shippingSameAsBilling}
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please provide billing address
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                              </Row>
-                              <Row className="mb-3">
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom05"
-                                >
-                                  <Form.Check
-                                    type="checkbox"
-                                    label="Shipping address same as billing address"
-                                    checked={shippingSameAsBilling}
-                                    onChange={(e) =>
-                                      setShippingSameAsBilling(e.target.checked)
-                                    }
-                                  />
-                                </Form.Group>
-                              </Row>
-                              <Row className="mb-3">
-                                <Form.Group
-                                  as={Col}
-                                  md="6"
-                                  controlId="validationCustom05"
-                                >
-                                  <Form.Control
-                                    type="text"
-                                    placeholder="City"
-                                    required
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please provide a valid city.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group
-                                  as={Col}
-                                  md="3"
-                                  controlId="validationCustom06"
-                                >
-                                  <Form.Control
-                                    type="text"
-                                    placeholder="State"
-                                    required
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please provide a valid state.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group
-                                  as={Col}
-                                  md="3"
-                                  controlId="validationCustom07"
-                                >
-                                  <Form.Control
-                                    type="text"
-                                    placeholder="Zip"
-                                    required
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please provide a valid zip.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                              </Row>
-                              <Form.Group className="mb-3">
-                                <Form.Check
+                          <Form
+                            noValidate
+                            validated={validated}
+                            onSubmit={handleSubmit}
+                          >
+                            <Row className="my-3">
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom01"
+                              >
+                                <Form.Control
                                   required
-                                  label="Agree to terms and conditions"
-                                  feedback="You must agree before submitting."
-                                  feedbackType="invalid"
+                                  type="text"
+                                  placeholder="First name"
+                                  name="firstName"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     firstName: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  First name required
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom02"
+                              >
+                                <Form.Control
+                                  required
+                                  type="text"
+                                  placeholder="Last name"
+                                  name="lastName"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     lastName: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Last name required
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                              <Form.Group
+                                as={Col}
+                                md="12"
+                                controlId="validationCustomUsername"
+                              >
+                                <InputGroup hasValidation>
+                                  <InputGroup.Text id="inputGroupPrepend">
+                                    @
+                                  </InputGroup.Text>
+                                  <Form.Control
+                                    type="text"
+                                    placeholder="Email"
+                                    aria-describedby="inputGroupPrepend"
+                                    required
+                                    name="email"
+                                    // onChange={(e) =>
+                                    //   setFormData({
+                                    //     ...formData,
+                                    //     email: e.target.value,
+                                    //   })
+                                    // }
+                                  />
+                                  <Form.Control.Feedback type="invalid">
+                                    Please enter you email.
+                                  </Form.Control.Feedback>
+                                </InputGroup>
+                              </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom03"
+                              >
+                                <Form.Control
+                                  type="number"
+                                  placeholder="Contact No."
+                                  required
+                                  name="contact"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     contact: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Please provide a contact number.
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom04"
+                              >
+                                <Form.Control
+                                  type="number"
+                                  placeholder="Phone No."
+                                  name="phone"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     phone: e.target.value,
+                                  //   })
+                                  // }
                                 />
                               </Form.Group>
-                              <Button type="submit">Submit form</Button>
-                            </Form>
-                          </div>
+                            </Row>
+                            <Row className="mb-3">
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom05"
+                              >
+                                <Form.Control
+                                  as={"textarea"}
+                                  rows={3}
+                                  placeholder="Billing Address"
+                                  required
+                                  name="billingAddress"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     billingAddress: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Please provide billing address
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom05"
+                              >
+                                <Form.Control
+                                  as={"textarea"}
+                                  rows={3}
+                                  placeholder="Shipping Address"
+                                  required
+                                  disabled={shippingSameAsBilling}
+                                  name="shippingAddress"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     shippingAddress: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Please provide billing address
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                              <Form.Group
+                                as={Col}
+                                md="12"
+                                controlId="validationCustom05"
+                              >
+                                <Form.Check
+                                  type="checkbox"
+                                  label="Shipping address same as billing address"
+                                  checked={shippingSameAsBilling}
+                                  name="sameAs"
+                                  onChange={(e) =>
+                                    setShippingSameAsBilling(e.target.checked)
+                                  }
+                                />
+                              </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                              <Form.Group
+                                as={Col}
+                                md="6"
+                                controlId="validationCustom05"
+                              >
+                                <Form.Control
+                                  type="text"
+                                  placeholder="City"
+                                  required
+                                  name="city"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     city: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Please provide a valid city.
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                              <Form.Group
+                                as={Col}
+                                md="3"
+                                controlId="validationCustom06"
+                              >
+                                <Form.Control
+                                  type="text"
+                                  placeholder="State"
+                                  required
+                                  name="state"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     state: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Please provide a valid state.
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                              <Form.Group
+                                as={Col}
+                                md="3"
+                                controlId="validationCustom07"
+                              >
+                                <Form.Control
+                                  type="text"
+                                  placeholder="Zip"
+                                  required
+                                  name="zip"
+                                  // onChange={(e) =>
+                                  //   setFormData({
+                                  //     ...formData,
+                                  //     zip: e.target.value,
+                                  //   })
+                                  // }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  Please provide a valid zip.
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                            </Row>
+                            <Row>
+                              <Col md="12">
+                                <button
+                                  name="button"
+                                  className="buy-btn"
+                                  type="submit"
+                                >
+                                  Next
+                                </button>
+                              </Col>
+                            </Row>
+                          </Form>
                         )}
-                        {currentStep === 2 && <div>Step 2 Content</div>}
-                        {currentStep === 3 && <div>Step 3 Content</div>}
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="text-center">
+                      <Col>
                         {currentStep > 1 && (
-                          <Button variant="primary" onClick={prevStep}>
-                            Previous
-                          </Button>
-                        )}
-                        {currentStep < 3 && (
-                          <Button variant="primary" onClick={nextStep}>
-                            Next
-                          </Button>
+                          <Form>
+                            <Row className="my-3">
+                              <Form.Group as={Col} md="12">
+                                <Form.Label>Select Payment Method</Form.Label>
+                              </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                              <Form.Group as={Col} md="12">
+                                <Form.Check
+                                  type="checkbox"
+                                  label="Cash On Delivery"
+                                  checked={paymentMethod}
+                                  name="paymentMethod"
+                                  onChange={(e) =>
+                                    setPaymentMethod(e.target.checked)
+                                  }
+                                />
+                              </Form.Group>
+                            </Row>
+                            <Row>
+                              <Col md="12">
+                                <button className="buy-btn" onClick={prevStep}>
+                                  Previous
+                                </button>
+                              </Col>
+                            </Row>
+                          </Form>
                         )}
                       </Col>
                     </Row>
@@ -344,14 +444,14 @@ function Cart() {
               </div>
 
               {/* Cart Item Information */}
-              <div className="col-md-5 p-5">
+              <div className="col-md-5">
                 {cartData.map((item, index) => (
                   <div
                     key={index}
                     style={{
-                      boxShadow: "1px 1px 15px 1px #efefef",
-                      marginBlock: "10px",
                       padding: "15px",
+                      marginBottom: "15px",
+                      borderBottom: "1px solid #e9e9e9",
                     }}
                   >
                     <div className="d-flex justify-content-between cartItemContainerBox">
@@ -372,8 +472,8 @@ function Cart() {
                         />
                       </div>
                       <div>
-                        <p>{item.title}</p>
-                        <div className="d-flex justify-content-center gap-3">
+                        <p className="item-title">{item.title}</p>
+                        <div className="d-flex gap-4">
                           <button
                             className="decreaseBtn"
                             onClick={() => handleDecrease(item.id)}
@@ -395,6 +495,25 @@ function Cart() {
                     </div>
                   </div>
                 ))}
+                <div>
+                  <button
+                    className={paymentMethod === true ? "order-btn" : ""}
+                    style={{
+                      display: currentStep > 1 ? "block" : "none",
+                      width: "100%",
+                      padding: "10px 15px",
+                      borderRadius: "4px",
+                      outline: "none",
+                      border: paymentMethod && "1px solid #000000",
+                      backgroundColor: paymentMethod && "#000000",
+                      color: paymentMethod && "#ffffff",
+                      transition: "all .3s ease-in-out",
+                    }}
+                    disabled={!paymentMethod}
+                  >
+                    Place Order
+                  </button>
+                </div>
               </div>
             </div>
           </div>
