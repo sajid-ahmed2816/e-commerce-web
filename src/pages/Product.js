@@ -29,7 +29,7 @@ function Product() {
       .get(url)
       .then((res) => {
         setData([...data, ...res.data]);
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => {
         console.log(err);

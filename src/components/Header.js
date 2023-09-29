@@ -30,7 +30,7 @@ function Header({ data }) {
   };
 
   useEffect(() => {
-    console.log(searchData); // Log searchData whenever it changes
+    // console.log(searchData); // Log searchData whenever it changes
   }, [searchData]);
 
   return (

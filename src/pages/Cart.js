@@ -9,12 +9,13 @@ import {
   ProgressBar,
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { remove } from "../config/redux/reducer/cartSlice";
+import { remove, reset } from "../config/redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import emailjs from "emailjs-com";
 
 function Cart() {
   const cartData = useSelector((state) => state.Cart);
@@ -89,13 +90,8 @@ function Cart() {
       event.stopPropagation();
       setValidated(true);
     } else {
-      const formDataFields = Array.from(form.elements).filter((el) => el.name);
-      const data = {};
-      formDataFields.forEach((field) => {
-        data[field.name] = field.value;
-      });
-      setFormData({ ...formData, data });
-      if (Object.keys(formData).length > 0) {
+      setFormData({ ...formData });
+      if (Object.entries(formData).length > 0) {
         nextStep();
       }
     }
@@ -118,12 +114,67 @@ function Cart() {
     }
   };
 
+  const handlePlaceOrder = () => {
+    const {
+      firstName,
+      lastName,
+      email,
+      contact,
+      billingAddress,
+      shippingAddress,
+      city,
+      state,
+      zip,
+    } = formData;
+
+    const serviceID = "service_pv26v5t";
+    const templateID = "template_eihlqi5";
+    const userID = "1_3oPznx1j1VBzGpJ";
+
+    const emailData = {
+      to_email: "sajid.ahmed2816@gmail.com",
+      from_name: `${firstName} ${lastName}`,
+      user_name: `${firstName} ${lastName}`,
+      user_email: email,
+      message: `Customer Details:
+      Name: ${firstName} ${lastName}
+      Email: ${email}
+      Contact: ${contact}
+      Billing Address: ${billingAddress}
+      Shipping Address: ${shippingAddress}
+      City: ${city}
+      State: ${state}
+      Zip: ${zip}
+      Order Details:
+      ProductName: ${cartData.map((item) => item.title)}
+      Quantity: ${cartData.length}
+      Price: ${cartData.map((item) => item.price)}
+      SKU: ${cartData.map((item) => item.id)}`,
+    };
+
+    // emailjs
+    //   .send(serviceID, templateID, emailData, userID)
+    //   .then((response) => {
+    //     console.log("Email sent successfully", response);
+    //     nextStep();
+    //   })
+    //   .catch((error) => {
+    //     console.error("Email error", error);
+    //   });
+
+    console.log("emailData", emailData);
+    dispatch(reset());
+    nextStep();
+  };
+
+  // console.log(cartData);
+
   return (
     <>
       <Header />
 
       {/* Cart items table */}
-      {cartData.length === 0 ? (
+      {cartData.length === 0 && currentStep !== 3 ? (
         <div className="emptyMessage-container">
           <h2 className="emptyCart-message display-6">Your cart is empty</h2>
           <button onClick={handleNavigate} className="emptyCart-btn">
@@ -133,7 +184,10 @@ function Cart() {
       ) : (
         <section className="cart-table">
           <div className="container">
-            <div className="row m-5">
+            <div
+              className="row m-5"
+              style={{ justifyContent: currentStep === 3 && "center" }}
+            >
               {/* Information Form */}
               <div className="col-md-7">
                 <div className="border rounded p-4">
@@ -160,12 +214,12 @@ function Cart() {
                                   type="text"
                                   placeholder="First name"
                                   name="firstName"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     firstName: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      firstName: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   First name required
@@ -181,12 +235,12 @@ function Cart() {
                                   type="text"
                                   placeholder="Last name"
                                   name="lastName"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     lastName: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      lastName: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Last name required
@@ -209,12 +263,12 @@ function Cart() {
                                     aria-describedby="inputGroupPrepend"
                                     required
                                     name="email"
-                                    // onChange={(e) =>
-                                    //   setFormData({
-                                    //     ...formData,
-                                    //     email: e.target.value,
-                                    //   })
-                                    // }
+                                    onChange={(e) =>
+                                      setFormData({
+                                        ...formData,
+                                        email: e.target.value,
+                                      })
+                                    }
                                   />
                                   <Form.Control.Feedback type="invalid">
                                     Please enter you email.
@@ -233,12 +287,12 @@ function Cart() {
                                   placeholder="Contact No."
                                   required
                                   name="contact"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     contact: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      contact: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Please provide a contact number.
@@ -253,12 +307,12 @@ function Cart() {
                                   type="number"
                                   placeholder="Phone No."
                                   name="phone"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     phone: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      phone: e.target.value,
+                                    })
+                                  }
                                 />
                               </Form.Group>
                             </Row>
@@ -274,12 +328,12 @@ function Cart() {
                                   placeholder="Billing Address"
                                   required
                                   name="billingAddress"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     billingAddress: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      billingAddress: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Please provide billing address
@@ -297,12 +351,12 @@ function Cart() {
                                   required
                                   disabled={shippingSameAsBilling}
                                   name="shippingAddress"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     shippingAddress: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      shippingAddress: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Please provide billing address
@@ -337,12 +391,12 @@ function Cart() {
                                   placeholder="City"
                                   required
                                   name="city"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     city: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      city: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Please provide a valid city.
@@ -358,12 +412,12 @@ function Cart() {
                                   placeholder="State"
                                   required
                                   name="state"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     state: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      state: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Please provide a valid state.
@@ -379,12 +433,12 @@ function Cart() {
                                   placeholder="Zip"
                                   required
                                   name="zip"
-                                  // onChange={(e) =>
-                                  //   setFormData({
-                                  //     ...formData,
-                                  //     zip: e.target.value,
-                                  //   })
-                                  // }
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      zip: e.target.value,
+                                    })
+                                  }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                   Please provide a valid zip.
@@ -408,7 +462,7 @@ function Cart() {
                     </Row>
                     <Row>
                       <Col>
-                        {currentStep > 1 && (
+                        {currentStep === 2 && (
                           <Form>
                             <Row className="my-3">
                               <Form.Group as={Col} md="12">
@@ -439,12 +493,24 @@ function Cart() {
                         )}
                       </Col>
                     </Row>
+                    <Row>
+                      <Col>
+                        {currentStep === 3 && (
+                          <div>
+                            <p>Your order has been placed</p>
+                          </div>
+                        )}
+                      </Col>
+                    </Row>
                   </Container>
                 </div>
               </div>
 
               {/* Cart Item Information */}
-              <div className="col-md-5">
+              <div
+                className="col-md-5"
+                style={{ display: currentStep === 3 ? "none" : "block" }}
+              >
                 {cartData.map((item, index) => (
                   <div
                     key={index}
@@ -509,6 +575,7 @@ function Cart() {
                       color: paymentMethod && "#ffffff",
                       transition: "all .3s ease-in-out",
                     }}
+                    onClick={handlePlaceOrder}
                     disabled={!paymentMethod}
                   >
                     Place Order
