@@ -152,17 +152,16 @@ function Cart() {
       SKU: ${cartData.map((item) => item.id)}`,
     };
 
-    // emailjs
-    //   .send(serviceID, templateID, emailData, userID)
-    //   .then((response) => {
-    //     console.log("Email sent successfully", response);
-    //     nextStep();
-    //   })
-    //   .catch((error) => {
-    //     console.error("Email error", error);
-    //   });
+    emailjs
+      .send(serviceID, templateID, emailData, userID)
+      .then((response) => {
+        console.log("Email sent successfully", response);
+        nextStep();
+      })
+      .catch((error) => {
+        console.error("Email error", error);
+      });
 
-    console.log("emailData", emailData);
     dispatch(reset());
     nextStep();
   };
