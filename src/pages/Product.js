@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
 import "../App.css";
 import Toastify from "../components/Toastify";
+import { Spinner } from "react-bootstrap";
 
 function Product() {
   const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ function Product() {
   const [womenWear, setWomenWear] = useState([]);
   const [jewelery, setJewelery] = useState([]);
   const [electronic, setElectronics] = useState([]);
+  const [spinner, setSpinner] = useState(false);
   let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
   const toastify = Toastify;
@@ -25,14 +27,17 @@ function Product() {
   };
 
   function getProducts() {
+    setSpinner(true);
     axios
       .get(url)
       .then((res) => {
         setData([...data, ...res.data]);
+        setSpinner(false);
         // console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
+        setSpinner(false);
       });
   }
 
@@ -60,70 +65,86 @@ function Product() {
     <>
       <Header />
       <div className="container">
-        <div className="row all-products my-5">
-          <h2 className="p-4 my-5 text-center display-5">Men's Clothing</h2>
-          {menWear.map((x, i) => (
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-              <div className="card-container">
-                <ProductCard
-                  data={x}
-                  id={x.id}
-                  src={x.image}
-                  Price={x.price}
-                  CardTitle={x.title}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
+        <div className="all-products">
+          {spinner ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "40px",
+              }}
+            >
+              <Spinner animation="grow" style={{ color: "#000000" }} />
             </div>
-          ))}
+          ) : (
+            <div className="row">
+              <h2 className="p-4 my-5 text-center display-5">Men's Clothing</h2>
+              {menWear.map((x, i) => (
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+                  <div className="card-container">
+                    <ProductCard
+                      data={x}
+                      id={x.id}
+                      src={x.image}
+                      Price={x.price}
+                      CardTitle={x.title}
+                      onClick={() => handleAdd(x)}
+                    />
+                  </div>
+                </div>
+              ))}
 
-          <h2 className="p-4 my-5 text-center display-5">Women's Clothing</h2>
-          {womenWear.map((x, i) => (
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-              <div className="card-container">
-                <ProductCard
-                  data={x}
-                  id={x.id}
-                  src={x.image}
-                  Price={x.price}
-                  CardTitle={x.title}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
-            </div>
-          ))}
+              <h2 className="p-4 my-5 text-center display-5">
+                Women's Clothing
+              </h2>
+              {womenWear.map((x, i) => (
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+                  <div className="card-container">
+                    <ProductCard
+                      data={x}
+                      id={x.id}
+                      src={x.image}
+                      Price={x.price}
+                      CardTitle={x.title}
+                      onClick={() => handleAdd(x)}
+                    />
+                  </div>
+                </div>
+              ))}
 
-          <h2 className="p-4 my-5 text-center display-5">Jeweleries</h2>
-          {jewelery.map((x, i) => (
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-              <div className="card-container">
-                <ProductCard
-                  data={x}
-                  id={x.id}
-                  src={x.image}
-                  Price={x.price}
-                  CardTitle={x.title}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
-            </div>
-          ))}
+              <h2 className="p-4 my-5 text-center display-5">Jeweleries</h2>
+              {jewelery.map((x, i) => (
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+                  <div className="card-container">
+                    <ProductCard
+                      data={x}
+                      id={x.id}
+                      src={x.image}
+                      Price={x.price}
+                      CardTitle={x.title}
+                      onClick={() => handleAdd(x)}
+                    />
+                  </div>
+                </div>
+              ))}
 
-          <h2 className="p-4 my-5 text-center display-5">Electronics</h2>
-          {electronic.map((x, i) => (
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-              <div className="card-container">
-                <ProductCard
-                  data={x}
-                  id={x.id}
-                  src={x.image}
-                  Price={x.price}
-                  CardTitle={x.title}
-                  onClick={() => handleAdd(x)}
-                />
-              </div>
+              <h2 className="p-4 my-5 text-center display-5">Electronics</h2>
+              {electronic.map((x, i) => (
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
+                  <div className="card-container">
+                    <ProductCard
+                      data={x}
+                      id={x.id}
+                      src={x.image}
+                      Price={x.price}
+                      CardTitle={x.title}
+                      onClick={() => handleAdd(x)}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
       <Footer />

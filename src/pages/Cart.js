@@ -7,12 +7,13 @@ import {
   Form,
   InputGroup,
   ProgressBar,
+  Spinner,
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { remove, reset } from "../config/redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import emailjs from "emailjs-com";
@@ -70,7 +71,7 @@ function Cart() {
     }, 0);
   };
 
-  const deliveryCharges = getTotalPrice() !== 0 ? 100.0 : 0;
+  const deliveryCharges = cartData.length !== 0 ? 100.0 : 0;
 
   const grandTotal =
     getTotalPrice() === 0 ? 0 : getTotalPrice() + deliveryCharges;
@@ -80,6 +81,7 @@ function Cart() {
   const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [formData, setFormData] = useState({});
+  const [spinner, setSpinner] = useState(false);
   const totalSteps = 3;
   const progress = (currentStep / totalSteps) * 100;
 
@@ -152,21 +154,23 @@ function Cart() {
       SKU: ${cartData.map((item) => item.id)}`,
     };
 
+    setSpinner(true);
+
     emailjs
       .send(serviceID, templateID, emailData, userID)
       .then((response) => {
         console.log("Email sent successfully", response);
+        dispatch(reset());
+        setSpinner(false);
         nextStep();
       })
       .catch((error) => {
         console.error("Email error", error);
+        setSpinner(false);
       });
 
-    dispatch(reset());
-    nextStep();
+    // nextStep();
   };
-
-  // console.log(cartData);
 
   return (
     <>
@@ -496,7 +500,25 @@ function Cart() {
                       <Col>
                         {currentStep === 3 && (
                           <div>
-                            <p>Your order has been placed</p>
+                            <div className="d-flex align-items-center gap-1 my-3">
+                              <FontAwesomeIcon
+                                icon={faCircleCheck}
+                                style={{ color: "#00941e", fontSize: "18px" }}
+                              />
+                              <p style={{ fontSize: "18px", margin: 0 }}>
+                                Your order has been placed successfully.
+                              </p>
+                            </div>
+                            <p>
+                              You will receive confirmation email and your order
+                              number in your email address.
+                            </p>
+                            <button
+                              onClick={() => navigate("/products")}
+                              className="buy-btn"
+                            >
+                              Continue Shopping
+                            </button>
                           </div>
                         )}
                       </Col>
@@ -560,6 +582,26 @@ function Cart() {
                     </div>
                   </div>
                 ))}
+                <div className="border d-flex flex-column gap-3 py-3">
+                  <div className="d-flex flex-row justify-content-around">
+                    <p style={{ width: "250px", margin: 0 }}>SUBTOTAL:</p>
+                    <p style={{ width: "50px", margin: 0 }}>
+                      ${getTotalPrice()}
+                    </p>
+                  </div>
+                  <div className="d-flex flex-row justify-content-around">
+                    <p style={{ width: "250px", margin: 0 }}>
+                      DELIVERY CHARGES:
+                    </p>
+                    <p style={{ width: "50px", margin: 0 }}>
+                      ${deliveryCharges}
+                    </p>
+                  </div>
+                  <div className="d-flex flex-row justify-content-around">
+                    <p style={{ width: "250px", margin: 0 }}>GRAND TOTAL</p>
+                    <p style={{ width: "50px", margin: 0 }}>${grandTotal}</p>
+                  </div>
+                </div>
                 <div>
                   <button
                     className={paymentMethod === true ? "order-btn" : ""}
@@ -569,7 +611,10 @@ function Cart() {
                       padding: "10px 15px",
                       borderRadius: "4px",
                       outline: "none",
-                      border: paymentMethod && "1px solid #000000",
+                      border:
+                        paymentMethod === true
+                          ? "1px solid #000000"
+                          : "1px solid #dee2e6",
                       backgroundColor: paymentMethod && "#000000",
                       color: paymentMethod && "#ffffff",
                       transition: "all .3s ease-in-out",
@@ -577,7 +622,7 @@ function Cart() {
                     onClick={handlePlaceOrder}
                     disabled={!paymentMethod}
                   >
-                    Place Order
+                    {spinner ? <Spinner animation="border" /> : "Place Order"}
                   </button>
                 </div>
               </div>
