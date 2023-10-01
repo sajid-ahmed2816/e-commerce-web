@@ -18,6 +18,7 @@ function Product() {
   const [electronic, setElectronics] = useState([]);
   const [spinner, setSpinner] = useState(false);
   let url = "https://fakestoreapi.com/products";
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const toastify = Toastify;
 
@@ -40,6 +41,11 @@ function Product() {
         setSpinner(false);
       });
   }
+
+  const handleProductDescription = (event, product) => {
+    event.stopPropagation();
+    navigate(`/description/${product.id}`, { state: product });
+  };
 
   useEffect(() => {
     getProducts();
@@ -83,6 +89,7 @@ function Product() {
                 <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                   <div className="card-container">
                     <ProductCard
+                      handleNavigate={(e) => handleProductDescription(e, x)}
                       data={x}
                       id={x.id}
                       src={x.image}
@@ -101,6 +108,7 @@ function Product() {
                 <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                   <div className="card-container">
                     <ProductCard
+                      handleNavigate={(e) => handleProductDescription(e, x)}
                       data={x}
                       id={x.id}
                       src={x.image}
@@ -117,6 +125,7 @@ function Product() {
                 <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                   <div className="card-container">
                     <ProductCard
+                      handleNavigate={(e) => handleProductDescription(e, x)}
                       data={x}
                       id={x.id}
                       src={x.image}
@@ -133,6 +142,7 @@ function Product() {
                 <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
                   <div className="card-container">
                     <ProductCard
+                      handleNavigate={(e) => handleProductDescription(e, x)}
                       data={x}
                       id={x.id}
                       src={x.image}

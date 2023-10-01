@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import ProductCard from "../components/Produccard";
 import Footer from "../components/Footer";
 import Carousel from "react-bootstrap/Carousel";
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import Toastify from "../components/Toastify";
 import { Images } from "../assets";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import MyModal from "../components/Modal";
 
 function Home() {
   const [index, setIndex] = useState(0);
@@ -98,12 +99,17 @@ function Home() {
     toastify.ToastifyVariants.success();
   };
 
+  const handleProductDescription = (event, product) => {
+    event.stopPropagation();
+    navigate(`/description/${product.id}`, { state: product });
+  };
+
   useEffect(() => {
     getProducts();
   }, []);
 
   return (
-    <>
+    <Fragment>
       {/* Header Section */}
       <Header data={data} />
 
@@ -230,6 +236,7 @@ function Home() {
               >
                 <div className="card-container">
                   <ProductCard
+                    handleNavigate={(e) => handleProductDescription(e, x)}
                     data={x}
                     Price={x.price}
                     id={x.id}
@@ -259,6 +266,7 @@ function Home() {
               >
                 <div className="card-container">
                   <ProductCard
+                    handleNavigate={(e) => handleProductDescription(e, x)}
                     data={x}
                     Price={x.price}
                     id={x.id}
@@ -327,7 +335,7 @@ function Home() {
 
       {/* Footer Section */}
       <Footer />
-    </>
+    </Fragment>
   );
 }
 export default Home;

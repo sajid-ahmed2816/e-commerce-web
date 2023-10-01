@@ -7,10 +7,12 @@ import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
 import "../App.css";
 import Toastify from "../components/Toastify";
+import { useNavigate } from "react-router-dom";
 
 function Womenproducts() {
   const [data, setData] = useState([]);
   let url = "https://fakestoreapi.com/products";
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const toastify = Toastify;
 
@@ -33,6 +35,11 @@ function Womenproducts() {
     toastify.ToastifyVariants.success();
   };
 
+  const handleProductDescription = (event, product) => {
+    event.stopPropagation();
+    navigate(`/description/${product.id}`, { state: product });
+  };
+
   useEffect(() => {
     getProducts();
   });
@@ -48,6 +55,7 @@ function Womenproducts() {
             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
               <div className="card-container">
                 <ProductCard
+                  handleNavigate={(e) => handleProductDescription(e, x)}
                   data={x}
                   CardTitle={x.title}
                   src={x.image}

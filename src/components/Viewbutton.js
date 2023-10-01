@@ -1,22 +1,16 @@
-import "../App.css"
+import React, { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import "../App.css";
 
-function Viewbutton({data}) {
-    const navigate = useNavigate();
-
-    const handleClick = (productData) => {
-      // event.isPropagationStopped(() => true)
-      navigate(`/description/${productData.id}`, {state: productData})
-      // console.log(productData)
-    };
-
+function Viewbutton({ onClick }) {
   return (
-    <button className="view-btn" onClick={() => handleClick(data)}>
-        <FontAwesomeIcon icon={faEye}/>
-    </button>
-  )
+    <Fragment>
+      <button className="view-btn" onClick={onClick}>
+        <FontAwesomeIcon icon={faEye} />
+      </button>
+    </Fragment>
+  );
 }
 
 export default Viewbutton;

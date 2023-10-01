@@ -261,6 +261,9 @@ section.product-cards .row .col-xl-3 > * p.card-text {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* position: absolute;
+  bottom: 82%;
+  left: 5%; */
 }
 
 .buy-btn-container {
@@ -429,8 +432,11 @@ section.instagram .row .col-xl-3 {
   border-radius: 50%;
   background: #1a1a1a;
   color: #fff;
-  display: none;
+  display: blocl;
   position: absolute;
+  bottom: 250px;
+  right: 100px;
+  display: none;
   animation-name: slideInRight;
   transition: all 0.2s ease-in-out;
 }

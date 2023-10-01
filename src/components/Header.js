@@ -14,7 +14,7 @@ import "../App.css";
 
 function Header({ data }) {
   const [text, setText] = useState("");
-  const [searchData, setSearchData] = useState({});
+  const [searchData, setSearchData] = useState([]);
 
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.Cart);
@@ -22,15 +22,17 @@ function Header({ data }) {
   // console.log("productsData", productsData);
 
   const handleSearch = (text) => {
-    const filterData = productsData.find((item) => item.title === text);
-    setSearchData({ ...filterData });
+    const filterData = productsData.filter(
+      (item) => item.title.includes(text) || item.category.includes(text)
+    );
+    setSearchData([...filterData]);
     if (searchData.length !== 0) {
       navigate(`/search/${text}`, { state: searchData });
     }
   };
 
   useEffect(() => {
-    // console.log(searchData); // Log searchData whenever it changes
+    console.log(searchData); // Log searchData whenever it changes
   }, [searchData]);
 
   return (
