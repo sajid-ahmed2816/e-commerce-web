@@ -78,6 +78,15 @@ section.header {
   .header .navbar {
     padding-block: 14px !important;
   }
+
+  .mainLogo {
+    width: 200px;
+    height: 200px;
+  }
+
+  .loginRow {
+    transform: translate(0, 10px) !important;
+  }
 }
 
 @media screen and (max-width: 443px) {
