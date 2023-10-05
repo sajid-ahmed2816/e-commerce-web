@@ -22,7 +22,8 @@ function Product() {
   const dispatch = useDispatch();
   const toastify = Toastify;
 
-  const handleAdd = (product) => {
+  const handleAdd = (event, product) => {
+    event.stopPropagation();
     dispatch(add(product));
     toastify.ToastifyVariants.success();
   };
@@ -95,7 +96,7 @@ function Product() {
                       src={x.image}
                       Price={x.price}
                       CardTitle={x.title}
-                      onClick={() => handleAdd(x)}
+                      onClick={(e) => handleAdd(e, x)}
                     />
                   </div>
                 </div>
@@ -114,7 +115,7 @@ function Product() {
                       src={x.image}
                       Price={x.price}
                       CardTitle={x.title}
-                      onClick={() => handleAdd(x)}
+                      onClick={(e) => handleAdd(e, x)}
                     />
                   </div>
                 </div>
@@ -131,7 +132,7 @@ function Product() {
                       src={x.image}
                       Price={x.price}
                       CardTitle={x.title}
-                      onClick={() => handleAdd(x)}
+                      onClick={(e) => handleAdd(e, x)}
                     />
                   </div>
                 </div>
@@ -148,7 +149,7 @@ function Product() {
                       src={x.image}
                       Price={x.price}
                       CardTitle={x.title}
-                      onClick={() => handleAdd(x)}
+                      onClick={(e) => handleAdd(e, x)}
                     />
                   </div>
                 </div>

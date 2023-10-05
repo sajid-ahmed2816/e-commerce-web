@@ -30,7 +30,8 @@ function Accessories() {
       });
   }
 
-  const handleAdd = (product) => {
+  const handleAdd = (event, product) => {
+    event.stopPropagation();
     dispatch(add(product));
     toastify.ToastifyVariants.success();
   };
@@ -60,7 +61,7 @@ function Accessories() {
                   CardTitle={x.title}
                   src={x.image}
                   price={x.price}
-                  onClick={() => handleAdd(x)}
+                  onClick={(e) => handleAdd(e, x)}
                 />
               </div>
             </div>

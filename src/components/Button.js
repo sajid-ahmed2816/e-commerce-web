@@ -1,12 +1,12 @@
-import '../App.css'
+import "../App.css";
 
 function Button(props) {
-    let {onClick} = props
+  let { onClick } = props;
   return (
     <button className="hero-btn" onClick={onClick}>
-        Shop now
+      Shop now
     </button>
-  )
+  );
 }
 
-export default Button
+export default Button;

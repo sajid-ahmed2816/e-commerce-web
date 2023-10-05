@@ -714,3 +714,7 @@ label {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+.login-btn:hover {
+  box-shadow: 1px 1px 15px 1px #b9b9b9;
+}

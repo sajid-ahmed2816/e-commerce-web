@@ -6,7 +6,7 @@ function MyModal(props) {
   if (!data) {
     return null;
   }
-  console.log("data", data.title);
+
   return (
     <Modal
       size="lg"

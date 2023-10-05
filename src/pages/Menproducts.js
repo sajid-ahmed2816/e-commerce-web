@@ -28,7 +28,8 @@ function MenProducts() {
       .catch((err) => console.log(err));
   }
 
-  const handleAdd = (product) => {
+  const handleAdd = (event, product) => {
+    event.stopPropagation();
     dispatch(add(product));
     toastify.ToastifyVariants.success();
   };
@@ -58,7 +59,7 @@ function MenProducts() {
                   CardTitle={x.title}
                   src={x.image}
                   Price={x.price}
-                  onClick={() => handleAdd(x)}
+                  onClick={(e) => handleAdd(e, x)}
                 />
               </div>
             </div>

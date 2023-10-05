@@ -94,7 +94,8 @@ function Home() {
     navigate("/category/electronics");
   };
 
-  const handleAdd = (product) => {
+  const handleAdd = (event, product) => {
+    event.stopPropagation();
     dispatch(add(product));
     toastify.ToastifyVariants.success();
   };
@@ -242,7 +243,7 @@ function Home() {
                     id={x.id}
                     CardTitle={x.title}
                     src={x.image}
-                    onClick={() => handleAdd(x)}
+                    onClick={(e) => handleAdd(e, x)}
                   />
                 </div>
               </div>
@@ -272,7 +273,7 @@ function Home() {
                     id={x.id}
                     CardTitle={x.title}
                     src={x.image}
-                    onClick={() => handleAdd(x)}
+                    onClick={(e) => handleAdd(e, x)}
                   />
                 </div>
               </div>
