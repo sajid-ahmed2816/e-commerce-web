@@ -669,7 +669,7 @@ section.stores > * .leaflet-touch .leaflet-control-attribution {
 
 label {
   display: flex !important;
-  align-items: end !important;
+  align-items: flex-end !important;
   margin-left: 5px !important;
 }
 

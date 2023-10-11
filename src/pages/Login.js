@@ -1,13 +1,26 @@
 import React, { Fragment, useState } from "react";
 import { Row, Col, Form, Container } from "react-bootstrap";
 import { Images } from "../assets";
+import AuthServices from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [form, setForm] = useState({});
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log("form=>", form);
+  const handleLogin = async () => {
+    try {
+      const { data } = await AuthServices.login(form);
+      if (data === null) return;
+      console.log("data=>", data);
+      if (data.status === true) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log("error=>", error);
+    }
   };
+
   return (
     <Fragment>
       <Container>
@@ -39,7 +52,7 @@ function Login() {
                     type="email"
                     placeholder="Enter email"
                     onChange={(e) =>
-                      setForm({ ...form, login: e.target.value })
+                      setForm({ ...form, email: e.target.value })
                     }
                   />
                   <Form.Text className="text-muted"></Form.Text>
