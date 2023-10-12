@@ -2,8 +2,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ToastifyVariants = {
-  success: () => {
-    toast.success("Product has been added to cart", {
+  success: (message) => {
+    toast.success(message, {
       position: "top-center",
       className: "toastify-success",
     });

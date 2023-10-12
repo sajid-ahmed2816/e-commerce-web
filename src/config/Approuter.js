@@ -10,6 +10,7 @@ import Electronics from "../pages/Electronics";
 import Womenproducts from "../pages/Womenproducts";
 import Search from "../pages/Search";
 import Login from "../pages/Login";
+import Signin from "../pages/Signin";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function Approuter() {
@@ -27,7 +28,8 @@ function Approuter() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/description/:productId" element={<Description />} />
         <Route path="/search/:productcategory" element={<Search />} />
-        <Route path="/auth/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
       </Routes>
     </Router>
   );
