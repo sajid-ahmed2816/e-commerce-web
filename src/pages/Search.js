@@ -1,7 +1,5 @@
 import React, { Fragment } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import ProductCard from "../components/Produccard";
 import { Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -29,7 +27,6 @@ function Search() {
 
   return (
     <Fragment>
-      <Header />
       <section className="search">
         <Container>
           <div className="row my-5">
@@ -51,7 +48,6 @@ function Search() {
           </div>
         </Container>
       </section>
-      <Footer />
     </Fragment>
   );
 }

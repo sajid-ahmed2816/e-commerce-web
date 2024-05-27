@@ -1,5 +1,3 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import {
   Container,
   Row,
@@ -11,7 +9,7 @@ import {
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { remove, reset } from "../config/redux/reducer/cartSlice";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -53,9 +51,10 @@ function Cart() {
       setItemQuantities(updatedQuantities);
     } else if (itemQuantities[id] === 1) {
       // If quantity is 1, set it to 0 (prevent negative quantity)
-      const updatedQuantities = { ...itemQuantities };
-      updatedQuantities[id] = 0;
-      setItemQuantities(updatedQuantities);
+      // const updatedQuantities = { ...itemQuantities };
+      // updatedQuantities[id] = 0;
+      // setItemQuantities(updatedQuantities);
+      handleRemove(id);
     }
   };
 
@@ -71,7 +70,7 @@ function Cart() {
     }, 0);
   };
 
-  const deliveryCharges = cartData.length !== 0 ? 100.0 : 0;
+  const deliveryCharges = cartData.length !== 0 ? 100 : 0;
 
   const grandTotal =
     getTotalPrice() === 0 ? 0 : getTotalPrice() + deliveryCharges;
@@ -173,9 +172,7 @@ function Cart() {
   };
 
   return (
-    <>
-      <Header />
-
+    <Fragment>
       {/* Cart items table */}
       {cartData.length === 0 && currentStep !== 3 ? (
         <div className="emptyMessage-container">
@@ -192,7 +189,7 @@ function Cart() {
               style={{ justifyContent: currentStep === 3 && "center" }}
             >
               {/* Information Form */}
-              <div className="col-md-7">
+              <div className="col-md-6">
                 <div className="border rounded p-4">
                   <Container>
                     <Row>
@@ -529,7 +526,7 @@ function Cart() {
 
               {/* Cart Item Information */}
               <div
-                className="col-md-5"
+                className="col-md-6"
                 style={{ display: currentStep === 3 ? "none" : "block" }}
               >
                 {cartData.map((item, index) => (
@@ -541,7 +538,7 @@ function Cart() {
                       borderBottom: "1px solid #e9e9e9",
                     }}
                   >
-                    <div className="d-flex justify-content-between cartItemContainerBox">
+                    <div className="d-flex cartItemContainerBox" style={{ gap: "10px" }}>
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <div
                           className="del-item-btn"
@@ -594,12 +591,12 @@ function Cart() {
                       DELIVERY CHARGES:
                     </p>
                     <p style={{ width: "50px", margin: 0 }}>
-                      ${deliveryCharges}
+                      ${deliveryCharges.toFixed(2)}
                     </p>
                   </div>
                   <div className="d-flex flex-row justify-content-around">
                     <p style={{ width: "250px", margin: 0 }}>GRAND TOTAL</p>
-                    <p style={{ width: "50px", margin: 0 }}>${grandTotal}</p>
+                    <p style={{ width: "50px", margin: 0 }}>${grandTotal.toFixed(2)}</p>
                   </div>
                 </div>
                 <div>
@@ -630,8 +627,7 @@ function Cart() {
           </div>
         </section>
       )}
-      <Footer />
-    </>
+    </Fragment>
   );
 }
 

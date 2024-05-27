@@ -1,10 +1,9 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
 import "../App.css";
 import Toastify from "../components/Toastify";
+import { Fragment } from "react";
 
 function Description() {
   const location = useLocation();
@@ -14,16 +13,11 @@ function Description() {
 
   const handleAdd = (product) => {
     dispatch(add(product));
-    toastify.ToastifyVariants.success();
+    toastify.ToastifyVariants.success("Product added to cart");
   };
 
-  // if(!product) {
-  //   return null;
-  // }
-  console.log(product);
   return (
-    <>
-      <Header />
+    <Fragment>
       <div className="container">
         <div className="row">
           <div className="col-md-6">
@@ -50,8 +44,7 @@ function Description() {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </Fragment>
   );
 }
 

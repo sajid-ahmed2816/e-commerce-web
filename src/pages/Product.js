@@ -1,8 +1,6 @@
-import Header from "../components/Header";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import ProductCard from "../components/Produccard";
-import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
@@ -25,7 +23,7 @@ function Product() {
   const handleAdd = (event, product) => {
     event.stopPropagation();
     dispatch(add(product));
-    toastify.ToastifyVariants.success();
+    toastify.ToastifyVariants.success("Product added to cart");
   };
 
   function getProducts() {
@@ -69,8 +67,7 @@ function Product() {
   }, [data]);
 
   return (
-    <>
-      <Header />
+    <Fragment>
       <div className="container">
         <div className="all-products">
           {spinner ? (
@@ -158,8 +155,7 @@ function Product() {
           )}
         </div>
       </div>
-      <Footer />
-    </>
+    </Fragment>
   );
 }
 

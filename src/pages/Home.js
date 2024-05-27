@@ -1,6 +1,4 @@
-import Header from "../components/Header";
 import ProductCard from "../components/Produccard";
-import Footer from "../components/Footer";
 import Carousel from "react-bootstrap/Carousel";
 import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -13,6 +11,7 @@ import { Images } from "../assets";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MyModal from "../components/Modal";
+
 
 function Home() {
   const [index, setIndex] = useState(0);
@@ -97,7 +96,7 @@ function Home() {
   const handleAdd = (event, product) => {
     event.stopPropagation();
     dispatch(add(product));
-    toastify.ToastifyVariants.success();
+    toastify.ToastifyVariants.success("Product added to cart")
   };
 
   const handleProductDescription = (event, product) => {
@@ -111,9 +110,6 @@ function Home() {
 
   return (
     <Fragment>
-      {/* Header Section */}
-      <Header data={data} />
-
       {/* Hero Section */}
 
       <section className="hero">
@@ -333,9 +329,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer Section */}
-      <Footer />
     </Fragment>
   );
 }

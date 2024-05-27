@@ -42,7 +42,7 @@ function ProductCard(props) {
             style={{
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              width: "230px",
+              width: "100%",
               overflow: "hidden",
               padding: "0px 10px",
             }}
@@ -53,7 +53,7 @@ function ProductCard(props) {
           <div className="buy-btn-container">
             <button className="buy-btn" onClick={onClick}>
               <FontAwesomeIcon icon={faCartShopping} />
-              Buy Now
+              Add To Cart
             </button>
           </div>
         </Card.Body>

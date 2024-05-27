@@ -1,109 +1,126 @@
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { Fragment, useEffect } from 'react';
+import LazyLoad from 'react-lazyload';
+import { Images } from '../assets';
+import AOS from "aos"
+import "aos/dist/aos.css";
 
 function About() {
-  return (
-    <>
-      <Header />
+  useEffect(() => {
+    AOS.init({
+      disable: "phone",
+      duration: 700,
+      easing: "ease-out-cubic",
+    })
+  }, []);
 
+  return (
+    <Fragment>
       <section className='about-sec'>
         <div className='container'>
           <div className='row'>
             <div className='col-md-12'>
-              <div className='blog-1 animate-slideFromTop'>
+              <div className='blog-1' data-aos="fade-right">
                 <div className='row'>
                   <div className='col-md-7'>
                     <div className='blog-para'>
                       <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                         mollit anim id est laborum.
                       </p>
                     </div>
                   </div>
                   <div className='col-md-5'>
-                    <figure className='blog-img'>
-                      <img 
-                        src='https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-842811.jpg&fm=jpg'
-                        alt='men'
-                        width='100%'
-                      />
-                    </figure>
+                    <LazyLoad>
+                      <figure className='blog-img'>
+                        <img
+                          src={Images.bannerImg1}
+                          alt='men'
+                          width='100%'
+                        />
+                      </figure>
+                    </LazyLoad>
                   </div>
                 </div>
               </div>
-              <div className='blog-2 animate-slideFromLeft'>
+              <div className='blog-2' data-aos="fade-left">
                 <div className='row'>
                   <div className='col-md-5'>
-                    <figure className='blog-img'>
-                      <img
-                        src='https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-974911.jpg&fm=jpg'
-                        alt='women'
-                        width='100%'
-                      />
-                    </figure>
+                    <LazyLoad>
+                      <figure className='blog-img'>
+                        <img
+                          src={Images.bannerImg2}
+                          alt='women'
+                          width='100%'
+                        />
+                      </figure>
+                    </LazyLoad>
                   </div>
                   <div className='col-md-7'>
                     <div className='blog-para'>
                       <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                         mollit anim id est laborum.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className='blog-3 animate-slideFromRight'>
-              <div className='row'>
+              <div className='blog-3' data-aos="fade-right">
+                <div className='row'>
                   <div className='col-md-7'>
                     <div className='blog-para'>
                       <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                         mollit anim id est laborum.
                       </p>
                     </div>
                   </div>
                   <div className='col-md-5'>
-                    <figure className='blog-img'>
-                      <img 
-                        src='https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg'
-                        alt='men'
-                        width='100%'
-                      />
-                    </figure>
+                    <LazyLoad>
+                      <figure className='blog-img'>
+                        <img
+                          src={Images.bannerImg3}
+                          alt='men'
+                          width='100%'
+                        />
+                      </figure>
+                    </LazyLoad>
                   </div>
                 </div>
               </div>
-              <div className='blog-4 animate-slideFromBottom'>
-              <div className='row'>
+              <div className='blog-4' data-aos="fade-left">
+                <div className='row'>
                   <div className='col-md-5'>
-                    <figure className='blog-img'>
-                      <img
-                        src='https://images.pexels.com/photos/213162/pexels-photo-213162.jpeg?cs=srgb&dl=pexels-photomix-company-213162.jpg&fm=jpg'
-                        alt='women'
-                        width='100%'
-                      />
-                    </figure>
+                    <LazyLoad>
+                      <figure className='blog-img'>
+                        <img
+                          src={Images.bannerImg4}
+                          alt='women'
+                          width='100%'
+                        />
+                      </figure>
+                    </LazyLoad>
                   </div>
                   <div className='col-md-7'>
                     <div className='blog-para'>
                       <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                         mollit anim id est laborum.
                       </p>
                     </div>
@@ -112,11 +129,9 @@ function About() {
               </div>
             </div>
           </div>
-        </div> 
+        </div>
       </section>
-
-      <Footer />
-    </>
+    </Fragment>
   )
 }
 

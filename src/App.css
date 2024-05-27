@@ -17,10 +17,11 @@
   margin: 0 !important;
 }
 
-.announcement-bar > * a {
+.announcement-bar>* a {
   text-decoration: none;
 }
-.announcement-bar > * a .counter-container {
+
+.announcement-bar>* a .counter-container {
   width: 18px;
   height: 18px;
   background: red;
@@ -34,7 +35,7 @@
   justify-content: center;
 }
 
-.announcement-bar > * a .counter-container .cartItems-length {
+.announcement-bar>* a .counter-container .cartItems-length {
   color: #fff;
   font-size: 12px;
   margin: 0 !important;
@@ -168,12 +169,11 @@ hr {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.7
-  ); /* Adjust the overlay color and opacity */
+  background-color: rgba(0,
+      0,
+      0,
+      0.7);
+  /* Adjust the overlay color and opacity */
 }
 
 .slider .carousel-inner .carousel-item img {
@@ -183,14 +183,14 @@ hr {
   opacity: 1;
 }
 
-section.hero > * p {
+section.hero>* p {
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-start;
   gap: 10px;
 }
 
-section.hero > * p span {
+section.hero>* p span {
   font-weight: 500;
 }
 
@@ -208,14 +208,14 @@ section.hero > * p span {
   padding: 40px;
 }
 
-.categories > * img {
+.categories>* img {
   height: 200px;
   width: 100%;
   object-fit: cover;
   cursor: pointer;
 }
 
-section.categories > * .col-md-4 {
+section.categories>* .col-md-4 {
   margin-block: 10px;
 }
 
@@ -247,7 +247,7 @@ section.categories .row .col-md-4 {
 }
 
 section.product-cards .row .col-xl-3,
-section.search > * .row .col-xl-3,
+section.search>* .row .col-xl-3,
 .all-products .col-xl-3,
 .women-section .col-xl-3,
 .accessories-section .col-xl-3,
@@ -258,11 +258,11 @@ section.search > * .row .col-xl-3,
   margin-block: 10px;
 }
 
-section.product-cards .row .col-xl-3 > * {
+section.product-cards .row .col-xl-3>* {
   cursor: pointer;
 }
 
-section.product-cards .row .col-xl-3 > * p.card-text {
+section.product-cards .row .col-xl-3>* p.card-text {
   margin-bottom: 0;
 }
 
@@ -358,24 +358,23 @@ section.instagram .row .col-xl-3 {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
 
   .header .logo {
-    display: flex;
-    align-self: flex-start;
-    margin-block: 6px;
-    padding: 10px;
+    display: none;
   }
 
   .header .navbar {
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding-block: 20px;
+    width: 100%
   }
 
   .header .navbar .navlinks {
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
     min-width: 230px;
   }
 
@@ -385,6 +384,29 @@ section.instagram .row .col-xl-3 {
 
   ul {
     padding: 0 !important;
+  }
+
+  .navbar .logo-sm {
+    font-size: 20px;
+  }
+
+  .announcement-bar .greeting p {
+    font-size: 12px;
+  }
+
+  .navbar .navlinks .navitem {
+    display: flex;
+    width: 100%;
+  }
+
+  .navbar .navlinks .navitem input {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .navbar .logo-sm {
+    display: none;
   }
 }
 
@@ -407,6 +429,7 @@ section.instagram .row .col-xl-3 {
     transform: translateX(-50%);
     opacity: 0;
   }
+
   100% {
     transform: translateX(0);
     opacity: 1;
@@ -417,16 +440,18 @@ section.instagram .row .col-xl-3 {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
 }
 
 .col-xl-3 .card-container {
-  box-shadow: 1px 0px 15px 5px #e4e4e4dc;
+  box-shadow: 0px 2px 10px 3px #e4e4e4dc;
   border: none;
   padding: 10px;
   width: 100%;
+  border-radius: 6px;
 }
 
 .col-xl-3 .card-container .card {
@@ -518,7 +543,7 @@ section.instagram .row .col-xl-3 {
   font-weight: 600;
 }
 
-section.cart-table > * .del-item-btn {
+section.cart-table>* .del-item-btn {
   height: 40px;
   width: 40px;
   border: none;
@@ -532,109 +557,49 @@ section.cart-table > * .del-item-btn {
   justify-content: center;
 }
 
-section.cart-table > * .del-item-btn:active {
+section.cart-table>* .del-item-btn:active {
   background: transparent;
   color: #1a1a1a;
   border: 1px solid #1a1a1a;
 }
 
-section.about-sec > * .blog-1,
-section.about-sec > * .blog-2,
-section.about-sec > * .blog-3,
-section.about-sec > * .blog-4 {
-  margin-block: 50px;
+section.about-sec>* .blog-1,
+section.about-sec>* .blog-2,
+section.about-sec>* .blog-3,
+section.about-sec>* .blog-4 {
+  margin-block: 100px;
 }
 
-section.about-sec > * .blog-para {
+section.about-sec>* .blog-para {
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-section.about-sec > * p {
+section.about-sec>* p {
   line-height: 38px;
   margin: 0;
 }
 
-section.about-sec > * figure {
+section.about-sec>* figure {
   margin: 0;
-}
-
-@keyframes slideFromTop {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideFromRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideFromLeft {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideFromBottom {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.animate-slideFromTop {
-  animation: slideFromTop 1.5s ease-in-out;
-}
-
-.animate-slideFromRight {
-  animation: slideFromRight 2s ease-in-out;
-}
-
-.animate-slideFromLeft {
-  animation: slideFromLeft 2.5s ease-in-out;
-}
-
-.animate-slideFromBottom {
-  animation: slideFromBottom 3.5s ease-in-out;
 }
 
 section.stores {
   margin-block: 70px;
 }
 
-section.stores > * .box {
+section.stores>* .box {
   height: 400px;
   overflow-y: scroll;
   box-shadow: 2px 5px 12px 2px #e4e4e4;
 }
 
-section.stores > * .box .address {
+section.stores>* .box .address {
   padding: 30px;
 }
 
-section.stores > * .btn-map {
+section.stores>* .btn-map {
   width: 100%;
   padding: 8px;
   border: none;
@@ -642,7 +607,7 @@ section.stores > * .btn-map {
   color: #fff;
 }
 
-section.stores > * .leaflet-touch .leaflet-control-attribution {
+section.stores>* .leaflet-touch .leaflet-control-attribution {
   display: none;
 }
 
@@ -704,11 +669,11 @@ label {
   color: #ffffff !important;
 }
 
-.Toastify__close-button > svg {
+.Toastify__close-button>svg {
   fill: #ffffff !important;
 }
 
-.cart-table > * p.item-title {
+.cart-table>* p.item-title {
   width: 229px !important;
   white-space: nowrap !important;
   overflow: hidden !important;

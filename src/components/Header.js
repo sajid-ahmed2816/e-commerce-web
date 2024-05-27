@@ -13,27 +13,8 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 function Header({ data }) {
-  const [text, setText] = useState("");
-  const [searchData, setSearchData] = useState([]);
-
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.Cart);
-  const productsData = data;
-  // console.log("productsData", productsData);
-
-  const handleSearch = (text) => {
-    const filterData = productsData.filter(
-      (item) => item.title.includes(text) || item.category.includes(text)
-    );
-    setSearchData([...filterData]);
-    if (searchData.length !== 0) {
-      navigate(`/search/${text}`, { state: searchData });
-    }
-  };
-
-  useEffect(() => {
-    console.log(searchData); // Log searchData whenever it changes
-  }, [searchData]);
 
   return (
     <>
@@ -101,6 +82,7 @@ function Header({ data }) {
             <div className="logo">Fashion Brand</div>
             <hr />
             <Navbar expand="lg" className="navbar">
+              <div className="logo-sm">Fashion Brand</div>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <ul className="navlinks">
@@ -139,11 +121,11 @@ function Header({ data }) {
                   <li className="navitem">
                     <input
                       type="text"
-                      onChange={(e) => setText(e.target.value)}
+                    // onChange={(e) => setText(e.target.value)}
                     />
                     <button
                       className="search-btn"
-                      onClick={() => handleSearch(text)}
+                    // onClick={() => handleSearch(text)}
                     >
                       <FontAwesomeIcon
                         icon={faSearch}

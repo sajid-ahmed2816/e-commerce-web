@@ -1,6 +1,4 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import ProductCard from "../components/Produccard";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -33,7 +31,7 @@ function Accessories() {
   const handleAdd = (event, product) => {
     event.stopPropagation();
     dispatch(add(product));
-    toastify.ToastifyVariants.success();
+    toastify.ToastifyVariants.success("Product added to cart");
   };
 
   const handleProductDescription = (event, product) => {
@@ -48,8 +46,7 @@ function Accessories() {
   console.log(data);
 
   return (
-    <>
-      <Header />
+    <Fragment>
       <div className="container">
         <div className="row accessories-section py-5">
           {data.map((x, i) => (
@@ -68,8 +65,7 @@ function Accessories() {
           ))}
         </div>
       </div>
-      <Footer />
-    </>
+    </Fragment>
   );
 }
 
