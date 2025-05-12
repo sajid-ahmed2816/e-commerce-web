@@ -11,6 +11,10 @@ import Womenproducts from "../pages/Womenproducts";
 import Search from "../pages/Search";
 import Login from "../pages/Login";
 import Signin from "../pages/Signin";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+const stripePromise = loadStripe("pk_test_51RNzw1PrjmeW2KXhD524f791YmlYGn1VzEOxcjYjs2yekdw3pmI1XbQgeHgdMOaHESf0Nrdgtd9jL3YsgHuWFjCx00fhD8uQvX")
+
 
 const WebRoutes = [
   {
@@ -31,7 +35,11 @@ const WebRoutes = [
   },
   {
     path: "/cart",
-    component: <Cart />
+    component: (
+      <Elements stripe={stripePromise}>
+        <Cart />
+      </Elements>
+    )
   },
   {
     path: "/description/:productId",

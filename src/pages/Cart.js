@@ -13,13 +13,50 @@ import { useState, useEffect, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
 import emailjs from "emailjs-com";
+import PaymentService from "../api/payment/PaymentService";
+import Toastify from "../components/Toastify";
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
+
+import "../App.css";
+
+const totalSteps = 3;
+
+const cardOptions = {
+  style: {
+    base: {
+      padding: 8,
+      iconColor: '#c4f0ff',
+      color: '#31325F',
+      lineHeight: '40px',
+      fontWeight: 400,
+      fontFamily: 'Poppins, Roboto, Open Sans, Segoe UI, sans-serif',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#CFD7E0',
+      },
+    },
+    invalid: {
+      iconColor: '#FFC7EE',
+      color: '#FFC7EE',
+    },
+  },
+};
 
 function Cart() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [validated, setValidated] = useState(false);
+  const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [spinner, setSpinner] = useState(false);
+  const progress = (currentStep / totalSteps) * 100;
+  const [processing, setProcessing] = useState(false);
   const cartData = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const stripe = useStripe();
+  const elements = useElements();
 
   const [itemQuantities, setItemQuantities] = useState(() =>
     cartData.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
@@ -50,10 +87,6 @@ function Cart() {
       updatedQuantities[id] -= 1;
       setItemQuantities(updatedQuantities);
     } else if (itemQuantities[id] === 1) {
-      // If quantity is 1, set it to 0 (prevent negative quantity)
-      // const updatedQuantities = { ...itemQuantities };
-      // updatedQuantities[id] = 0;
-      // setItemQuantities(updatedQuantities);
       handleRemove(id);
     }
   };
@@ -75,15 +108,6 @@ function Cart() {
   const grandTotal =
     getTotalPrice() === 0 ? 0 : getTotalPrice() + deliveryCharges;
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [validated, setValidated] = useState(false);
-  const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [spinner, setSpinner] = useState(false);
-  const totalSteps = 3;
-  const progress = (currentStep / totalSteps) * 100;
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -97,6 +121,106 @@ function Cart() {
       }
     }
   };
+
+  // const handleOnlinePayment = async () => {
+  //   if (!stripe || !elements) return;
+
+  //   setProcessing(true);
+
+  //   const cardElement = elements.getElement(CardElement);
+
+  //   const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
+  //     type: 'card',
+  //     card: cardElement,
+  //   });
+
+  //   if (error) {
+  //     // Show error message if any
+  //     console.log(error);
+  //     alert(error.message);
+  //     setProcessing(false);
+  //     return;
+  //   }
+
+  //   const obj = {
+  //     amount: grandTotal?.toFixed(2),
+  //   }
+  //   try {
+  //     const result = await PaymentService.onlinePayment(obj);
+  //     if (result.data.status) {
+  //       Toastify.ToastifyVariants.success(result.data.message);
+  //     }
+  //     const {clientSecret} = result.data;
+
+  //     const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+  //       payment_method: stripePaymentMethod.id,
+  //     });
+
+  //     if (confirmError) {
+  //       Toastify.ToastifyVariants.error(confirmError.message);
+  //     } else {
+  //       // Payment succeeded
+  //       Toastify.ToastifyVariants.success("Payment Successful!");
+  //     }
+  //   } catch (error) {
+  //     Toastify.ToastifyVariants.error(error);
+  //   }
+  // };
+
+  const handleOnlinePayment = async () => {
+    if (!stripe || !elements) return;
+
+    setProcessing(true);
+
+    const cardElement = elements.getElement("card");
+
+    // Create payment method using Stripe's CardElement
+    const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+    });
+
+    if (error) {
+      // Show error message if any
+      console.log(error);
+      Toastify.ToastifyVariants.error(error.message);
+      setProcessing(false);
+      return;
+    }
+
+    const obj = {
+      amount: grandTotal ? (grandTotal * 100).toFixed(0) : 0, // Convert amount to cents
+    };
+
+    try {
+      // Call the backend to create a payment intent
+      const result = await PaymentService.onlinePayment(obj);
+
+      if (result.data.status) {
+        Toastify.ToastifyVariants.success(result.data.message);
+      }
+
+      const { clientSecret } = result.data;  // Get the client secret for confirming the payment
+
+      // Confirm the payment on the client side with the clientSecret
+      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: stripePaymentMethod.id,
+      });
+
+      if (confirmError) {
+        Toastify.ToastifyVariants.error(confirmError.message);
+      } else {
+        // Payment succeeded, show success message
+        Toastify.ToastifyVariants.success("Payment Successful!");
+      }
+    } catch (error) {
+      // Handle any other errors
+      Toastify.ToastifyVariants.error(error.message || "An error occurred");
+    } finally {
+      setProcessing(false); // Reset processing state
+    }
+  };
+
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -464,30 +588,77 @@ function Cart() {
                       <Col>
                         {currentStep === 2 && (
                           <Form>
-                            <Row className="my-3">
-                              <Form.Group as={Col} md="12">
-                                <Form.Label>Select Payment Method</Form.Label>
-                              </Form.Group>
-                            </Row>
-                            <Row className="mb-3">
-                              <Form.Group as={Col} md="12">
-                                <Form.Check
-                                  type="checkbox"
-                                  label="Cash On Delivery"
-                                  checked={paymentMethod}
-                                  name="paymentMethod"
-                                  onChange={(e) =>
-                                    setPaymentMethod(e.target.checked)
-                                  }
-                                />
-                              </Form.Group>
-                            </Row>
-                            <Row>
+                            <Row className="g-3">
                               <Col md="12">
-                                <button className="buy-btn" onClick={prevStep}>
-                                  Previous
-                                </button>
+                                <Form.Group>
+                                  <Form.Label>Select Payment Method</Form.Label>
+                                </Form.Group>
                               </Col>
+                              <Col md="12">
+                                <Form.Group style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                                  <Form.Check
+                                    type="radio"
+                                    value="cod"
+                                    label="Cash On Delivery"
+                                    checked={paymentMethod === "cod"}
+                                    name="paymentMethod"
+                                    onChange={(e) =>
+                                      setPaymentMethod(e.target.value)
+                                    }
+                                  />
+                                  <Form.Check
+                                    type="radio"
+                                    value="online"
+                                    label="Online Payment"
+                                    checked={paymentMethod === "online"}
+                                    name="paymentMethod"
+                                    onChange={(e) => {
+                                      setPaymentMethod(e.target.value)
+                                      if (e.target.value === "online") {
+                                        handleOnlinePayment()
+                                      }
+                                    }}
+                                  />
+                                </Form.Group>
+                              </Col>
+                              {paymentMethod === "online" && (
+                                <Col md="12">
+                                  <Row className="g-3">
+                                    <Col md="12">
+                                      <h4 style={{ margin: 0 }}>Enter Card Details</h4>
+                                    </Col>
+                                    <Col md="12">
+                                      <CardNumberElement options={cardOptions} />
+                                    </Col>
+                                    <Col md="8">
+                                      <CardExpiryElement options={cardOptions} />
+                                    </Col>
+                                    <Col md="4">
+                                      <CardCvcElement options={cardOptions} />
+                                    </Col>
+                                  </Row>
+                                </Col>
+                              )}
+                              {paymentMethod === "cod" ? (
+                                <Col md="12">
+                                  <button className="buy-btn" onClick={prevStep}>
+                                    Previous
+                                  </button>
+                                </Col>
+                              ) : (
+                                <Fragment>
+                                  <Col md="6">
+                                    <button className="buy-btn" onClick={prevStep}>
+                                      Previous
+                                    </button>
+                                  </Col>
+                                  <Col md="6">
+                                    <button className="buy-btn" onClick={prevStep}>
+                                      Pay Online
+                                    </button>
+                                  </Col>
+                                </Fragment>
+                              )}
                             </Row>
                           </Form>
                         )}
@@ -529,98 +700,106 @@ function Cart() {
                 className="col-md-6"
                 style={{ display: currentStep === 3 ? "none" : "block" }}
               >
-                {cartData.map((item, index) => (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    position: "sticky",
+                    border: "1px solid #dee2e6",
+                    top: "130px",
+                  }}
+                >
                   <div
-                    key={index}
                     style={{
-                      padding: "15px",
-                      marginBottom: "15px",
-                      borderBottom: "1px solid #e9e9e9",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 16
                     }}
                   >
-                    <div className="d-flex cartItemContainerBox" style={{ gap: "10px" }}>
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <div
-                          className="del-item-btn"
-                          onClick={() => handleRemove(item.id)}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
+                    {cartData.map((item, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          padding: "16px",
+                          borderBottom: cartData.length > 1 && index !== cartData.length - 1 ? "1px solid #e9e9e9" : "none",
+                        }}
+                      >
+                        <div className="d-flex cartItemContainerBox" style={{ gap: "10px" }}>
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <div
+                              className="del-item-btn"
+                              onClick={() => handleRemove(item.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </div>
+                          </div>
+                          <div className="d-flex align-items-center">
+                            <img
+                              src={item.image}
+                              width={"60px"}
+                              height={"60px"}
+                              style={{ objectFit: "contain" }}
+                            />
+                          </div>
+                          <div>
+                            <p className="item-title">{item.title}</p>
+                            <div className="d-flex gap-4">
+                              <button
+                                className="decreaseBtn"
+                                onClick={() => handleDecrease(item.id)}
+                              >
+                                -
+                              </button>
+                              <span>{itemQuantities[item.id]}</span>
+                              <button
+                                className="IncreaseBtn"
+                                onClick={() => handleIncrease(item.id)}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div>
+                            <p>{item.price}</p>
+                          </div>
                         </div>
                       </div>
-                      <div className="d-flex align-items-center">
-                        <img
-                          src={item.image}
-                          width={"60px"}
-                          height={"60px"}
-                          style={{ objectFit: "contain" }}
-                        />
-                      </div>
-                      <div>
-                        <p className="item-title">{item.title}</p>
-                        <div className="d-flex gap-4">
-                          <button
-                            className="decreaseBtn"
-                            onClick={() => handleDecrease(item.id)}
-                          >
-                            -
-                          </button>
-                          <span>{itemQuantities[item.id]}</span>
-                          <button
-                            className="IncreaseBtn"
-                            onClick={() => handleIncrease(item.id)}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                      <div>
-                        <p>{item.price}</p>
-                      </div>
+                    ))}
+                  </div>
+                  <div className="border-top d-flex flex-column gap-3 p-3">
+                    <div className="d-flex flex-row justify-content-between">
+                      <p style={{ margin: 0 }}>SUBTOTAL:</p>
+                      <p style={{ margin: 0 }}>${getTotalPrice()}</p>
                     </div>
+                    <div className="d-flex flex-row justify-content-between">
+                      <p style={{ margin: 0 }}>DELIVERY CHARGES:</p>
+                      <p style={{ margin: 0 }}>${deliveryCharges.toFixed(2)}</p>
+                    </div>
+                    <div className="d-flex flex-row justify-content-between">
+                      <p style={{ margin: 0 }}>GRAND TOTAL</p>
+                      <p style={{ margin: 0 }}>${grandTotal.toFixed(2)}</p>
+                    </div>
+                    <button
+                      className={paymentMethod === true ? "order-btn" : ""}
+                      style={{
+                        display: currentStep > 1 ? "block" : "none",
+                        width: "100%",
+                        padding: "10px 15px",
+                        borderRadius: "4px",
+                        outline: "none",
+                        border:
+                          paymentMethod === true
+                            ? "1px solid #000000"
+                            : "1px solid #dee2e6",
+                        backgroundColor: paymentMethod && "#000000",
+                        color: paymentMethod && "#ffffff",
+                        transition: "all .3s ease-in-out",
+                      }}
+                      onClick={handlePlaceOrder}
+                      disabled={!paymentMethod}
+                    >
+                      {spinner ? <Spinner animation="border" /> : "Place Order"}
+                    </button>
                   </div>
-                ))}
-                <div className="border d-flex flex-column gap-3 py-3">
-                  <div className="d-flex flex-row justify-content-around">
-                    <p style={{ width: "250px", margin: 0 }}>SUBTOTAL:</p>
-                    <p style={{ width: "50px", margin: 0 }}>
-                      ${getTotalPrice()}
-                    </p>
-                  </div>
-                  <div className="d-flex flex-row justify-content-around">
-                    <p style={{ width: "250px", margin: 0 }}>
-                      DELIVERY CHARGES:
-                    </p>
-                    <p style={{ width: "50px", margin: 0 }}>
-                      ${deliveryCharges.toFixed(2)}
-                    </p>
-                  </div>
-                  <div className="d-flex flex-row justify-content-around">
-                    <p style={{ width: "250px", margin: 0 }}>GRAND TOTAL</p>
-                    <p style={{ width: "50px", margin: 0 }}>${grandTotal.toFixed(2)}</p>
-                  </div>
-                </div>
-                <div>
-                  <button
-                    className={paymentMethod === true ? "order-btn" : ""}
-                    style={{
-                      display: currentStep > 1 ? "block" : "none",
-                      width: "100%",
-                      padding: "10px 15px",
-                      borderRadius: "4px",
-                      outline: "none",
-                      border:
-                        paymentMethod === true
-                          ? "1px solid #000000"
-                          : "1px solid #dee2e6",
-                      backgroundColor: paymentMethod && "#000000",
-                      color: paymentMethod && "#ffffff",
-                      transition: "all .3s ease-in-out",
-                    }}
-                    onClick={handlePlaceOrder}
-                    disabled={!paymentMethod}
-                  >
-                    {spinner ? <Spinner animation="border" /> : "Place Order"}
-                  </button>
                 </div>
               </div>
             </div>

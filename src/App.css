@@ -158,6 +158,23 @@ hr {
   padding-inline: 10px;
 }
 
+.logo {
+  opacity: 1;
+  transform: translateY(0);
+  height: auto;
+  padding: 10px 0;
+  transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+.logo.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+  height: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
 .overlay {
   position: relative;
 }
@@ -177,7 +194,7 @@ hr {
 }
 
 .slider .carousel-inner .carousel-item img {
-  height: 67vh;
+  height: calc(100vh - 218px);
   width: 100%;
   object-fit: cover;
   opacity: 1;
@@ -344,8 +361,8 @@ section.instagram .row .col-xl-3 {
   color: #fff;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 40px;
-  padding-left: 40px;
 }
 
 .footer-part-2 p {
@@ -682,4 +699,10 @@ label {
 
 .login-btn:hover {
   box-shadow: 1px 1px 15px 1px #b9b9b9;
+}
+
+.StripeElement {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0px 6px 0px 10px;
 }

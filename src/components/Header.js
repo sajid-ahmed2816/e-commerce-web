@@ -9,12 +9,20 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-function Header({ data }) {
-  const navigate = useNavigate();
+function Header() {
+  const [atTop, setAtTop] = useState(true);
   const cartItems = useSelector((state) => state.Cart);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setAtTop(window.scrollY === 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
@@ -79,7 +87,7 @@ function Header({ data }) {
       <div className="sticky-header">
         <header className="header">
           <div className="container">
-            <div className="logo">Fashion Brand</div>
+            <div className={`logo ${atTop ? "" : "hidden"}`}>Fashion Brand</div>
             <hr />
             <Navbar expand="lg" className="navbar">
               <div className="logo-sm">Fashion Brand</div>
