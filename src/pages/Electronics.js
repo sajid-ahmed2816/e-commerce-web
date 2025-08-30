@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import ProductCard from "../components/Produccard";
 import { useDispatch } from "react-redux";
@@ -40,8 +40,6 @@ function Electronics() {
   useEffect(() => {
     getProducts();
   }, []);
-
-  console.log(data);
 
   return (
     <Fragment>

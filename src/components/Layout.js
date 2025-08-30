@@ -5,13 +5,13 @@ import { Outlet } from "react-router-dom";
 
 function Layout() {
   return (
-    <Fragment>
+    <div>
       <Header />
-      <main style={{ height: "100%" }}>
+      <main>
         <Outlet />
       </main>
       <Footer />
-    </Fragment>
+    </div>
   )
 }
 

@@ -4,4 +4,6 @@ export const Images = {
   bannerImg3: require("./Images/pexels-fernando-arcos-190819.jpg"),
   bannerImg4: require("./Images/pexels-photomix-company-213162.jpg"),
   logo: require("./Images/Logo_image-transformed.png"),
+  login: require("./Images/login.jpg"),
+  google: require("./Images/google.png"),
 };
