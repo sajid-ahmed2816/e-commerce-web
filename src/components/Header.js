@@ -55,7 +55,7 @@ function Header() {
           <p className="text-white">Welcome to our store</p>
         </div>
         <div className="d-flex align-items-center px-3 gap-3">
-          <Link to="/cart">
+          <Link to={"/cart"}>
             <FontAwesomeIcon
               icon={faShoppingCart}
               style={{
@@ -73,15 +73,17 @@ function Header() {
               <span style={{ display: "none" }}></span>
             )}
           </Link>
-          <FontAwesomeIcon
-            icon={faCircleUser}
-            style={{
-              color: "#fff",
-              fontSize: "22px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          />
+          <Link to={"/login"}>
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                color: "#fff",
+                fontSize: "22px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            />
+          </Link>
         </div>
       </header>
       <div className="sticky-header">

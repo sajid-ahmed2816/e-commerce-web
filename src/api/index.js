@@ -1,29 +1,52 @@
-import axios from "axios";
+import Axios from "../config/axios";
+import { ErrorHandler } from "../utils/ErrorHandler";
 
-const url = "http://localhost:3030/api";
-
-const instance = axios.create({
-  baseURL: url,
-});
-
-const get = (endPoint) => {
-  return instance.get(endPoint);
+export const get = async (endPoint, param) => {
+  try {
+    const result = await Axios.get(endPoint, { params: param });
+    if (result.status == 200) return result.data;
+    else throw result
+  } catch (e) {
+    throw ErrorHandler(e)
+  }
 };
 
-const getById = (endPoint, id) => {
-  return instance.get(`${endPoint}/${id}`);
+export const post = async (endPoint, data) => {
+  try {
+    const result = await Axios.post(endPoint, data);
+    if (result.status == 200 || result.status == 201) return result.data;
+    else throw result
+  } catch (e) {
+    throw ErrorHandler(e)
+  }
 };
 
-const post = (endPoint, body) => {
-  return instance.post(endPoint, body);
+export const patch = async (endPoint, data) => {
+  try {
+    const result = await Axios.patch(endPoint, data);
+    if (result.status == 200) return result.data;
+    else throw result
+  } catch (e) {
+    throw ErrorHandler(e)
+  }
 };
 
-const put = (endPoint, id, body) => {
-  return instance.put(`${endPoint}/${id}`, body);
+export const put = async (endPoint, data) => {
+  try {
+    const result = await Axios.put(endPoint, data);
+    if (result.status == 200) return result.data;
+    else throw result
+  } catch (e) {
+    throw ErrorHandler(e)
+  }
 };
 
-const del = (endPoint, id) => {
-  return instance.delete(`${endPoint}/${id}`);
+export const deleted = async (endPoint) => {
+  try {
+    const result = await Axios.delete(endPoint);
+    if (result.status == 200 || result.status == 204) return result?.data;
+    else throw result
+  } catch (e) {
+    throw ErrorHandler(e)
+  }
 };
-
-export { get, getById, post, put, del };

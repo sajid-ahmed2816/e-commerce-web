@@ -17,8 +17,9 @@ function Login() {
     try {
       const { data } = await AuthServices.login(form);
       if (data === null) return;
-      if (data.status) {
+      if (data) {
         Toastify.ToastifyVariants.success(data.message);
+        userLogin(data);
         navigate("/");
       }
     } catch (error) {
@@ -55,7 +56,7 @@ function Login() {
           // backgroundSize: "contain",
           // backgroundRepeat: "no-repeat",
           // backgroundPosition: "left center",
-          background: "linear-gradient(45deg, rgb(0 0 0) 10%, rgb(241, 241, 241) 110%)",
+          background: "linear-gradient(45deg, rgb(175 121 217) 10%, rgb(241, 241, 241) 60%)",
           height: "100%"
         }}
       >
@@ -66,7 +67,7 @@ function Login() {
                 className="d-flex flex-column align-items-stretch justify-content-center my-auto gap-4"
                 style={{
                   padding: 24,
-                  background: "rgba(255, 255, 255, 0.15)", // semi-transparent
+                  background: "rgb(137 137 137 / 20%)", // semi-transparent
                   backdropFilter: "blur(8px)", // glass effect
                   WebkitBackdropFilter: "blur(8px)", // Safari support
                   border: "1px solid rgba(255, 255, 255, 0.3)", // subtle border
