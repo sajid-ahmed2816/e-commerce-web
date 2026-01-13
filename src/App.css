@@ -713,3 +713,16 @@ label {
   border-radius: 6px;
   padding: 0px 6px 0px 10px;
 }
+
+#dropdown-basic {
+  padding: 0;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.dropdown-menu {
+  z-index: 9999 !important;
+  transform: translate(0px, 35px) !important;
+}

@@ -14,6 +14,14 @@ const AuthServices = {
     const data = await post(authRoutes.google, obj);
     return data;
   },
+  verifyOtp: async (obj) => {
+    const data = await post(authRoutes.verifyOtp, obj);
+    return data;
+  },
+  resendOtp: async (obj) => {
+    const data = await post(authRoutes.resendOtp, obj);
+    return data;
+  },
 };
 
 export default AuthServices;

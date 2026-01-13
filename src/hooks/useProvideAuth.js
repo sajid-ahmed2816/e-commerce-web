@@ -7,13 +7,12 @@ function useProvideAuth() {
   const [email, setEmail] = useState(localStorage.getItem("email"));
 
   const userLogin = (data) => {
-    console.log("🚀 ~ userLogin ~ data:", data)
     localStorage.setItem("token", data.token);
-    localStorage.setItem("name", data.name);
+    localStorage.setItem("name", `${data.firstName} ${data.lastName}`);
     localStorage.setItem("picture", data.image);
     localStorage.setItem("email", data.email);
     setToken(data.token);
-    setName(data.name);
+    setName(`${data.firstName} ${data.lastName}`);
     setPicture(data.image);
     setEmail(data.email);
   };

@@ -7,20 +7,32 @@ import { Link } from "react-router-dom";
 import { auth, provider, signInWithPopup } from "../config/firebase";
 import useAuth from "../hooks/useAuth";
 import Toastify from "../components/Toastify";
+import OTPDialog from "../components/Modal/OTPDialog";
 
 function Login() {
   const [form, setForm] = useState({});
+  const [isOTPDialogOpen, setIsOTPDialogOpen] = useState(false);
+  const [email, setEmail] = useState(false);
+  const handleOTPDialog = () => {
+    setIsOTPDialogOpen((prevOpen) => !prevOpen);
+  };
   const navigate = useNavigate();
   const { userLogin } = useAuth();
 
   const handleLogin = async () => {
     try {
-      const { data } = await AuthServices.login(form);
+      const { data, message } = await AuthServices.login(form);
+      console.log("🚀 ~ handleLogin ~ data:", data)
       if (data === null) return;
       if (data) {
-        Toastify.ToastifyVariants.success(data.message);
-        userLogin(data);
-        navigate("/");
+        Toastify.ToastifyVariants.success(message);
+        if (!data?.user?.isVerified) {
+          setEmail(data?.user?.email);
+          handleOTPDialog();
+        } else {
+          userLogin({ ...data, ...data?.user });
+          navigate("/");
+        }
       }
     } catch (error) {
       Toastify.ToastifyVariants.error(error);
@@ -50,14 +62,17 @@ function Login() {
 
   return (
     <Fragment>
+      <OTPDialog
+        show={isOTPDialogOpen}
+        onHide={handleOTPDialog}
+        email={email}
+      />
       <div
         style={{
-          // background: `url(${Images.login})`,
-          // backgroundSize: "contain",
-          // backgroundRepeat: "no-repeat",
-          // backgroundPosition: "left center",
-          background: "linear-gradient(45deg, rgb(175 121 217) 10%, rgb(241, 241, 241) 60%)",
-          height: "100%"
+          background: `url(${Images.bgSignup})`,
+          height: "100%",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom"
         }}
       >
         <Container style={{ height: "100%" }}>
@@ -67,7 +82,7 @@ function Login() {
                 className="d-flex flex-column align-items-stretch justify-content-center my-auto gap-4"
                 style={{
                   padding: 24,
-                  background: "rgb(137 137 137 / 20%)", // semi-transparent
+                  background: "rgb(255 226 226 / 30%)", // semi-transparent
                   backdropFilter: "blur(8px)", // glass effect
                   WebkitBackdropFilter: "blur(8px)", // Safari support
                   border: "1px solid rgba(255, 255, 255, 0.3)", // subtle border

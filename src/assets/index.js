@@ -6,4 +6,5 @@ export const Images = {
   logo: require("./Images/Logo_image-transformed.png"),
   login: require("./Images/login.jpg"),
   google: require("./Images/google.png"),
+  bgSignup: require("./Images/bg_signup.jpg")
 };

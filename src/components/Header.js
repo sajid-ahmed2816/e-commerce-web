@@ -1,4 +1,4 @@
-import { Navbar } from "react-bootstrap";
+import { Dropdown, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
@@ -6,15 +6,26 @@ import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faBars } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 function Header() {
   const [atTop, setAtTop] = useState(true);
+
+  const navigate = useNavigate();
+
   const cartItems = useSelector((state) => state.Cart);
 
+  const { token, name, userLogout } = useAuth();
+
+  const handleLogout = () => {
+    userLogout();
+    navigate("/login")
+  }
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY === 0);
@@ -73,17 +84,42 @@ function Header() {
               <span style={{ display: "none" }}></span>
             )}
           </Link>
-          <Link to={"/login"}>
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                color: "#fff",
-                fontSize: "22px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            />
-          </Link>
+          {token ? (
+            <Dropdown>
+              <Dropdown.Toggle
+                className="dropdown-icon d-flex"
+                id="dropdown-basic"
+                variant="link"
+                style={{ textDecoration: "none" }}
+              >
+                <FontAwesomeIcon
+                  icon={faBars}
+                  style={{
+                    color: "#fff",
+                    fontSize: "21px",
+                  }}
+                />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item disabled>{name}</Dropdown.Item>
+                <Dropdown.Item>Orders</Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <Link to={"/login"}>
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  color: "#fff",
+                  fontSize: "22px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              />
+            </Link>
+          )}
         </div>
       </header>
       <div className="sticky-header">
