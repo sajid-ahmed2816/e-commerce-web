@@ -19,6 +19,7 @@ import Toastify from "../components/Toastify";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
 
 import "../App.css";
+import useAuth from "../hooks/useAuth";
 
 const totalSteps = 3;
 
@@ -44,11 +45,11 @@ const cardOptions = {
 };
 
 function Cart() {
+  const { firstName, lastName, email, userId } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [validated, setValidated] = useState(false);
   const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(false);
-  const [formData, setFormData] = useState({});
   const [spinner, setSpinner] = useState(false);
   const progress = (currentStep / totalSteps) * 100;
   const [processing, setProcessing] = useState(false);
@@ -57,6 +58,9 @@ function Cart() {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
+  const [formData, setFormData] = useState({
+    firstName: firstName, lastName: lastName, email: email
+  });
 
   const [itemQuantities, setItemQuantities] = useState(() =>
     cartData.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
@@ -334,10 +338,12 @@ function Cart() {
                                 controlId="validationCustom01"
                               >
                                 <Form.Control
+                                  disabled={formData.firstName ? true : false}
                                   required
                                   type="text"
                                   placeholder="First name"
                                   name="firstName"
+                                  value={formData.firstName}
                                   onChange={(e) =>
                                     setFormData({
                                       ...formData,
@@ -355,10 +361,12 @@ function Cart() {
                                 controlId="validationCustom02"
                               >
                                 <Form.Control
+                                  disabled={formData.lastName ? true : false}
                                   required
                                   type="text"
                                   placeholder="Last name"
                                   name="lastName"
+                                  value={formData.lastName}
                                   onChange={(e) =>
                                     setFormData({
                                       ...formData,
@@ -382,11 +390,13 @@ function Cart() {
                                     @
                                   </InputGroup.Text>
                                   <Form.Control
+                                    disabled={formData.email ? true : false}
                                     type="text"
                                     placeholder="Email"
                                     aria-describedby="inputGroupPrepend"
                                     required
                                     name="email"
+                                    value={formData.email}
                                     onChange={(e) =>
                                       setFormData({
                                         ...formData,
@@ -641,8 +651,26 @@ function Cart() {
                               )}
                               {paymentMethod === "cod" ? (
                                 <Col md="12">
-                                  <button className="buy-btn" onClick={prevStep}>
-                                    Previous
+                                  <button
+                                    className={paymentMethod === true ? "order-btn" : ""}
+                                    style={{
+                                      display: currentStep > 1 ? "block" : "none",
+                                      width: "100%",
+                                      padding: "10px 15px",
+                                      borderRadius: "4px",
+                                      outline: "none",
+                                      border:
+                                        paymentMethod === true
+                                          ? "1px solid #000000"
+                                          : "1px solid #dee2e6",
+                                      backgroundColor: paymentMethod && "#000000",
+                                      color: paymentMethod && "#ffffff",
+                                      transition: "all .3s ease-in-out",
+                                    }}
+                                    onClick={handlePlaceOrder}
+                                    disabled={!paymentMethod}
+                                  >
+                                    {spinner ? <Spinner animation="border" /> : "Place Order"}
                                   </button>
                                 </Col>
                               ) : (
@@ -698,14 +726,14 @@ function Cart() {
               {/* Cart Item Information */}
               <div
                 className="col-md-6"
-                style={{ display: currentStep === 3 ? "none" : "block" }}
+                style={{ display: currentStep === 3 ? "none" : "block", height: "" }}
               >
                 <div
                   style={{
-                    borderRadius: "6px",
-                    position: "sticky",
                     border: "1px solid #dee2e6",
-                    top: "130px",
+                    borderRadius: "6px",
+                    // position: "sticky",
+                    // top: "130px",
                   }}
                 >
                   <div
@@ -778,27 +806,6 @@ function Cart() {
                       <p style={{ margin: 0 }}>GRAND TOTAL</p>
                       <p style={{ margin: 0 }}>${grandTotal.toFixed(2)}</p>
                     </div>
-                    <button
-                      className={paymentMethod === true ? "order-btn" : ""}
-                      style={{
-                        display: currentStep > 1 ? "block" : "none",
-                        width: "100%",
-                        padding: "10px 15px",
-                        borderRadius: "4px",
-                        outline: "none",
-                        border:
-                          paymentMethod === true
-                            ? "1px solid #000000"
-                            : "1px solid #dee2e6",
-                        backgroundColor: paymentMethod && "#000000",
-                        color: paymentMethod && "#ffffff",
-                        transition: "all .3s ease-in-out",
-                      }}
-                      onClick={handlePlaceOrder}
-                      disabled={!paymentMethod}
-                    >
-                      {spinner ? <Spinner animation="border" /> : "Place Order"}
-                    </button>
                   </div>
                 </div>
               </div>
