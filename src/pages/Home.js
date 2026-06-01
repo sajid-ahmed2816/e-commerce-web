@@ -11,6 +11,8 @@ import { Images } from "../assets";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MyModal from "../components/Modal";
+import BannerService from "../api/banners/BannerService";
+import CategoryService from "../api/category/CategoryService";
 
 
 function Home() {
@@ -19,6 +21,8 @@ function Home() {
   const [shortData, setShortData] = useState([]);
   const [randomData, setRandomData] = useState([]);
   const [instaData, setInstaData] = useState([]);
+  const [banners, setBanners] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
@@ -104,8 +108,33 @@ function Home() {
     navigate(`/description/${product.id}`, { state: product });
   };
 
+  const getCategories = async () => {
+    try {
+      const result = await CategoryService.getCategories();
+      if (result?.status) {
+        const arr = result?.data?.categories?.filter(c => c?.isPopular === true);
+        setCategories(arr);
+      }
+    } catch (error) {
+      toastify.ToastifyVariants.error(error);
+    };
+  };
+
+  const getBanners = async () => {
+    try {
+      const result = await BannerService.getBanner();
+      if (result?.status) {
+        setBanners(result?.data?.banners);
+      }
+    } catch (error) {
+      toastify.ToastifyVariants.error(error);
+    };
+  };
+
   useEffect(() => {
     getProducts();
+    getBanners();
+    getCategories();
   }, []);
 
   return (
@@ -118,69 +147,23 @@ function Home() {
           onSelect={handleSelect}
           className="slider"
         >
-          <Carousel.Item>
-            <div className="overlay">
-              <img
-                className="d-block"
-                src={Images.bannerImg1}
-                alt="First slide"
-              />
-            </div>
-            <Carousel.Caption>
-              <p>
-                <Button onClick={handleHeroButton} />
-                <span>A perfect choice for your fashion standard.</span>
-              </p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <div className="overlay">
-              <img
-                className="d-block"
-                src={Images.bannerImg2}
-                alt="Second slide"
-              />
-            </div>
-
-            <Carousel.Caption>
-              <p>
-                <Button onClick={handleHeroButton} />
-                <span>A perfect choice for your fashion standard.</span>
-              </p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <div className="overlay">
-              <img
-                className="d-block"
-                src={Images.bannerImg3}
-                alt="Third slide"
-              />
-            </div>
-
-            <Carousel.Caption>
-              <p>
-                <Button onClick={handleHeroButton} />
-                <span>A perfect choice for your fashion standard.</span>
-              </p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <div className="overlay">
-              <img
-                className="d-block"
-                src={Images.bannerImg4}
-                alt="Fourth slide"
-              />
-            </div>
-
-            <Carousel.Caption>
-              <p>
-                <Button onClick={handleHeroButton} />
-                <span>A perfect choice for your fashion standard.</span>
-              </p>
-            </Carousel.Caption>
-          </Carousel.Item>
+          {banners?.map((item, ind) => (
+            <Carousel.Item key={ind}>
+              <div className="overlay">
+                <img
+                  className="d-block"
+                  src={item?.image}
+                  alt={item?.category?.type}
+                />
+              </div>
+              <Carousel.Caption>
+                <p>
+                  <Button onClick={handleHeroButton} />
+                  <span>{item?.tagline}</span>
+                </p>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
         </Carousel>
       </section>
 
@@ -194,26 +177,13 @@ function Home() {
                 <h1 className="display-4">Shop by category</h1>
               </div>
             </div>
-            <div className="col-md-3 my-5">
-              <div onClick={handleMenCategory}>
-                <img src={Images.bannerImg1} alt="" />
+            {categories?.map((category, ind) => (
+              <div className="col-md-3 my-5" key={ind}>
+                <div onClick={handleMenCategory}>
+                  <img src={category?.image} alt={category?.name} />
+                </div>
               </div>
-            </div>
-            <div className="col-md-3 my-5">
-              <div onClick={handleWomenCategory}>
-                <img src={Images.bannerImg2} alt="" />
-              </div>
-            </div>
-            <div className="col-md-3 my-5">
-              <div onClick={handleAccessoriesCategory}>
-                <img src={Images.bannerImg3} alt="" />
-              </div>
-            </div>
-            <div className="col-md-3 my-5">
-              <div onClick={handleElectronicCategory}>
-                <img src={Images.bannerImg4} alt="" />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
