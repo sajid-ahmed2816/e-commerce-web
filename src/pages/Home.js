@@ -13,6 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import MyModal from "../components/Modal";
 import BannerService from "../api/banners/BannerService";
 import CategoryService from "../api/category/CategoryService";
+import Loader from "../components/Loader";
 
 
 function Home() {
@@ -23,6 +24,7 @@ function Home() {
   const [instaData, setInstaData] = useState([]);
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
@@ -33,8 +35,39 @@ function Home() {
     setIndex(selectedIndex);
   };
 
+  const handleHeroButton = () => {
+    navigate("/products");
+  };
+
+  const handleMenCategory = () => {
+    navigate("/category/menwear");
+  };
+
+  const handleAccessoriesCategory = () => {
+    navigate("/category/accessories");
+  };
+
+  const handleWomenCategory = () => {
+    navigate("/category/womenwear");
+  };
+
+  const handleElectronicCategory = () => {
+    navigate("/category/electronics");
+  };
+
+  const handleAdd = (event, product) => {
+    event.stopPropagation();
+    dispatch(add(product));
+    toastify.ToastifyVariants.success("Product added to cart")
+  };
+
+  const handleProductDescription = (event, product) => {
+    event.stopPropagation();
+    navigate(`/description/${product.id}`, { state: product });
+  };
+
   function getProducts() {
-    axios
+    return axios
       .get(url)
       .then((res) => {
         setData([...data, ...res.data]);
@@ -75,230 +108,201 @@ function Home() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const getData = async () => {
+    setIsLoading(true);
+    try {
+      const [bannersData, categoriesData] = await Promise.all([BannerService.getBanner(), CategoryService.getCategories(), getProducts()]);
+      if (bannersData?.status) {
+        setBanners(bannersData?.data?.banners);
+      }
+      if (categoriesData?.status) {
+        setCategories(categoriesData?.data?.categories);
+      }
+    } catch (error) {
+      Toastify.ToastifyVariants.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  const handleHeroButton = () => {
-    navigate("/products");
-  };
-
-  const handleMenCategory = () => {
-    navigate("/category/menwear");
-  };
-
-  const handleAccessoriesCategory = () => {
-    navigate("/category/accessories");
-  };
-
-  const handleWomenCategory = () => {
-    navigate("/category/womenwear");
-  };
-
-  const handleElectronicCategory = () => {
-    navigate("/category/electronics");
-  };
-
-  const handleAdd = (event, product) => {
-    event.stopPropagation();
-    dispatch(add(product));
-    toastify.ToastifyVariants.success("Product added to cart")
-  };
-
-  const handleProductDescription = (event, product) => {
-    event.stopPropagation();
-    navigate(`/description/${product.id}`, { state: product });
-  };
-
-  const getCategories = async () => {
-    try {
-      const result = await CategoryService.getCategories();
-      if (result?.status) {
-        const arr = result?.data?.categories?.filter(c => c?.isPopular === true);
-        setCategories(arr);
-      }
-    } catch (error) {
-      toastify.ToastifyVariants.error(error);
-    };
-  };
-
-  const getBanners = async () => {
-    try {
-      const result = await BannerService.getBanner();
-      if (result?.status) {
-        setBanners(result?.data?.banners);
-      }
-    } catch (error) {
-      toastify.ToastifyVariants.error(error);
-    };
-  };
-
   useEffect(() => {
-    getProducts();
-    getBanners();
-    getCategories();
+    getData();
   }, []);
 
   return (
     <Fragment>
-      {/* Hero Section */}
 
-      <section className="hero">
-        <Carousel
-          activeIndex={index}
-          onSelect={handleSelect}
-          className="slider"
-        >
-          {banners?.map((item, ind) => (
-            <Carousel.Item key={ind}>
-              <div className="overlay">
-                <img
-                  className="d-block"
-                  src={item?.image}
-                  alt={item?.category?.type}
-                />
-              </div>
-              <Carousel.Caption>
-                <p>
-                  <Button onClick={handleHeroButton} />
-                  <span>{item?.tagline}</span>
-                </p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          ))}
-        </Carousel>
-      </section>
+      {isLoading ? (
+        <div style={{ height: "100vh", display: "flex", alignItems: "center" }}>
+          <Loader />
+        </div>
+      ) : (
+        <>
+          {/* Hero Section */}
 
-      {/* Category Section */}
+          <section className="hero">
+            <Carousel
+              activeIndex={index}
+              onSelect={handleSelect}
+              className="slider"
+            >
+              {banners?.map((item, ind) => (
+                <Carousel.Item key={ind}>
+                  <div className="overlay">
+                    <img
+                      className="d-block"
+                      src={item?.image}
+                      alt={item?.category?.type}
+                    />
+                  </div>
+                  <Carousel.Caption>
+                    <p>
+                      <Button onClick={handleHeroButton} />
+                      <span style={{ textAlign: "start" }}>{item?.tagline}</span>
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          </section>
 
-      <section className="categories">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="head text-center my-5">
-                <h1 className="display-4">Shop by category</h1>
+          {/* Category Section */}
+
+          <section className="categories">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="head text-center my-5">
+                    <h1 className="display-4">Shop by category</h1>
+                  </div>
+                </div>
+                {categories?.map((category, ind) => (
+                  <div className="col-md-3 my-5" key={ind}>
+                    <div onClick={handleMenCategory}>
+                      <img src={category?.image} alt={category?.name} />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            {categories?.map((category, ind) => (
-              <div className="col-md-3 my-5" key={ind}>
-                <div onClick={handleMenCategory}>
-                  <img src={category?.image} alt={category?.name} />
+          </section>
+
+          {/* Products Card Section */}
+
+          <section className="product-cards">
+            <div className="container">
+              <div className="d-flex p-3 justify-content-center align-items-center">
+                <h1 className="display-4">Hot Products Selling on Demand</h1>
+              </div>
+              <div className="row mb-5">
+                {shortData.map((x, i) => (
+                  <div
+                    className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5"
+                    key={i}
+                  >
+                    <div className="card-container">
+                      <ProductCard
+                        handleNavigate={(e) => handleProductDescription(e, x)}
+                        data={x}
+                        Price={x.price}
+                        id={x.id}
+                        CardTitle={x.title}
+                        src={x.image}
+                        onClick={(e) => handleAdd(e, x)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Products Card Section */}
+
+          <section className="product-cards">
+            <div className="container">
+              <div className="d-flex p-3 justify-content-center align-items-center">
+                <h1 className="display-4">Featured Products You Like</h1>
+              </div>
+              <div className="row mb-5">
+                {randomData.map((x, i) => (
+                  <div
+                    className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5"
+                    key={i}
+                  >
+                    <div className="card-container">
+                      <ProductCard
+                        handleNavigate={(e) => handleProductDescription(e, x)}
+                        data={x}
+                        Price={x.price}
+                        id={x.id}
+                        CardTitle={x.title}
+                        src={x.image}
+                        onClick={(e) => handleAdd(e, x)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Instagram Section */}
+
+          <section className="instagram">
+            <div className="container">
+              <div className="p-5 d-flex justify-content-center align-items-center">
+                <h1 className="display-4">Gallery Of Our Featured Produts</h1>
+              </div>
+              <div className="row mb-5">
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                  <div className="insta-images">
+                    <img
+                      src={Images.bannerImg1}
+                      alt=""
+                      width="100%"
+                      height="300px"
+                    />
+                  </div>
+                </div>
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                  <div className="insta-images">
+                    <img
+                      src={Images.bannerImg2}
+                      alt=""
+                      width="100%"
+                      height="300px"
+                    />
+                  </div>
+                </div>
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                  <div className="insta-images">
+                    <img
+                      src={Images.bannerImg3}
+                      alt=""
+                      width="100%"
+                      height="300px"
+                    />
+                  </div>
+                </div>
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                  <div className="insta-images">
+                    <img
+                      src={Images.bannerImg4}
+                      alt=""
+                      width="100%"
+                      height="300px"
+                    />
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Products Card Section */}
-
-      <section className="product-cards">
-        <div className="container">
-          <div className="d-flex p-3 justify-content-center align-items-center">
-            <h1 className="display-4">Hot Products Selling on Demand</h1>
-          </div>
-          <div className="row mb-5">
-            {shortData.map((x, i) => (
-              <div
-                className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5"
-                key={i}
-              >
-                <div className="card-container">
-                  <ProductCard
-                    handleNavigate={(e) => handleProductDescription(e, x)}
-                    data={x}
-                    Price={x.price}
-                    id={x.id}
-                    CardTitle={x.title}
-                    src={x.image}
-                    onClick={(e) => handleAdd(e, x)}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Products Card Section */}
-
-      <section className="product-cards">
-        <div className="container">
-          <div className="d-flex p-3 justify-content-center align-items-center">
-            <h1 className="display-4">Featured Products You Like</h1>
-          </div>
-          <div className="row mb-5">
-            {randomData.map((x, i) => (
-              <div
-                className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5"
-                key={i}
-              >
-                <div className="card-container">
-                  <ProductCard
-                    handleNavigate={(e) => handleProductDescription(e, x)}
-                    data={x}
-                    Price={x.price}
-                    id={x.id}
-                    CardTitle={x.title}
-                    src={x.image}
-                    onClick={(e) => handleAdd(e, x)}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Instagram Section */}
-
-      <section className="instagram">
-        <div className="container">
-          <div className="p-5 d-flex justify-content-center align-items-center">
-            <h1 className="display-4">Gallery Of Our Featured Produts</h1>
-          </div>
-          <div className="row mb-5">
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-              <div className="insta-images">
-                <img
-                  src={Images.bannerImg1}
-                  alt=""
-                  width="100%"
-                  height="300px"
-                />
-              </div>
             </div>
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-              <div className="insta-images">
-                <img
-                  src={Images.bannerImg2}
-                  alt=""
-                  width="100%"
-                  height="300px"
-                />
-              </div>
-            </div>
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-              <div className="insta-images">
-                <img
-                  src={Images.bannerImg3}
-                  alt=""
-                  width="100%"
-                  height="300px"
-                />
-              </div>
-            </div>
-            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-              <div className="insta-images">
-                <img
-                  src={Images.bannerImg4}
-                  alt=""
-                  width="100%"
-                  height="300px"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        </>
+      )}
+
     </Fragment>
   );
 }

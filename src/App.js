@@ -9,11 +9,12 @@ import { PersistGate } from 'redux-persist/integration/react';
 import PublicRoutes from './routes/PublicRoutes';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from './components/Loader';
 
 function App() {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<Loader />} persistor={persistor}>
         <BrowserRouter>
           <ToastContainer />
           <Routes>

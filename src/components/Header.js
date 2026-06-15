@@ -38,95 +38,98 @@ function Header() {
   return (
     <>
       <header className="announcement-bar">
-        <div className="d-flex align-items-center px-3 gap-3">
-          <a href="https://www.facebook.com" target="_new">
-            <FontAwesomeIcon
-              icon={faSquareFacebook}
-              style={{
-                color: "#fff",
-                fontSize: "23px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            />
-          </a>
-          <a href="https://www.instagram.com" target="_new">
-            <FontAwesomeIcon
-              icon={faInstagram}
-              style={{
-                color: "#fff",
-                fontSize: "25px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            />
-          </a>
-        </div>
-        <div className="d-flex align-items-center px-3 greeting">
-          <p className="text-white">Welcome to our store</p>
-        </div>
-        <div className="d-flex align-items-center px-3 gap-3">
-          <Link to={"/cart"}>
-            <FontAwesomeIcon
-              icon={faShoppingCart}
-              style={{
-                color: "#fff",
-                fontSize: "21px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            />
-            {cartItems.length > 0 ? (
-              <span className="counter-container">
-                <span className="cartItems-length">{cartItems.length}</span>
-              </span>
-            ) : (
-              <span style={{ display: "none" }}></span>
-            )}
-          </Link>
-          {token ? (
-            <Dropdown>
-              <Dropdown.Toggle
-                className="dropdown-icon d-flex"
-                id="dropdown-basic"
-                variant="link"
-                style={{ textDecoration: "none" }}
-              >
+        <div className="container">
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center gap-3">
+              <a href="https://www.facebook.com" target="_new">
                 <FontAwesomeIcon
-                  icon={faBars}
+                  icon={faSquareFacebook}
+                  style={{
+                    color: "#fff",
+                    fontSize: "23px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                />
+              </a>
+              <a href="https://www.instagram.com" target="_new">
+                <FontAwesomeIcon
+                  icon={faInstagram}
+                  style={{
+                    color: "#fff",
+                    fontSize: "25px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                />
+              </a>
+            </div>
+            <div className="d-flex align-items-center greeting">
+              <p className="text-white">Welcome to our store</p>
+            </div>
+            <div className="d-flex align-items-center gap-3">
+              <Link to={"/cart"}>
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
                   style={{
                     color: "#fff",
                     fontSize: "21px",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 />
-              </Dropdown.Toggle>
+                {cartItems.length > 0 ? (
+                  <span className="counter-container">
+                    <span className="cartItems-length">{cartItems.length}</span>
+                  </span>
+                ) : (
+                  <span style={{ display: "none" }}></span>
+                )}
+              </Link>
+              {token ? (
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="dropdown-icon d-flex"
+                    id="dropdown-basic"
+                    variant="link"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faBars}
+                      style={{
+                        color: "#fff",
+                        fontSize: "21px",
+                      }}
+                    />
+                  </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item disabled>{name}</Dropdown.Item>
-                <Dropdown.Item>Orders</Dropdown.Item>
-                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <Link to={"/login"}>
-              <FontAwesomeIcon
-                icon={faCircleUser}
-                style={{
-                  color: "#fff",
-                  fontSize: "22px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              />
-            </Link>
-          )}
+                  <Dropdown.Menu>
+                    <Dropdown.Item disabled>{name}</Dropdown.Item>
+                    <Dropdown.Item>Orders</Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              ) : (
+                <Link to={"/login"}>
+                  <FontAwesomeIcon
+                    icon={faCircleUser}
+                    style={{
+                      color: "#fff",
+                      fontSize: "22px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  />
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </header>
       <div className="sticky-header">
         <header className="header">
-          <div className="container">
-            <div className={`logo ${atTop ? "" : "hidden"}`}>Fashion Brand</div>
-            <hr />
+          <div className="container d-flex align-items-center justify-content-between">
+            <h1 className="m-0 logo">Fashion Brand</h1>
             <Navbar expand="lg" className="navbar">
               <div className="logo-sm">Fashion Brand</div>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -164,24 +167,30 @@ function Header() {
                   <li className="navitem">
                     <Link to="/store">Stores</Link>
                   </li>
-                  <li className="navitem">
-                    <input
-                      type="text"
-                    // onChange={(e) => setText(e.target.value)}
-                    />
-                    <button
-                      className="search-btn"
-                    // onClick={() => handleSearch(text)}
-                    >
-                      <FontAwesomeIcon
-                        icon={faSearch}
-                        style={{ color: "gray" }}
-                      />
-                    </button>
-                  </li>
                 </ul>
               </Navbar.Collapse>
             </Navbar>
+            <div className="navitem">
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  // onChange={(e) => setText(e.target.value)}
+                  placeholder="Search here..."
+                  style={{
+                    width: "203.953px"
+                  }}
+                />
+                <button
+                  className="search-btn"
+                // onClick={() => handleSearch(text)}
+                >
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    style={{ color: "gray" }}
+                  />
+                </button>
+              </div>
+            </div>
           </div>
         </header>
       </div>
