@@ -6,7 +6,7 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import MyModal from "./Modal";
 
 function ProductCard(props) {
-  let { CardTitle, src, Price, onClick, data, handleNavigate } = props;
+  let { CardTitle, src, Price, onClick, data } = props;
 
   const [modal, setModal] = useState(false);
 
@@ -17,7 +17,7 @@ function ProductCard(props) {
   return (
     <Fragment>
       <MyModal show={modal} onHide={() => setModal(false)} data={data} />
-      <Card onClick={handleNavigate}>
+      <Card>
         <Card.Body>
           <Card.Img
             variant="top"

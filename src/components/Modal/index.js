@@ -17,7 +17,7 @@ function MyModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          {data.title}
+          {data.name}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

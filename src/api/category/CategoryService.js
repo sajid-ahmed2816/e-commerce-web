@@ -2,8 +2,8 @@ import { get } from "../index";
 import Routes from "./Routes";
 
 const CategoryService = {
-  getCategories: async () => {
-    const result = await get(Routes.getCategories);
+  getCategories: async (params) => {
+    const result = await get(Routes.getCategories, params);
     return result;
   },
 };

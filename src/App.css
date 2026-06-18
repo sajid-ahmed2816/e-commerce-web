@@ -240,16 +240,6 @@ section.hero>* p span {
   cursor: pointer;
 }
 
-section.categories>* .col-md-4 {
-  margin-block: 10px;
-}
-
-section.categories .row .col-md-4 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .navitem input {
   padding: 5px;
   outline: none;
@@ -270,26 +260,6 @@ section.categories .row .col-md-4 {
 
 .product-cards {
   padding: 20px;
-}
-
-section.product-cards .row .col-xl-3,
-section.search>* .row .col-xl-3,
-.all-products .col-xl-3,
-.women-section .col-xl-3,
-.accessories-section .col-xl-3,
-.elec-section .col-xl-3 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-block: 10px;
-}
-
-section.product-cards .row .col-xl-3>* {
-  cursor: pointer;
-}
-
-section.product-cards .row .col-xl-3>* p.card-text {
-  margin-bottom: 0;
 }
 
 .btn-container {
@@ -341,12 +311,6 @@ section.instagram .insta-images img {
   object-fit: cover;
 }
 
-section.instagram .row .col-xl-3 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .footer {
   background: #a7a5a5a1;
   display: flex;
@@ -354,7 +318,7 @@ section.instagram .row .col-xl-3 {
 }
 
 .footer-part-1 {
-  padding: 40px;
+  padding-block: 40px;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -436,80 +400,37 @@ section.instagram .row .col-xl-3 {
   }
 }
 
-.men-section .col-xl-3 {
-  display: flex;
-  justify-content: center;
-}
-
-.all-products .col-xl-3 {
-  margin-block: 10px;
-}
-
-.women-section .col-xl-3,
-.elec-section .col-xl-3 {
-  margin-block: 10px;
-}
-
-@keyframes slideInLeft {
-  0% {
-    transform: translateX(-50%);
-    opacity: 0;
-  }
-
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInRight {
-  0% {
-    transform: translateX(0%);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.col-xl-3 .card-container {
+.card-container {
   box-shadow: 0px 2px 10px 3px #e4e4e4dc;
   border: none;
   padding: 10px;
   width: 100%;
   border-radius: 6px;
+  position: relative;
 }
 
-.col-xl-3 .card-container .card {
+.card-container .card {
   border: none;
 }
 
-.col-xl-3 .card-container .card .view-btn {
-  margin-left: -60px;
+.card .view-btn {
   height: 40px;
   width: 40px;
   border: none;
   border-radius: 50%;
   background: #1a1a1a;
   color: #fff;
-  display: blocl;
   position: absolute;
-  bottom: 250px;
-  right: 100px;
-  display: none;
-  animation-name: slideInRight;
+  bottom: 278px;
+  left: -20px;
+  opacity: 0;
   transition: all 0.2s ease-in-out;
 }
 
-.col-xl-3 .card-container .card:hover .view-btn {
-  display: block;
-  bottom: 82%;
-  left: 5%;
-  margin-left: 0px;
-  transition: all ease-in-out;
-  animation-name: slideInLeft;
-  animation-duration: 0.2s;
-  animation-timing-function: ease-in-out;
+.card:hover .view-btn {
+  left: 0px;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-container .view-btn:active {
@@ -727,4 +648,73 @@ label {
 .dropdown-menu {
   z-index: 9999 !important;
   transform: translate(0px, 35px) !important;
+}
+
+/* Filter Sidebar - Modern Look */
+.filter-sidebar {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.filter-sidebar:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Price range slider track and handles overrides */
+.rc-slider-handle:active {
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.3) !important;
+}
+
+.rc-slider-handle:focus {
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2) !important;
+}
+
+/* Product cards - subtle hover effect */
+.card-container {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Improve input number appearance */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background: #000000;
+  padding: 12px;
+  border-radius: 50%;
+  color: #ffffff !important;
+  border: 1px solid #000000;
+}
+
+.swiper-button-next {
+  right: 0 !important;
+}
+
+.swiper-button-next:hover {
+  border: 1px solid #000000;
+  background: transparent;
+  color: #000000 !important;
+}
+
+.swiper-button-prev {
+  left: 0 !important;
+}
+
+.swiper-button-prev:hover {
+  border: 1px solid #000000;
+  background: transparent;
+  color: #000000 !important;
 }

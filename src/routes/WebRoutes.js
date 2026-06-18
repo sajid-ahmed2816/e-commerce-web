@@ -8,12 +8,6 @@ const About = lazy(() => import("../pages/About"));
 const Product = lazy(() => import("../pages/Product"));
 const Store = lazy(() => import("../pages/Store"));
 const Cart = lazy(() => import("../pages/Cart"));
-const Description = lazy(() => import("../pages/Description"));
-const MenProducts = lazy(() => import("../pages/Menproducts"));
-const Accessories = lazy(() => import("../pages/Accessories"));
-const Electronics = lazy(() => import("../pages/Electronics"));
-const Womenproducts = lazy(() => import("../pages/Womenproducts"));
-
 
 const WebRoutes = [
   {
@@ -39,26 +33,6 @@ const WebRoutes = [
         <Cart />
       </Elements>
     )
-  },
-  {
-    path: "/description/:productId",
-    component: <Description />
-  },
-  {
-    path: "/category/menwear",
-    component: <MenProducts />
-  },
-  {
-    path: "/category/accessories",
-    component: <Accessories />
-  },
-  {
-    path: "/category/electronics",
-    component: <Electronics />
-  },
-  {
-    path: "/category/womenwear",
-    component: <Womenproducts />
   },
 ];
 

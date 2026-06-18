@@ -4,15 +4,15 @@ import "react-toastify/dist/ReactToastify.css";
 const ToastifyVariants = {
   success: (message) => {
     toast.success(message, {
-      position: "top-center",
+      position: "top-right",
       className: "toastify-success",
     });
   },
-  warning: () => {
-    toast.warning("Please select color and size");
+  warning: (message) => {
+    toast.warning(message);
   },
-  error: () => {
-    toast.error("Internal server error");
+  error: (message) => {
+    toast.error(message);
   },
 };
 

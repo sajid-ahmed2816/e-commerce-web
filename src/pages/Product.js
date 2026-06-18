@@ -1,158 +1,349 @@
-import axios from "axios";
-import { useEffect, useState, Fragment } from "react";
-import ProductCard from "../components/Produccard";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, Fragment, useRef, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { add } from "../config/redux/reducer/cartSlice";
-import "../App.css";
-import Toastify from "../components/Toastify";
+import { increment, decrement, remove, reset } from "../config/redux/reducer/cartSlice";
 import { Spinner } from "react-bootstrap";
+import Slider from "rc-slider";
+import ProductCard from "../components/Produccard";
+import ProductService from "../api/product/ProductService";
+import CategoryService from "../api/category/CategoryService";
+import Toastify from "../components/Toastify";
+import "rc-slider/assets/index.css";
+import "../App.css";
+
+// 🆕 Import rc-slider
 
 function Product() {
-  const [data, setData] = useState([]);
-  const [menWear, setMenWear] = useState([]);
-  const [womenWear, setWomenWear] = useState([]);
-  const [jewelery, setJewelery] = useState([]);
-  const [electronic, setElectronics] = useState([]);
-  const [spinner, setSpinner] = useState(false);
-  let url = "https://fakestoreapi.com/products";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const toastify = Toastify;
+  const { state } = useLocation();
+
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [filters, setFilters] = useState({
+    category: state?.categoryId || "",
+    minPrice: 0,
+    maxPrice: 10000,
+  });
+
+  const isFetchingNext = useRef(false);
+  const sentinelRef = useRef(null);
+  const observerRef = useRef(null);
 
   const handleAdd = (event, product) => {
     event.stopPropagation();
-    dispatch(add(product));
-    toastify.ToastifyVariants.success("Product added to cart");
+    dispatch(increment(product));
+    Toastify.ToastifyVariants.success("Product added to cart");
   };
 
-  function getProducts() {
-    setSpinner(true);
-    axios
-      .get(url)
-      .then((res) => {
-        setData([...data, ...res.data]);
-        setSpinner(false);
-        // console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        setSpinner(false);
-      });
-  }
+  const fetchProducts = useCallback(
+    async (pageNum, resetList = false) => {
+      if (loading && !resetList) return;
 
-  const handleProductDescription = (event, product) => {
-    event.stopPropagation();
-    navigate(`/description/${product.id}`, { state: product });
+      setLoading(true);
+      try {
+        const params = {
+          page: pageNum,
+          limit: 12, // per page 12 items
+          category: filters.category || undefined,
+          minPrice: filters.minPrice || undefined,
+          maxPrice: filters.maxPrice || undefined,
+        };
+
+        // Clean undefined params
+        Object.keys(params).forEach(
+          (key) => params[key] === undefined && delete params[key]
+        );
+
+        const result = await ProductService.getProducts(params);
+
+        if (result?.status) {
+          const newProducts = result.data.products || [];
+          const pagination = result.data.pagination;
+
+          if (resetList) {
+            setProducts(newProducts);
+          } else {
+            setProducts((prev) => {
+              const existingIds = new Set(prev.map((p) => p._id));
+              const uniqueNew = newProducts.filter((p) => !existingIds.has(p._id));
+              return [...prev, ...uniqueNew];
+            });
+          }
+
+          const totalPages = pagination?.totalPages || 1;
+          setHasMore(pageNum < totalPages);
+        } else {
+          Toastify.ToastifyVariants.error("Failed to fetch products");
+        }
+      } catch (error) {
+        Toastify.ToastifyVariants.error(error?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+        isFetchingNext.current = false;
+      }
+    }, [filters]
+  );
+
+  useEffect(() => {
+    setPage(1);
+    setHasMore(true);
+    isFetchingNext.current = false;
+    fetchProducts(1, true);
+  }, [filters]);
+
+  useEffect(() => {
+    if (page > 1) {
+      isFetchingNext.current = true;
+      fetchProducts(page, false);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    if (loading || !hasMore || isFetchingNext.current) {
+      return;
+    }
+
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMore && !loading && !isFetchingNext.current) {
+          isFetchingNext.current = true;
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px 50px 0px" }
+    );
+
+    if (sentinelRef.current) {
+      observerRef.current.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [loading, hasMore, products]);
+
+  // ---------- GET CATEGORIES ----------
+  const getCategories = async () => {
+    try {
+      const params = { page: 1, limit: "all" };
+      const result = await CategoryService.getCategories(params);
+      if (result?.status) {
+        setCategories(result?.data?.categories || []);
+      }
+    } catch (error) {
+      Toastify.ToastifyVariants.error(error);
+    }
   };
 
   useEffect(() => {
-    getProducts();
+    getCategories();
   }, []);
 
-  useEffect(() => {
-    let menProducts = data.filter((item) => item.category === "men's clothing");
-    setMenWear([...menProducts]);
-
-    let womenProducts = data.filter(
-      (item) => item.category === "women's clothing"
-    );
-    setWomenWear([...womenProducts]);
-
-    let accessories = data.filter((item) => item.category === "jewelery");
-    setJewelery([...accessories]);
-
-    let electronics = data.filter((item) => item.category === "electronics");
-    setElectronics([...electronics]);
-  }, [data]);
-
+  // ---------- RENDER ----------
   return (
     <Fragment>
       <div className="container">
-        <div className="all-products">
-          {spinner ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "40px",
-              }}
+        <div className="row">
+          {/* ========== LEFT SIDEBAR (col-3) ========== */}
+          <div className="col-lg-3 col-md-4">
+            <div className="my-4"
+              style={{ position: "sticky", top: "90px" }}
             >
-              <Spinner animation="grow" style={{ color: "#000000" }} />
+              <div className="filter-sidebar p-3 rounded-2 shadow-sm bg-white">
+                <h5 className="fw-bold mb-4">
+                  <i className="bi bi-funnel me-2"></i> Filters
+                </h5>
+
+                {/* Category Filter */}
+                <div className="mb-4">
+                  <h6 className="fw-semibold text-secondary mb-3">
+                    <i className="bi bi-tags me-2"></i> Categories
+                  </h6>
+                  <div className="d-flex flex-wrap gap-2">
+                    <button
+                      className={`btn btn-sm rounded-pill px-3 ${filters.category === "" ? "btn-dark" : "btn-outline-secondary"
+                        }`}
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, category: "" }))
+                      }
+                    >
+                      All
+                    </button>
+                    {categories.map((cat) => (
+                      <button
+                        key={cat._id}
+                        className={`btn btn-sm rounded-pill px-3 ${filters.category === cat._id ? "btn-dark" : "btn-outline-secondary"
+                          }`}
+                        onClick={() =>
+                          setFilters((prev) => ({ ...prev, category: cat._id }))
+                        }
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Range Filter - Single Slider with Dual Handles */}
+                <div>
+                  <h6 className="fw-semibold text-secondary mb-3">
+                    <i className="bi bi-currency-rupee me-2"></i> Price Range
+                  </h6>
+
+                  <div className="price-slider-container px-1">
+                    <Slider
+                      range={true}   // <-- ye range slider banayega
+                      min={0}
+                      max={10000}
+                      step={100}
+                      value={[filters.minPrice, filters.maxPrice]}
+                      onChange={(values) => {
+                        setFilters((prev) => ({
+                          ...prev,
+                          minPrice: values[0],
+                          maxPrice: values[1],
+                        }));
+                      }}
+                      trackStyle={[{ backgroundColor: "#000000", height: 6 }]}
+                      handleStyle={[
+                        {
+                          backgroundColor: "#000000",
+                          borderColor: "#000000",
+                          height: 18,
+                          width: 18,
+                          borderRadius: "50%",
+                          marginTop: -6,
+                        },
+                        {
+                          backgroundColor: "#000000",
+                          borderColor: "#000000",
+                          height: 18,
+                          width: 18,
+                          borderRadius: "50%",
+                          marginTop: -6,
+                        },
+                      ]}
+                      railStyle={{ backgroundColor: "#e9ecef", height: 6 }}
+                    />
+                  </div>
+
+                  <div className="d-flex justify-content-between mt-2">
+                    <div className="input-group input-group-sm">
+                      <span className="input-group-text bg-light">Rs.</span>
+                      <input
+                        type="number"
+                        className="form-control form-control-sm"
+                        min={0}
+                        max={filters.maxPrice}
+                        value={filters.minPrice}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          if (val >= 0 && val <= filters.maxPrice) {
+                            setFilters((prev) => ({ ...prev, minPrice: val }));
+                          }
+                        }}
+                      />
+                    </div>
+                    <span className="align-self-center text-muted">—</span>
+                    <div className="input-group input-group-sm">
+                      <span className="input-group-text bg-light">Rs.</span>
+                      <input
+                        type="number"
+                        className="form-control form-control-sm"
+                        min={filters.minPrice}
+                        max={10000}
+                        value={filters.maxPrice}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          if (val >= filters.minPrice && val <= 10000) {
+                            setFilters((prev) => ({ ...prev, maxPrice: val }));
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Optional Reset Button */}
+                <button
+                  className="btn btn-outline-danger btn-sm w-100 mt-4 rounded-pill"
+                  onClick={() =>
+                    setFilters({ category: "", minPrice: 0, maxPrice: 10000 })
+                  }
+                >
+                  <i className="bi bi-arrow-counterclockwise me-1"></i> Reset Filters
+                </button>
+              </div>
             </div>
-          ) : (
-            <div className="row">
-              <h2 className="p-4 my-5 text-center display-5">Men's Clothing</h2>
-              {menWear.map((x, i) => (
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-                  <div className="card-container">
-                    <ProductCard
-                      handleNavigate={(e) => handleProductDescription(e, x)}
-                      data={x}
-                      id={x.id}
-                      src={x.image}
-                      Price={x.price}
-                      CardTitle={x.title}
-                      onClick={(e) => handleAdd(e, x)}
-                    />
-                  </div>
-                </div>
-              ))}
+          </div>
 
-              <h2 className="p-4 my-5 text-center display-5">
-                Women's Clothing
-              </h2>
-              {womenWear.map((x, i) => (
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-                  <div className="card-container">
-                    <ProductCard
-                      handleNavigate={(e) => handleProductDescription(e, x)}
-                      data={x}
-                      id={x.id}
-                      src={x.image}
-                      Price={x.price}
-                      CardTitle={x.title}
-                      onClick={(e) => handleAdd(e, x)}
-                    />
+          {/* ========== RIGHT CONTENT (col-9) ========== */}
+          <div className="col-lg-9 col-md-8">
+            <div className="my-4">
+              <div className="row g-3">
+                {products?.length > 0 ? (
+                  products.map((x, i) => {
+                    const isLast = i === products.length - 1;
+                    return (
+                      <div
+                        className="col-xl-4 col-lg-6 col-md-6 col-sm-12"
+                        key={x._id || i}
+                        ref={isLast ? sentinelRef : null}
+                      >
+                        <div className="card-container h-100">
+                          <ProductCard
+                            data={x}
+                            id={x._id}
+                            src={x.image}
+                            Price={x.price}
+                            CardTitle={x.name}
+                            onClick={(e) => handleAdd(e, x)}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="col-12 text-center py-5">
+                    {loading ? (
+                      <Spinner animation="grow" style={{ color: "#0d6efd" }} />
+                    ) : (
+                      <div>
+                        <i className="bi bi-box-seam display-1 text-muted"></i>
+                        <p className="mt-3 text-muted">No products found</p>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                )}
 
-              <h2 className="p-4 my-5 text-center display-5">Jeweleries</h2>
-              {jewelery.map((x, i) => (
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-                  <div className="card-container">
-                    <ProductCard
-                      handleNavigate={(e) => handleProductDescription(e, x)}
-                      data={x}
-                      id={x.id}
-                      src={x.image}
-                      Price={x.price}
-                      CardTitle={x.title}
-                      onClick={(e) => handleAdd(e, x)}
-                    />
+                {/* Loading more spinner */}
+                {loading && products.length > 0 && (
+                  <div className="col-12 text-center py-3">
+                    <Spinner animation="border" size="sm" style={{ color: "#0d6efd" }} />
+                    <span className="ms-2 text-muted">Loading more...</span>
                   </div>
-                </div>
-              ))}
+                )}
 
-              <h2 className="p-4 my-5 text-center display-5">Electronics</h2>
-              {electronic.map((x, i) => (
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12" key={i}>
-                  <div className="card-container">
-                    <ProductCard
-                      handleNavigate={(e) => handleProductDescription(e, x)}
-                      data={x}
-                      id={x.id}
-                      src={x.image}
-                      Price={x.price}
-                      CardTitle={x.title}
-                      onClick={(e) => handleAdd(e, x)}
-                    />
+                {/* End of list message */}
+                {!hasMore && products.length > 0 && (
+                  <div className="col-12 text-center py-3">
+                    <span className="text-muted">— You've reached the end —</span>
                   </div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </Fragment>

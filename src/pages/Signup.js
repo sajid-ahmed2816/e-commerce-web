@@ -44,20 +44,23 @@ function Signup() {
     try {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
-      const response = await AuthServices.login({ token: token });
-      if (response.data.status === true) {
-        const name = `${response.data.data.user.firstName} ${response.data.data.user.lastName}`
+      const response = await AuthServices.google({ token: token });
+      if (response.status === true) {
+        const name = `${response?.data?.user?.firstName} ${response?.data?.user?.lastName}`
         const obj = {
-          token: response.data.data.token,
+          firstName: response?.data?.user?.firstName,
+          lastName: response?.data?.user?.lastName,
+          token: response?.data?.token,
           name: name,
-          picture: response.data.data.user.picture,
-          email: response.data.data.user.email
+          picture: response?.data?.user?.picture ?? "",
+          email: response?.data?.user?.email,
+          _id: response?.data?.user?._id
         }
         userLogin(obj);
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      toastify.ToastifyVariants.error(error);
     }
   };
 

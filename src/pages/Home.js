@@ -2,7 +2,7 @@ import ProductCard from "../components/Produccard";
 import Carousel from "react-bootstrap/Carousel";
 import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { add } from "../config/redux/reducer/cartSlice";
+import { increment } from "../config/redux/reducer/cartSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import axios from "axios";
@@ -14,12 +14,16 @@ import MyModal from "../components/Modal";
 import BannerService from "../api/banners/BannerService";
 import CategoryService from "../api/category/CategoryService";
 import Loader from "../components/Loader";
-
+import ProductService from "../api/product/ProductService";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 function Home() {
   const [index, setIndex] = useState(0);
   const [data, setData] = useState([]);
-  const [shortData, setShortData] = useState([]);
+  const [featuredData, setFeaturedData] = useState([]);
   const [randomData, setRandomData] = useState([]);
   const [instaData, setInstaData] = useState([]);
   const [banners, setBanners] = useState([]);
@@ -39,93 +43,41 @@ function Home() {
     navigate("/products");
   };
 
-  const handleMenCategory = () => {
-    navigate("/category/menwear");
-  };
-
-  const handleAccessoriesCategory = () => {
-    navigate("/category/accessories");
-  };
-
-  const handleWomenCategory = () => {
-    navigate("/category/womenwear");
-  };
-
-  const handleElectronicCategory = () => {
-    navigate("/category/electronics");
+  const handleNavigate = (id) => {
+    navigate("/products", { state: { categoryId: id } });
   };
 
   const handleAdd = (event, product) => {
     event.stopPropagation();
-    dispatch(add(product));
+    dispatch(increment(product));
     toastify.ToastifyVariants.success("Product added to cart")
-  };
-
-  const handleProductDescription = (event, product) => {
-    event.stopPropagation();
-    navigate(`/description/${product.id}`, { state: product });
-  };
-
-  function getProducts() {
-    return axios
-      .get(url)
-      .then((res) => {
-        setData([...data, ...res.data]);
-
-        let item1 = res.data.find((x) => x.id === 2);
-        let item2 = res.data.find((x) => x.id === 7);
-        let item3 = res.data.find((x) => x.id === 14);
-        let item4 = res.data.find((x) => x.id === 20);
-
-        setRandomData([...randomData, item1, item2, item3, item4]);
-
-        let shDtItem1 = res.data.find((x) => x.id === 3);
-        let shDtItem2 = res.data.find((x) => x.id === 4);
-        let shDtItem3 = res.data.find((x) => x.id === 15);
-        let shDtItem4 = res.data.find((x) => x.id === 16);
-
-        setShortData([
-          ...shortData,
-          shDtItem1,
-          shDtItem2,
-          shDtItem3,
-          shDtItem4,
-        ]);
-
-        let instaItem1 = res.data.find((x) => x.id === 1);
-        let instaItem2 = res.data.find((x) => x.id === 8);
-        let instaItem3 = res.data.find((x) => x.id === 12);
-        let instaItem4 = res.data.find((x) => x.id === 17);
-
-        setInstaData([
-          ...instaData,
-          instaItem1,
-          instaItem2,
-          instaItem3,
-          instaItem4,
-        ]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const getData = async () => {
     setIsLoading(true);
+    const productsParams = {
+      page: 1,
+      limit: "all"
+    }
     try {
-      const [bannersData, categoriesData] = await Promise.all([BannerService.getBanner(), CategoryService.getCategories(), getProducts()]);
+      const [bannersData, categoriesData, productsData] = await Promise.all([BannerService.getBanner(), CategoryService.getCategories(), ProductService.getProducts(productsParams)]);
       if (bannersData?.status) {
         setBanners(bannersData?.data?.banners);
-      }
+      };
       if (categoriesData?.status) {
         setCategories(categoriesData?.data?.categories);
-      }
+      };
+      if (productsData?.status) {
+        setData(productsData?.data?.products);
+        const featuredProducts = productsData?.data?.products?.filter(p => p.isFeatured === true);
+        setFeaturedData(featuredProducts);
+      };
     } catch (error) {
       Toastify.ToastifyVariants.error(error);
     } finally {
       setIsLoading(false);
-    }
-  }
+    };
+  };
 
   useEffect(() => {
     getData();
@@ -180,7 +132,7 @@ function Home() {
                 </div>
                 {categories?.map((category, ind) => (
                   <div className="col-md-3 my-5" key={ind}>
-                    <div onClick={handleMenCategory}>
+                    <div onClick={() => handleNavigate(category?._id)}>
                       <img src={category?.image} alt={category?.name} />
                     </div>
                   </div>
@@ -194,27 +146,50 @@ function Home() {
           <section className="product-cards">
             <div className="container">
               <div className="d-flex p-3 justify-content-center align-items-center">
-                <h1 className="display-4">Hot Products Selling on Demand</h1>
+                <h1 className="display-4 m-0">Hot Products Selling on Demand</h1>
               </div>
-              <div className="row mb-5">
-                {shortData.map((x, i) => (
-                  <div
-                    className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5"
-                    key={i}
-                  >
-                    <div className="card-container">
-                      <ProductCard
-                        handleNavigate={(e) => handleProductDescription(e, x)}
-                        data={x}
-                        Price={x.price}
-                        id={x.id}
-                        CardTitle={x.title}
-                        src={x.image}
-                        onClick={(e) => handleAdd(e, x)}
-                      />
-                    </div>
-                  </div>
-                ))}
+              <div className="my-5">
+                <Swiper
+                  breakpoints={{
+                    640: {
+                      slidesPerView: 2,
+                      spaceBetween: 20,
+                    },
+                    768: {
+                      slidesPerView: 3,
+                      spaceBetween: 20,
+                    },
+                    1024: {
+                      slidesPerView: 4,
+                      spaceBetween: 20,
+                    },
+                  }}
+                  modules={[Navigation]}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev"
+                  }}
+                  style={{
+                    padding: "12px"
+                  }}
+                >
+                  {data.map((x, i) => (
+                    <SwiperSlide key={i}>
+                      <div className="card-container h-100">
+                        <ProductCard
+                          data={x}
+                          Price={x.price}
+                          id={x.id}
+                          CardTitle={x.name}
+                          src={x.image}
+                          onClick={(e) => handleAdd(e, x)}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                  <div className="swiper-button-prev"></div>
+                  <div className="swiper-button-next"></div>
+                </Swiper>
               </div>
             </div>
           </section>
@@ -227,18 +202,17 @@ function Home() {
                 <h1 className="display-4">Featured Products You Like</h1>
               </div>
               <div className="row mb-5">
-                {randomData.map((x, i) => (
+                {featuredData.map((x, i) => (
                   <div
                     className="col-xl-3 col-lg-3 col-md-6 col-sm-12 my-5"
                     key={i}
                   >
                     <div className="card-container">
                       <ProductCard
-                        handleNavigate={(e) => handleProductDescription(e, x)}
                         data={x}
                         Price={x.price}
                         id={x.id}
-                        CardTitle={x.title}
+                        CardTitle={x.name}
                         src={x.image}
                         onClick={(e) => handleAdd(e, x)}
                       />

@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Row, Col, Form, Container, FormGroup } from "react-bootstrap";
 import { Images } from "../assets";
 import AuthServices from "../api/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { auth, provider, signInWithPopup } from "../config/firebase";
 import useAuth from "../hooks/useAuth";
@@ -17,12 +17,12 @@ function Login() {
     setIsOTPDialogOpen((prevOpen) => !prevOpen);
   };
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { userLogin } = useAuth();
 
   const handleLogin = async () => {
     try {
       const { data, message } = await AuthServices.login(form);
-      console.log("🚀 ~ handleLogin ~ data:", data)
       if (data === null) return;
       if (data) {
         Toastify.ToastifyVariants.success(message);
@@ -31,7 +31,8 @@ function Login() {
           handleOTPDialog();
         } else {
           userLogin({ ...data, ...data?.user });
-          navigate("/");
+          const path = state?.path ? state?.path : "/"
+          navigate(path);
         }
       }
     } catch (error) {
@@ -44,16 +45,21 @@ function Login() {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
       const response = await AuthServices.google({ token: token });
-      if (response.data.status) {
+      if (response?.status) {
+        const name = `${response?.data?.user.firstName} ${response?.data?.user.lastName}`
         const obj = {
-          token: response.data.data.token,
-          name: response.data.data.user.name,
-          picture: response.data.data.user.picture,
-          email: response.data.data.user.email
+          token: response?.data?.token,
+          firstName: response?.data?.user.firstName,
+          lastName: response?.data?.user.lastName,
+          name: name,
+          picture: response?.data?.user.picture,
+          email: response?.data?.user.email,
+          _id: response?.data?.user?._id
         }
         userLogin(obj);
         Toastify.ToastifyVariants.success("Login Successfully");
-        navigate("/");
+        const path = state?.path ? state?.path : "/"
+        navigate(path);
       }
     } catch (error) {
       Toastify.ToastifyVariants.error(error);

@@ -3,31 +3,20 @@ import "../App.css";
 
 const storeLinks = [
   {
-    name: "Men Wear",
-    path: "/category/menwear",
+    name: "Home",
+    path: "/",
   },
   {
-    name: "Women Wear",
-    path: "/category/womenwear",
-  },
-  {
-    name: "Accessories",
-    path: "/category/accessories",
-  },
-  {
-    name: "Electronices",
-    path: "/category/electronics",
-  },
-];
-
-const supportLinks = [
-  {
-    name: "Contact us",
-    path: "/store",
-  },
-  {
-    name: "About us",
+    name: "About",
     path: "/about",
+  },
+  {
+    name: "Products",
+    path: "/products",
+  },
+  {
+    name: "Store",
+    path: "/store",
   },
 ];
 
@@ -38,6 +27,7 @@ function Footer() {
         <div className="footer-part-1">
           <div className="footer-items">
             <h3 className="footer-link">Fashion Brand</h3>
+            <p>C/12, X Block, Y Road, Z Area, City, State, Country</p>
             <p>123 456 789</p>
           </div>
           <div>
@@ -59,35 +49,55 @@ function Footer() {
           </div>
           <div>
             <h3 className="footer-link">Support</h3>
-            {supportLinks.map((item, index) => (
-              <div key={index} style={{ marginBottom: "20px" }}>
-                <Link
-                  to={item.path}
-                  style={{
-                    color: "#000000",
-                    textDecoration: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  {item.name}
-                </Link>
-              </div>
-            ))}
+            <div style={{ marginBottom: "20px" }}>
+              <a href="mailto:test@domain.com">
+                test@domain.com
+              </a>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <a href="tel:123456789">
+                123 456 789
+              </a>
+            </div>
           </div>
           <div>
             <h3 className="footer-link">Quick links</h3>
-            <Link
-              to={"/auth/login"}
-              style={{
-                color: "#000000",
-                textDecoration: "none",
-                cursor: "pointer",
-              }}
-            >
-              My account
-            </Link>
-            <p>Checkout</p>
-            <p>Newsletter</p>
+            <div style={{ marginBottom: "20px" }}>
+              <Link
+                // to={"/auth/login"}
+                style={{
+                  color: "#000000",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+              >
+                My account
+              </Link>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <Link
+                to={"/cart"}
+                style={{
+                  color: "#000000",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Checkout
+              </Link>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <Link
+                // to={"/auth/login"}
+                style={{
+                  color: "#000000",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Newsletter
+              </Link>
+            </div>
           </div>
         </div>
       </div>
