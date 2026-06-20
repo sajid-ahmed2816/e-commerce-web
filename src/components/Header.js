@@ -142,13 +142,17 @@ function Header() {
                 </div>
               </div>
             ))}
-            <PrimaryButton
-              title={"Checkout"}
-              onClick={() => {
-                navigate("/cart");
-                handleDrawer();
-              }}
-            />
+            {cartData?.length > 0 ? (
+              <PrimaryButton
+                title={"Checkout"}
+                onClick={() => {
+                  navigate("/cart");
+                  handleDrawer();
+                }}
+              />
+            ) : (
+              <p className="m-0 text-center">No products</p>
+            )}
           </div>
         </Offcanvas.Body>
       </Offcanvas>
