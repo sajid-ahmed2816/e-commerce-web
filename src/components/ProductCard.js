@@ -3,10 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Card from "react-bootstrap/Card";
-import Viewbutton from "./Viewbutton";
 import MyModal from "./Modal";
 import PrimaryButton from "./PrimaryButton";
-import { decrement, increment, remove } from "../config/redux/reducer/cartSlice";
+import { decrement, increment } from "../config/redux/reducer/cartSlice";
 
 function ProductCard(props) {
   let { CardTitle, src, Price, onClick, data } = props;
@@ -92,7 +91,7 @@ function ProductCard(props) {
               </button>
             </div>
             <Card.Text style={{ margin: 0 }}>${Price}</Card.Text>
-            {cartData?.some((p) => p._id == data?._id) ? (
+            {cartData?.some((p) => p._id === data?._id) ? (
               <div
                 style={{
                   padding: "10px 16px",
@@ -117,7 +116,7 @@ function ProductCard(props) {
                 >
                   -
                 </button>
-                <p className="m-0">{cartData?.find((p) => p._id == data?._id)?.quantity}</p>
+                <p className="m-0">{cartData?.find((p) => p._id === data?._id)?.quantity}</p>
                 <button
                   style={{
                     outline: "none",

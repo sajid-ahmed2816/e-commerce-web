@@ -1,5 +1,6 @@
+import { useState, Fragment } from "react";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import {
-  Container,
   Row,
   Col,
   Form,
@@ -9,13 +10,10 @@ import {
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { increment, decrement, remove, reset } from "../config/redux/reducer/cartSlice";
-import { useState, useEffect, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { Navigate, useNavigate, useLocation } from "react-router-dom";
-import emailjs from "emailjs-com";
 import PaymentService from "../api/payment/PaymentService";
-import Toastify from "../components/Toastify";
+import toastify from "../components/Toastify";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
 
 import "../App.css";
@@ -135,7 +133,7 @@ function Cart() {
     if (error) {
       // Show error message if any
       console.log(error);
-      Toastify.ToastifyVariants.error(error.message);
+      toastify.error(error.message);
       setProcessing(false);
       return;
     }
@@ -149,25 +147,25 @@ function Cart() {
       const result = await PaymentService.onlinePayment(obj);
 
       if (result.data.status) {
-        Toastify.ToastifyVariants.success(result.data.message);
+        toastify.success(result.data.message);
       }
 
       const { clientSecret } = result.data;  // Get the client secret for confirming the payment
 
       // Confirm the payment on the client side with the clientSecret
-      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: stripePaymentMethod.id,
       });
 
       if (confirmError) {
-        Toastify.ToastifyVariants.error(confirmError.message);
+        toastify.error(confirmError.message);
       } else {
         // Payment succeeded, show success message
-        Toastify.ToastifyVariants.success("Payment Successful!");
+        toastify.success("Payment Successful!");
       }
     } catch (error) {
       // Handle any other errors
-      Toastify.ToastifyVariants.error(error.message || "An error occurred");
+      toastify.error(error.message || "An error occurred");
     } finally {
       setProcessing(false); // Reset processing state
     }
@@ -216,13 +214,13 @@ function Cart() {
     try {
       const result = await OrderServices.createOrder(data);
       if (result.status) {
-        Toastify.ToastifyVariants.success(result.message);
+        toastify.success(result.message);
         dispatch(reset());
         setSpinner(false);
         nextStep();
       }
     } catch (error) {
-      Toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     } finally {
       setSpinner(false);
     }
@@ -584,6 +582,7 @@ function Cart() {
                             <Col md="12">
                               <Form.Group style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                                 <Form.Check
+                                  disabled={processing}
                                   type="radio"
                                   value="cod"
                                   label="Cash On Delivery"
@@ -743,6 +742,7 @@ function Cart() {
                           </div>
                           <div className="d-flex align-items-center">
                             <img
+                              alt={item?.name}
                               src={item.image}
                               width={"60px"}
                               height={"60px"}

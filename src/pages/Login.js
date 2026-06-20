@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from "react";
-import { Row, Col, Form, Container, FormGroup } from "react-bootstrap";
+import { Row, Col, Form, Container } from "react-bootstrap";
 import { Images } from "../assets";
 import AuthServices from "../api/auth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { auth, provider, signInWithPopup } from "../config/firebase";
 import useAuth from "../hooks/useAuth";
-import Toastify from "../components/Toastify";
+import toastify from "../components/Toastify";
 import OTPDialog from "../components/Modal/OTPDialog";
 
 function Login() {
@@ -25,7 +25,7 @@ function Login() {
       const { data, message } = await AuthServices.login(form);
       if (data === null) return;
       if (data) {
-        Toastify.ToastifyVariants.success(message);
+        toastify.success(message);
         if (!data?.user?.isVerified) {
           setEmail(data?.user?.email);
           handleOTPDialog();
@@ -36,7 +36,7 @@ function Login() {
         }
       }
     } catch (error) {
-      Toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     }
   };
 
@@ -57,12 +57,12 @@ function Login() {
           _id: response?.data?.user?._id
         }
         userLogin(obj);
-        Toastify.ToastifyVariants.success("Login Successfully");
+        toastify.success("Login Successfully");
         const path = state?.path ? state?.path : "/"
         navigate(path);
       }
     } catch (error) {
-      Toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     }
   };
 
@@ -183,7 +183,11 @@ function Login() {
                         transition: "all .3s ease-in-out",
                       }}
                     >
-                      <img src={Images.google} style={{ width: 20, height: 20, objectFit: "contain" }} />
+                      <img
+                        alt={"google logo"}
+                        src={Images.google}
+                        style={{ width: 20, height: 20, objectFit: "contain" }}
+                      />
                       Continue with Google
                     </button>
                   </div>

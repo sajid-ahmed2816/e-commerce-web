@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Row, Col, Form, Container, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import AuthServices from "../api/auth";
-import Toastify from "../components/Toastify";
+import toastify from "../components/Toastify";
 import { auth, provider, signInWithPopup } from "../config/firebase";
 import { Images } from "../assets";
 import useAuth from "../hooks/useAuth";
@@ -15,7 +15,6 @@ function Signup() {
   const [email, setEmail] = useState(false);
   const navigate = useNavigate();
   const { userLogin } = useAuth();
-  const toastify = Toastify;
 
   const handleOTPDialog = () => {
     setIsOTPDialogOpen((prevOpen) => !prevOpen);
@@ -25,16 +24,15 @@ function Signup() {
     setLoading(true);
     try {
       let result = await AuthServices.signup(form);
-      console.log("🚀 ~ handleSubmit ~ result:", result)
       if (result.status) {
-        toastify.ToastifyVariants.success(result.message);
+        toastify.success(result.message);
         if (!result?.data?.isVerified) {
           setEmail(result?.data?.email);
           handleOTPDialog();
         }
       }
     } catch (error) {
-      toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     } finally {
       setLoading(false);
     }
@@ -60,7 +58,7 @@ function Signup() {
         navigate("/");
       }
     } catch (error) {
-      toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     }
   };
 
@@ -213,7 +211,11 @@ function Signup() {
                         transition: "all .3s ease-in-out",
                       }}
                     >
-                      <img src={Images.google} style={{ width: 20, height: 20, objectFit: "contain" }} />
+                      <img
+                        src={Images.google}
+                        style={{ width: 20, height: 20, objectFit: "contain" }}
+                        alt={"google logo"}
+                      />
                       Continue with Google
                     </button>
                   </div>

@@ -22,7 +22,7 @@ function MyModal(props) {
       </Modal.Header>
       <Modal.Body>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <img src={data.image} width="200px" />
+          <img src={data.image} width="200px" alt={data?.name} />
         </div>
         <p style={{ fontSize: "13px" }}>{data.description}</p>
         <p style={{ fontWeight: "700" }}>Price: ${data.price}</p>

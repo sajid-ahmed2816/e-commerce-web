@@ -6,7 +6,7 @@ import Loader from "./Loader";
 
 function Layout() {
   return (
-    <div>
+    <Fragment>
       <Header />
       <main>
         <Suspense fallback={<Loader />}>
@@ -14,7 +14,7 @@ function Layout() {
         </Suspense>
       </main>
       <Footer />
-    </div>
+    </Fragment>
   )
 }
 

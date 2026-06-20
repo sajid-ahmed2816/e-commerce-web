@@ -1,20 +1,17 @@
 import React, { useEffect, useState, Fragment, useRef, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { increment, decrement, remove, reset } from "../config/redux/reducer/cartSlice";
+import { increment } from "../config/redux/reducer/cartSlice";
 import { Spinner } from "react-bootstrap";
 import Slider from "rc-slider";
 import ProductCard from "../components/ProductCard";
 import ProductService from "../api/product/ProductService";
 import CategoryService from "../api/category/CategoryService";
-import Toastify from "../components/Toastify";
+import toastify from "../components/Toastify";
 import "rc-slider/assets/index.css";
 import "../App.css";
 
-// 🆕 Import rc-slider
-
 function Product() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { state } = useLocation();
 
@@ -33,32 +30,42 @@ function Product() {
   const sentinelRef = useRef(null);
   const observerRef = useRef(null);
 
+  // NEW: refs for fetch locking and request cancellation
+  const isFetchingRef = useRef(false);
+  const requestIdRef = useRef(0);
+
   const handleAdd = (event, product) => {
     event.stopPropagation();
     dispatch(increment(product));
-    Toastify.ToastifyVariants.success("Product added to cart");
+    toastify.success("Product added to cart");
   };
 
   const fetchProducts = useCallback(
     async (pageNum, resetList = false) => {
-      if (loading && !resetList) return;
+      // Prevent concurrent "load more" calls, but allow reset (filters change)
+      if (isFetchingRef.current && !resetList) return;
 
+      const currentRequestId = ++requestIdRef.current;
+      isFetchingRef.current = true;
       setLoading(true);
+
       try {
         const params = {
           page: pageNum,
-          limit: 12, // per page 12 items
+          limit: 12,
           category: filters.category || undefined,
           minPrice: filters.minPrice || undefined,
           maxPrice: filters.maxPrice || undefined,
         };
 
-        // Clean undefined params
         Object.keys(params).forEach(
           (key) => params[key] === undefined && delete params[key]
         );
 
         const result = await ProductService.getProducts(params);
+
+        // Ignore stale responses
+        if (requestIdRef.current !== currentRequestId) return;
 
         if (result?.status) {
           const newProducts = result.data.products || [];
@@ -77,39 +84,40 @@ function Product() {
           const totalPages = pagination?.totalPages || 1;
           setHasMore(pageNum < totalPages);
         } else {
-          Toastify.ToastifyVariants.error("Failed to fetch products");
+          toastify.error("Failed to fetch products");
         }
       } catch (error) {
-        Toastify.ToastifyVariants.error(error?.message || "Something went wrong");
+        toastify.error(error?.message || "Something went wrong");
       } finally {
         setLoading(false);
+        isFetchingRef.current = false;
         isFetchingNext.current = false;
       }
-    }, [filters]
+    },
+    [filters] // ✅ only depends on filters
   );
 
+  // Reset and fetch when filters change
   useEffect(() => {
     setPage(1);
     setHasMore(true);
     isFetchingNext.current = false;
     fetchProducts(1, true);
-  }, [filters]);
+  }, [fetchProducts]); // ✅ include fetchProducts
 
+  // Fetch next page when page changes (but skip page 1)
   useEffect(() => {
     if (page > 1) {
       isFetchingNext.current = true;
       fetchProducts(page, false);
     }
-  }, [page]);
+  }, [page, fetchProducts]); // ✅ include fetchProducts
 
+  // Intersection Observer for infinite scroll
   useEffect(() => {
-    if (loading || !hasMore || isFetchingNext.current) {
-      return;
-    }
+    if (loading || !hasMore || isFetchingNext.current) return;
 
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
+    if (observerRef.current) observerRef.current.disconnect();
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -122,27 +130,21 @@ function Product() {
       { threshold: 0.1, rootMargin: "0px 0px 50px 0px" }
     );
 
-    if (sentinelRef.current) {
-      observerRef.current.observe(sentinelRef.current);
-    }
+    if (sentinelRef.current) observerRef.current.observe(sentinelRef.current);
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+      if (observerRef.current) observerRef.current.disconnect();
     };
-  }, [loading, hasMore, products]);
+  }, [loading, hasMore, products]); // ✅ no change needed here
 
-  // ---------- GET CATEGORIES ----------
+  // Fetch categories
   const getCategories = async () => {
     try {
       const params = { page: 1, limit: "all" };
       const result = await CategoryService.getCategories(params);
-      if (result?.status) {
-        setCategories(result?.data?.categories || []);
-      }
+      if (result?.status) setCategories(result?.data?.categories || []);
     } catch (error) {
-      Toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     }
   };
 
@@ -150,16 +152,13 @@ function Product() {
     getCategories();
   }, []);
 
-  // ---------- RENDER ----------
   return (
     <Fragment>
       <div className="container">
         <div className="row">
-          {/* ========== LEFT SIDEBAR (col-3) ========== */}
+          {/* LEFT SIDEBAR */}
           <div className="col-lg-3 col-md-4">
-            <div className="my-4"
-              style={{ position: "sticky", top: "90px" }}
-            >
+            <div className="my-4" style={{ position: "sticky", top: "90px" }}>
               <div className="filter-sidebar p-3 rounded-2 shadow-sm bg-white">
                 <h5 className="fw-bold mb-4">
                   <i className="bi bi-funnel me-2"></i> Filters
@@ -195,15 +194,14 @@ function Product() {
                   </div>
                 </div>
 
-                {/* Price Range Filter - Single Slider with Dual Handles */}
+                {/* Price Range Filter */}
                 <div>
                   <h6 className="fw-semibold text-secondary mb-3">
                     <i className="bi bi-currency-rupee me-2"></i> Price Range
                   </h6>
-
                   <div className="price-slider-container px-1">
                     <Slider
-                      range={true}   // <-- ye range slider banayega
+                      range={true}
                       min={0}
                       max={10000}
                       step={100}
@@ -275,7 +273,6 @@ function Product() {
                   </div>
                 </div>
 
-                {/* Optional Reset Button */}
                 <button
                   className="btn btn-outline-danger btn-sm w-100 mt-4 rounded-pill"
                   onClick={() =>
@@ -288,7 +285,7 @@ function Product() {
             </div>
           </div>
 
-          {/* ========== RIGHT CONTENT (col-9) ========== */}
+          {/* RIGHT CONTENT */}
           <div className="col-lg-9 col-md-8">
             <div className="my-4">
               <div className="row g-3">
@@ -327,7 +324,6 @@ function Product() {
                   </div>
                 )}
 
-                {/* Loading more spinner */}
                 {loading && products.length > 0 && (
                   <div className="col-12 text-center py-3">
                     <Spinner animation="border" size="sm" style={{ color: "#0d6efd" }} />
@@ -335,7 +331,6 @@ function Product() {
                   </div>
                 )}
 
-                {/* End of list message */}
                 {!hasMore && products.length > 0 && (
                   <div className="col-12 text-center py-3">
                     <span className="text-muted">— You've reached the end —</span>

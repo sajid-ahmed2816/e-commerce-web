@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Navbar } from "react-bootstrap";
@@ -8,16 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
-import { faAngleDown, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { decrement, increment, remove } from "../config/redux/reducer/cartSlice";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import useAuth from "../hooks/useAuth";
 import "../App.css";
-import Button from "./Button";
 import PrimaryButton from "./PrimaryButton";
 
 function Header() {
-  const [atTop, setAtTop] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -51,15 +49,6 @@ function Header() {
     userLogout();
     navigate("/login")
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setAtTop(window.scrollY === 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <>
@@ -102,6 +91,7 @@ function Header() {
                   </div>
                   <div className="d-flex align-items-center">
                     <img
+                      alt={"logo"}
                       src={item.image}
                       width={"48px"}
                       height={"48px"}

@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ToastifyVariants = {
+const toastify = {
   success: (message) => {
     toast.success(message, {
       position: "top-right",
@@ -16,4 +16,4 @@ const ToastifyVariants = {
   },
 };
 
-export default { ToastifyVariants };
+export default toastify;

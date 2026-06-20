@@ -1,4 +1,4 @@
-import { post, get } from "../index";
+import { post } from "../index";
 import authRoutes from "./auth.routes";
 
 const AuthServices = {

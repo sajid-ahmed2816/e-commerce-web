@@ -4,12 +4,10 @@ import { useDispatch } from "react-redux";
 import { increment } from "../config/redux/reducer/cartSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import axios from "axios";
-import Toastify from "../components/Toastify";
+import toastify from "../components/Toastify";
 import { Images } from "../assets";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import MyModal from "../components/Modal";
 import BannerService from "../api/banners/BannerService";
 import CategoryService from "../api/category/CategoryService";
 import Loader from "../components/Loader";
@@ -24,15 +22,12 @@ function Home() {
   const [index, setIndex] = useState(0);
   const [data, setData] = useState([]);
   const [featuredData, setFeaturedData] = useState([]);
-  const [randomData, setRandomData] = useState([]);
-  const [instaData, setInstaData] = useState([]);
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const toastify = Toastify;
 
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
@@ -49,7 +44,7 @@ function Home() {
   const handleAdd = (event, product) => {
     event.stopPropagation();
     dispatch(increment(product));
-    toastify.ToastifyVariants.success("Product added to cart")
+    toastify.success("Product added to cart")
   };
 
   const getData = async () => {
@@ -72,7 +67,7 @@ function Home() {
         setFeaturedData(featuredProducts);
       };
     } catch (error) {
-      Toastify.ToastifyVariants.error(error);
+      toastify.error(error);
     } finally {
       setIsLoading(false);
     };

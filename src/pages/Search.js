@@ -4,20 +4,19 @@ import ProductCard from "../components/ProductCard";
 import { Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";
-import Toastify from "../components/Toastify";
+import toastify from "../components/Toastify";
 
 function Search() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const data = location.state;
-  const toastify = Toastify;
 
   console.log(data);
 
   const handleAdd = (product) => {
     dispatch(add(product));
-    toastify.ToastifyVariants.success();
+    toastify.success();
   };
 
   const handleProductDescription = (event, product) => {
