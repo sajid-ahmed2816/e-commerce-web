@@ -1,4 +1,3 @@
-import ProductCard from "../components/Produccard";
 import Carousel from "react-bootstrap/Carousel";
 import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -19,6 +18,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import ProductCard from "../components/ProductCard";
 
 function Home() {
   const [index, setIndex] = useState(0);
@@ -30,7 +30,6 @@ function Home() {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  let url = "https://fakestoreapi.com/products";
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toastify = Toastify;

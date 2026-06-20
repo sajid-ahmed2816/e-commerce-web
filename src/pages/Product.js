@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { increment, decrement, remove, reset } from "../config/redux/reducer/cartSlice";
 import { Spinner } from "react-bootstrap";
 import Slider from "rc-slider";
-import ProductCard from "../components/Produccard";
+import ProductCard from "../components/ProductCard";
 import ProductService from "../api/product/ProductService";
 import CategoryService from "../api/category/CategoryService";
 import Toastify from "../components/Toastify";

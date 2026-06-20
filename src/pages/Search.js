@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ProductCard from "../components/Produccard";
+import ProductCard from "../components/ProductCard";
 import { Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { add } from "../config/redux/reducer/cartSlice";

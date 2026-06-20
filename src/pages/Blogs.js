@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 
-function Store() {
+function Blogs() {
 
   const initialMarkerPosition = {
     lat: 24.9103194,
@@ -128,4 +128,4 @@ function Store() {
   )
 }
 
-export default Store;
+export default Blogs;

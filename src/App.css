@@ -28,21 +28,21 @@ body,
   text-decoration: none;
 }
 
-.announcement-bar>* a .counter-container {
+.announcement-bar>* button .counter-container {
   width: 18px;
   height: 18px;
   background: red;
   border-radius: 50%;
   position: absolute;
   top: 0;
-  margin-top: 2px;
+  margin-top: -8px;
   margin-left: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.announcement-bar>* a .counter-container .cartItems-length {
+.announcement-bar>* button .counter-container .cartItems-length {
   color: #fff;
   font-size: 12px;
   margin: 0 !important;
@@ -164,6 +164,17 @@ hr {
 
 .navitem .search-btn {
   padding-inline: 10px;
+  border-radius: 0px 6px 6px 0px;
+  background: #000000;
+  border-color: #000000;
+  color: #ffffff;
+  transition: all 0.3s ease-in-out;
+}
+
+.search-btn:hover {
+  background: #ffffff;
+  border-color: #adadad;
+  color: #000000
 }
 
 .logo {
@@ -271,37 +282,6 @@ section.hero>* p span {
   left: 5%; */
 }
 
-.buy-btn-container {
-  width: 100%;
-}
-
-.buy-btn {
-  background-color: #000000;
-  border: 1px solid #000000;
-  border-radius: 4px;
-  outline: none;
-  width: 100%;
-  padding: 10px 15px;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.2s ease-in-out;
-}
-
-.buy-btn:hover {
-  border: 1px solid #000000;
-  color: #000000;
-  background-color: #ffffff;
-}
-
-.buy-btn:active {
-  border: 1px solid #000000;
-  color: #ffffff;
-  background-color: #000000;
-}
-
 .instagram {
   background-color: #e6f3ff;
   padding: 20px;
@@ -401,16 +381,22 @@ section.instagram .insta-images img {
 }
 
 .card-container {
-  box-shadow: 0px 2px 10px 3px #e4e4e4dc;
-  border: none;
-  padding: 10px;
+  border: 1px solid #f5f5f5;
   width: 100%;
   border-radius: 6px;
-  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-container:hover {
+  border: 1px solid transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .card-container .card {
   border: none;
+  padding: 10px;
+  background: #fefefe;
 }
 
 .card .view-btn {
@@ -421,7 +407,7 @@ section.instagram .insta-images img {
   background: #1a1a1a;
   color: #fff;
   position: absolute;
-  bottom: 278px;
+  top: 0;
   left: -20px;
   opacity: 0;
   transition: all 0.2s ease-in-out;
@@ -442,22 +428,6 @@ section.instagram .insta-images img {
 
 .card-body {
   padding: 0 !important;
-}
-
-.des-pg-view-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  background: #1a1a1a;
-  color: #fff;
-  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-
-.des-pg-view-btn:active {
-  background: transparent;
-  color: #1a1a1a;
-  border: 1px solid #1a1a1a;
-  font-weight: 500;
 }
 
 .emptyMessage-container {
@@ -669,16 +639,6 @@ label {
   box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2) !important;
 }
 
-/* Product cards - subtle hover effect */
-.card-container {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card-container:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
-
 /* Improve input number appearance */
 input[type="number"] {
   -moz-appearance: textfield;
@@ -717,4 +677,51 @@ input[type="number"]::-webkit-inner-spin-button {
   border: 1px solid #000000;
   background: transparent;
   color: #000000 !important;
+}
+
+.primary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  outline: none;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  background: #000000;
+  color: #ffffff;
+  width: 100%;
+  padding: 10px 16px;
+  transition: 0.3s all ease-in-out;
+}
+
+.primary-button:hover {
+  border: 1px solid #000000;
+  background: #ffffff;
+  color: #000000;
+}
+
+.secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  outline: none;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #000000;
+  width: 100%;
+  padding: 10px 16px;
+  transition: 0.3s all ease-in-out;
+}
+
+.secondary-button:hover {
+  border: 1px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+}
+
+.spinner-border {
+  --bs-spinner-width: 1.5rem !important;
+  --bs-spinner-height: 1.5rem !important;
 }

@@ -60,7 +60,17 @@ function Cart() {
   const stripe = useStripe();
   const elements = useElements();
   const [formData, setFormData] = useState({
-    firstName: firstName, lastName: lastName, email: email
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    contact: "",
+    phone: "",
+    billingAddress: "",
+    shippingAddress: "",
+    country: "",
+    city: "",
+    state: "",
+    zip: ""
   });
 
   const { pathname } = useLocation();
@@ -341,6 +351,7 @@ function Cart() {
                                   controlId="validationCustom03"
                                 >
                                   <Form.Control
+                                    value={formData.contact}
                                     type="number"
                                     placeholder="Contact No."
                                     required
@@ -362,6 +373,7 @@ function Cart() {
                                   controlId="validationCustom04"
                                 >
                                   <Form.Control
+                                    value={formData.phone}
                                     type="number"
                                     placeholder="Phone No."
                                     name="phone"
@@ -383,6 +395,7 @@ function Cart() {
                                   controlId="validationCustom05"
                                 >
                                   <Form.Control
+                                    value={formData.billingAddress}
                                     as={"textarea"}
                                     rows={3}
                                     placeholder="Billing Address"
@@ -405,6 +418,7 @@ function Cart() {
                                   controlId="validationCustom05"
                                 >
                                   <Form.Control
+                                    value={formData.shippingAddress}
                                     as={"textarea"}
                                     rows={3}
                                     placeholder="Shipping Address"
@@ -451,6 +465,7 @@ function Cart() {
                                   controlId="validationCustom05"
                                 >
                                   <Form.Control
+                                    value={formData.country}
                                     type="text"
                                     placeholder="Country"
                                     required
@@ -472,6 +487,7 @@ function Cart() {
                                   controlId="validationCustom05"
                                 >
                                   <Form.Control
+                                    value={formData.city}
                                     type="text"
                                     placeholder="City"
                                     required
@@ -497,6 +513,7 @@ function Cart() {
                                   controlId="validationCustom06"
                                 >
                                   <Form.Control
+                                    value={formData.state}
                                     type="text"
                                     placeholder="State"
                                     required
@@ -518,6 +535,7 @@ function Cart() {
                                   controlId="validationCustom07"
                                 >
                                   <Form.Control
+                                    value={formData.zip}
                                     type="text"
                                     placeholder="Zip"
                                     required
@@ -540,8 +558,8 @@ function Cart() {
                                 <Col md="12">
                                   <button
                                     name="button"
-                                    className="buy-btn"
                                     type="submit"
+                                    className="primary-button"
                                   >
                                     Next
                                   </button>
@@ -554,7 +572,7 @@ function Cart() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col>
+                    <Col className="col-12">
                       {currentStep === 2 && (
                         <Form>
                           <Row className="g-3">
@@ -609,39 +627,41 @@ function Cart() {
                               </Col>
                             )}
                             {paymentMethod === "cod" ? (
-                              <Col md="12">
-                                <button
-                                  className={paymentMethod === true ? "order-btn" : ""}
-                                  style={{
-                                    display: currentStep > 1 ? "block" : "none",
-                                    width: "100%",
-                                    padding: "10px 15px",
-                                    borderRadius: "4px",
-                                    outline: "none",
-                                    border:
-                                      paymentMethod === true
-                                        ? "1px solid #000000"
-                                        : "1px solid #dee2e6",
-                                    backgroundColor: paymentMethod && "#000000",
-                                    color: paymentMethod && "#ffffff",
-                                    transition: "all .3s ease-in-out",
-                                  }}
-                                  onClick={handlePlaceOrder}
-                                  disabled={!paymentMethod}
-                                  type={"button"}
-                                >
-                                  {spinner ? <Spinner animation="border" /> : "Place Order"}
-                                </button>
-                              </Col>
-                            ) : (
                               <Fragment>
-                                <Col md="6">
-                                  <button className="buy-btn" onClick={prevStep}>
+                                <Col className="col-6">
+                                  <button
+                                    className="secondary-button"
+                                    onClick={prevStep}
+                                  >
                                     Previous
                                   </button>
                                 </Col>
                                 <Col md="6">
-                                  <button className="buy-btn" onClick={prevStep}>
+                                  <button
+                                    className="primary-button"
+                                    onClick={handlePlaceOrder}
+                                    disabled={!paymentMethod}
+                                    type={"button"}
+                                  >
+                                    {spinner ? <Spinner animation="border" /> : "Place Order"}
+                                  </button>
+                                </Col>
+                              </Fragment>
+                            ) : (
+                              <Fragment>
+                                <Col md="6">
+                                  <button
+                                    className="secondary-button"
+                                    onClick={prevStep}
+                                  >
+                                    Previous
+                                  </button>
+                                </Col>
+                                <Col md="6">
+                                  <button
+                                    className="primary-button"
+                                    onClick={prevStep}
+                                  >
                                     Pay Online
                                   </button>
                                 </Col>
@@ -655,7 +675,7 @@ function Cart() {
                   <Row>
                     <Col>
                       {currentStep === 3 && (
-                        <div>
+                        <Fragment>
                           <div className="d-flex align-items-center gap-1 my-3">
                             <FontAwesomeIcon
                               icon={faCircleCheck}
@@ -671,11 +691,11 @@ function Cart() {
                           </p>
                           <button
                             onClick={() => navigate("/products")}
-                            className="buy-btn"
+                            className="primary-button"
                           >
                             Continue Shopping
                           </button>
-                        </div>
+                        </Fragment>
                       )}
                     </Col>
                   </Row>
@@ -784,7 +804,7 @@ function Cart() {
           </div>
         </section>
       )}
-    </Fragment>
+    </Fragment >
   ) : (
     <Navigate to={"/login"} state={{ path: pathname }} />
   );

@@ -1,31 +1,57 @@
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faAngleDown, faBars } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { decrement, increment, remove } from "../config/redux/reducer/cartSlice";
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import useAuth from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import "../App.css";
+import Button from "./Button";
+import PrimaryButton from "./PrimaryButton";
 
 function Header() {
   const [atTop, setAtTop] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const navigate = useNavigate();
 
-  const cartItems = useSelector((state) => state.Cart);
+  const dispatch = useDispatch();
+  const cartData = useSelector((state) => state.Cart);
 
   const { token, name, userLogout } = useAuth();
+
+  const handleDrawer = () => {
+    setIsDrawerOpen((prev) => !prev);
+  };
+
+  const handleDecrease = (id) => {
+    dispatch(decrement(id));    // new action
+  };
+
+  const handleIncrease = (id) => {
+    // Find the item to pass the full object to add()
+    const item = cartData.find((item) => item._id === id);
+    if (item) {
+      dispatch(increment(item));
+    }
+  };
+
+  const handleRemove = (id) => {
+    dispatch(remove(id));
+  };
 
   const handleLogout = () => {
     userLogout();
     navigate("/login")
-  }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setAtTop(window.scrollY === 0);
@@ -37,6 +63,95 @@ function Header() {
 
   return (
     <>
+      <Offcanvas
+        show={isDrawerOpen}
+        onHide={handleDrawer}
+        placement={"end"}
+      >
+        <Offcanvas.Header
+          closeButton
+          style={{
+            borderBottom: "1px solid #adadad"
+          }}
+        >
+          <Offcanvas.Title>Cart</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <div className="d-flex flex-column gap-3">
+            {cartData.map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  borderBottom: "1px solid #e9e9e9",
+                }}
+              >
+                <div
+                  className="d-flex cartItemContainerBox"
+                  style={{
+                    gap: "10px",
+                    padding: "10px"
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      className="del-item-btn"
+                      onClick={() => handleRemove(item._id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={item.image}
+                      width={"48px"}
+                      height={"48px"}
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p
+                      style={{
+                        marginBottom: "4px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        width: "220px"
+                      }}
+                    >
+                      {item.name}
+                    </p>
+                    <div className="d-flex gap-4">
+                      <button
+                        className="decreaseBtn"
+                        onClick={() => handleDecrease(item._id)}
+                      >
+                        -
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        className="IncreaseBtn"
+                        onClick={() => handleIncrease(item._id)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <p>{item.price}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <PrimaryButton
+              title={"Checkout"}
+              onClick={() => {
+                navigate("/cart");
+                handleDrawer();
+              }}
+            />
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
       <header className="announcement-bar">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between">
@@ -68,7 +183,16 @@ function Header() {
               <p className="text-white">Welcome to our store</p>
             </div>
             <div className="d-flex align-items-center gap-3">
-              <Link to={"/cart"}>
+              <button
+                onClick={handleDrawer}
+                style={{
+                  outline: "none",
+                  border: "none",
+                  background: "transparent",
+                  color: "white",
+                  position: "relative"
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faShoppingCart}
                   style={{
@@ -78,14 +202,13 @@ function Header() {
                     alignItems: "center",
                   }}
                 />
-                {cartItems.length > 0 ? (
+
+                {cartData.length > 0 && (
                   <span className="counter-container">
-                    <span className="cartItems-length">{cartItems.length}</span>
+                    <span className="cartItems-length">{cartData.length}</span>
                   </span>
-                ) : (
-                  <span style={{ display: "none" }}></span>
                 )}
-              </Link>
+              </button>
               {token ? (
                 <Dropdown>
                   <Dropdown.Toggle
@@ -136,18 +259,19 @@ function Header() {
               <Navbar.Collapse id="basic-navbar-nav">
                 <ul className="navlinks">
                   <li className="navitem">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="navitem">
-                    <Link to="/about">About</Link>
-                  </li>
-                  <li className="navitem">
-                    <Link to="/products">
-                      Products{" "}
+                    <Link to="/">
+                      Home
                     </Link>
                   </li>
                   <li className="navitem">
-                    <Link to="/store">Stores</Link>
+                    <Link to="/products">
+                      Products
+                    </Link>
+                  </li>
+                  <li className="navitem">
+                    <Link to="/blogs">
+                      Blogs
+                    </Link>
                   </li>
                 </ul>
               </Navbar.Collapse>
@@ -159,17 +283,16 @@ function Header() {
                   // onChange={(e) => setText(e.target.value)}
                   placeholder="Search here..."
                   style={{
-                    width: "203.953px"
+                    width: "203.953px",
+                    padding: "5px 0px 5px 10px",
+                    borderRadius: "6px 0px 0px 6px"
                   }}
                 />
                 <button
                   className="search-btn"
                 // onClick={() => handleSearch(text)}
                 >
-                  <FontAwesomeIcon
-                    icon={faSearch}
-                    style={{ color: "gray" }}
-                  />
+                  <FontAwesomeIcon icon={faSearch} />
                 </button>
               </div>
             </div>

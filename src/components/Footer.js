@@ -7,16 +7,12 @@ const storeLinks = [
     path: "/",
   },
   {
-    name: "About",
-    path: "/about",
-  },
-  {
     name: "Products",
     path: "/products",
   },
   {
-    name: "Store",
-    path: "/store",
+    name: "Blogs",
+    path: "/blogs",
   },
 ];
 
