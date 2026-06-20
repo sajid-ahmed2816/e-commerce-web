@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, useRef, useEffect, Fragment } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import {
   Row,
@@ -14,8 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import PaymentService from "../api/payment/PaymentService";
 import toastify from "../components/Toastify";
-import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
-
+// import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { loadStripe } from '@stripe/stripe-js';
 import "../App.css";
 import useAuth from "../hooks/useAuth";
 import OrderServices from "../api/order/OrderServices";
@@ -25,6 +25,8 @@ const totalSteps = 3;
 const cardOptions = {
   style: {
     base: {
+      border: "1px solid #dee2e6",
+      borderRadius: "6px",
       padding: 8,
       iconColor: '#c4f0ff',
       color: '#31325F',
@@ -37,26 +39,28 @@ const cardOptions = {
       },
     },
     invalid: {
-      iconColor: '#FFC7EE',
-      color: '#FFC7EE',
+      iconColor: '#fd0f0f',
+      color: '#fd0f0f',
     },
   },
 };
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 function Cart() {
   const { firstName, lastName, email, userId } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [validated, setValidated] = useState(false);
   const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [spinner, setSpinner] = useState(false);
   const progress = (currentStep / totalSteps) * 100;
   const [processing, setProcessing] = useState(false);
   const cartData = useSelector((state) => state.Cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
   const [formData, setFormData] = useState({
     firstName: firstName,
     lastName: lastName,
@@ -72,6 +76,51 @@ function Cart() {
   });
 
   const { pathname } = useLocation();
+
+  const cardNumberRef = useRef(null);
+  const cardExpiryRef = useRef(null);
+  const cardCvcRef = useRef(null);
+  const stripeInstanceRef = useRef(null);
+  const elementsRef = useRef(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initStripe = async () => {
+      try {
+        const stripe = await stripePromise;
+        if (!isMounted) return;
+
+        const elements = stripe.elements();
+
+        // Create each element and mount it
+        const cardNumber = elements.create('cardNumber', cardOptions);
+        const cardExpiry = elements.create('cardExpiry', cardOptions);
+        const cardCvc = elements.create('cardCvc', cardOptions);
+
+        // Mount only if refs are available
+        if (cardNumberRef.current) cardNumber.mount(cardNumberRef.current);
+        if (cardExpiryRef.current) cardExpiry.mount(cardExpiryRef.current);
+        if (cardCvcRef.current) cardCvc.mount(cardCvcRef.current);
+
+        stripeInstanceRef.current = stripe;
+        elementsRef.current = elements;
+      } catch (err) {
+        console.error('Stripe initialization error:', err);
+      }
+    };
+
+    initStripe();
+
+    // Cleanup
+    return () => {
+      isMounted = false;
+      // Only call destroy if it exists and is a function
+      if (elementsRef.current && typeof elementsRef.current.destroy === 'function') {
+        elementsRef.current.destroy();
+      }
+    };
+  }, []);
 
   const handleNavigate = () => {
     navigate("/products");
@@ -117,77 +166,6 @@ function Cart() {
     }
   };
 
-  const handleOnlinePayment = async () => {
-    if (!stripe || !elements) return;
-
-    setProcessing(true);
-
-    const cardElement = elements.getElement("card");
-
-    // Create payment method using Stripe's CardElement
-    const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    });
-
-    if (error) {
-      // Show error message if any
-      console.log(error);
-      toastify.error(error.message);
-      setProcessing(false);
-      return;
-    }
-
-    const obj = {
-      amount: grandTotal ? (grandTotal * 100).toFixed(0) : 0, // Convert amount to cents
-    };
-
-    try {
-      // Call the backend to create a payment intent
-      const result = await PaymentService.onlinePayment(obj);
-
-      if (result.data.status) {
-        toastify.success(result.data.message);
-      }
-
-      const { clientSecret } = result.data;  // Get the client secret for confirming the payment
-
-      // Confirm the payment on the client side with the clientSecret
-      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: stripePaymentMethod.id,
-      });
-
-      if (confirmError) {
-        toastify.error(confirmError.message);
-      } else {
-        // Payment succeeded, show success message
-        toastify.success("Payment Successful!");
-      }
-    } catch (error) {
-      // Handle any other errors
-      toastify.error(error.message || "An error occurred");
-    } finally {
-      setProcessing(false); // Reset processing state
-    }
-  };
-
-  const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-      if (currentStep === 1) {
-        if (Object.keys(formData).length > 1) {
-          setFormData(!formData);
-        }
-      }
-    }
-  };
-
   const handlePlaceOrder = async () => {
     setSpinner(true);
     const data = {
@@ -223,6 +201,77 @@ function Cart() {
       toastify.error(error);
     } finally {
       setSpinner(false);
+      setProcessing(false);
+    }
+  };
+
+  const handleOnlinePayment = async () => {
+    const stripe = stripeInstanceRef.current;
+    const elements = elementsRef.current;
+    if (!stripe || !elements) {
+      toastify.error("Stripe is not initialized.");
+      return;
+    }
+
+    setProcessing(true);
+
+    // Directly create PaymentMethod using raw elements
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: elements.getElement('cardNumber'), // ya direct elements create se
+    });
+
+    if (error) {
+      toastify.error(error.message);
+      setProcessing(false);
+      return;
+    }
+
+    const obj = {
+      amount: grandTotal,
+    };
+
+    try {
+      const result = await PaymentService.onlinePayment(obj);
+      if (!result.status) {
+        toastify.error(result.message || "Payment initiation failed");
+        setProcessing(false);
+        return;
+      }
+      const clientSecret = result.data?.clientSecret;
+      if (!clientSecret) throw new Error("No client secret received.");
+
+      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
+
+      if (confirmError) {
+        toastify.error(confirmError.message);
+      } else {
+        toastify.success("Payment Successful!");
+        await handlePlaceOrder();
+      }
+    } catch (error) {
+      toastify.error(error.message || "An error occurred during payment.");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const nextStep = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      if (currentStep === 1) {
+        if (Object.keys(formData).length > 1) {
+          setFormData(!formData);
+        }
+      }
     }
   };
 
@@ -571,104 +620,127 @@ function Cart() {
                   </Row>
                   <Row>
                     <Col className="col-12">
-                      {currentStep === 2 && (
-                        <Form>
-                          <Row className="g-3">
-                            <Col md="12">
-                              <Form.Group>
-                                <Form.Label>Select Payment Method</Form.Label>
-                              </Form.Group>
-                            </Col>
-                            <Col md="12">
-                              <Form.Group style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                                <Form.Check
-                                  disabled={processing}
-                                  type="radio"
-                                  value="cod"
-                                  label="Cash On Delivery"
-                                  checked={paymentMethod === "cod"}
-                                  name="paymentMethod"
-                                  onChange={(e) =>
-                                    setPaymentMethod(e.target.value)
-                                  }
-                                />
-                                <Form.Check
-                                  type="radio"
-                                  value="online"
-                                  label="Online Payment"
-                                  checked={paymentMethod === "online"}
-                                  name="paymentMethod"
-                                  onChange={(e) => {
-                                    setPaymentMethod(e.target.value)
-                                    if (e.target.value === "online") {
-                                      handleOnlinePayment()
-                                    }
-                                  }}
-                                />
-                              </Form.Group>
-                            </Col>
-                            {paymentMethod === "online" && (
+                      <Form>
+                        <Row className="g-3" style={{ display: currentStep === 2 ? "flex" : "none" }}>
+                          <Col className="col-12">
+                            <Row className="g-3">
                               <Col md="12">
-                                <Row className="g-3">
-                                  <Col md="12">
-                                    <h4 style={{ margin: 0 }}>Enter Card Details</h4>
-                                  </Col>
-                                  <Col md="12">
-                                    <CardNumberElement options={cardOptions} />
-                                  </Col>
-                                  <Col md="8">
-                                    <CardExpiryElement options={cardOptions} />
-                                  </Col>
-                                  <Col md="4">
-                                    <CardCvcElement options={cardOptions} />
-                                  </Col>
-                                </Row>
+                                <Form.Group>
+                                  <Form.Label>Select Payment Method</Form.Label>
+                                </Form.Group>
                               </Col>
-                            )}
-                            {paymentMethod === "cod" ? (
-                              <Fragment>
-                                <Col className="col-6">
-                                  <button
-                                    className="secondary-button"
-                                    onClick={prevStep}
-                                  >
-                                    Previous
-                                  </button>
-                                </Col>
-                                <Col md="6">
-                                  <button
-                                    className="primary-button"
-                                    onClick={handlePlaceOrder}
-                                    disabled={!paymentMethod}
-                                    type={"button"}
-                                  >
-                                    {spinner ? <Spinner animation="border" /> : "Place Order"}
-                                  </button>
-                                </Col>
-                              </Fragment>
-                            ) : (
-                              <Fragment>
-                                <Col md="6">
-                                  <button
-                                    className="secondary-button"
-                                    onClick={prevStep}
-                                  >
-                                    Previous
-                                  </button>
-                                </Col>
-                                <Col md="6">
-                                  <button
-                                    className="primary-button"
-                                    onClick={prevStep}
-                                  >
-                                    Pay Online
-                                  </button>
-                                </Col>
-                              </Fragment>
-                            )}
-                          </Row>
-                        </Form>
-                      )}
+                              <Col md="12">
+                                <Form.Group style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                                  <Form.Check
+                                    type="radio"
+                                    value="cod"
+                                    label="Cash On Delivery"
+                                    checked={paymentMethod === "cod"}
+                                    name="paymentMethod"
+                                    onChange={(e) =>
+                                      setPaymentMethod(e.target.value)
+                                    }
+                                  />
+                                  <Form.Check
+                                    type="radio"
+                                    value="online"
+                                    label="Online Payment"
+                                    checked={paymentMethod === "online"}
+                                    name="paymentMethod"
+                                    onChange={(e) => {
+                                      setPaymentMethod(e.target.value)
+                                    }}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col md="12">
+                            <Row className={`${paymentMethod === "online" ? "row" : "d-none"} g-3`}>
+                              <Col md="12">
+                                <h4 style={{ margin: 0 }}>Enter Card Details</h4>
+                              </Col>
+                              <Col md="12">
+                                <div className="row g-3 justify-content-around">
+                                  <div
+                                    ref={cardNumberRef}
+                                    className="col-12"
+                                    style={{
+                                      border: '1px solid #dee2e6',
+                                      borderRadius: '6px',
+                                      background: 'white',
+                                      width: "calc(100% - 18px)",
+                                    }}
+                                  />
+                                  <div
+                                    ref={cardExpiryRef}
+                                    className="col-6"
+                                    style={{
+                                      border: '1px solid #dee2e6',
+                                      borderRadius: '6px',
+                                      background: 'white',
+                                      width: "calc(50% - 18px)",
+                                    }}
+                                  />
+                                  <div
+                                    ref={cardCvcRef}
+                                    className="col-6"
+                                    style={{
+                                      border: '1px solid #dee2e6',
+                                      borderRadius: '6px',
+                                      background: 'white',
+                                      width: "calc(50% - 18px)",
+                                    }}
+                                  />
+                                </div>
+                              </Col>
+                            </Row>
+                          </Col>
+                          {paymentMethod === "cod" ? (
+                            <Fragment>
+                              <Col className="col-6">
+                                <button
+                                  className="secondary-button"
+                                  onClick={prevStep}
+                                >
+                                  Previous
+                                </button>
+                              </Col>
+                              <Col md="6">
+                                <button
+                                  className="primary-button"
+                                  onClick={handlePlaceOrder}
+                                  disabled={!paymentMethod}
+                                  type={"button"}
+                                >
+                                  {spinner ? <Spinner animation="border" /> : "Place Order"}
+                                </button>
+                              </Col>
+                            </Fragment>
+                          ) : paymentMethod === "online" ? (
+                            <Fragment>
+                              <Col md="6">
+                                <button
+                                  className="secondary-button"
+                                  onClick={prevStep}
+                                >
+                                  Previous
+                                </button>
+                              </Col>
+                              <Col md="6">
+                                <button
+                                  type="button"
+                                  className="primary-button"
+                                  disabled={processing}
+                                  onClick={(e) => handleOnlinePayment(e)}
+                                >
+                                  {processing ? <Spinner animation="border" /> : "Pay Online"}
+                                </button>
+                              </Col>
+                            </Fragment>
+                          ) : null}
+                        </Row>
+                      </Form>
                     </Col>
                   </Row>
                   <Row>

@@ -581,15 +581,6 @@ label {
   background-color: #000000 !important;
 }
 
-.toastify-success {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-}
-
-.Toastify__close-button>svg {
-  fill: #ffffff !important;
-}
-
 .cart-table>* p.item-title {
   width: 229px !important;
   white-space: nowrap !important;
@@ -599,12 +590,6 @@ label {
 
 .login-btn:hover {
   box-shadow: 1px 1px 15px 1px #b9b9b9;
-}
-
-.StripeElement {
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 0px 6px 0px 10px;
 }
 
 #dropdown-basic {
@@ -724,4 +709,11 @@ input[type="number"]::-webkit-inner-spin-button {
 .spinner-border {
   --bs-spinner-width: 1.5rem !important;
   --bs-spinner-height: 1.5rem !important;
+}
+
+.custom-element>* input {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 4px;
+  background: white;
 }

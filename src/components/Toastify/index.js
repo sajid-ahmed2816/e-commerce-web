@@ -3,10 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const toastify = {
   success: (message) => {
-    toast.success(message, {
-      position: "top-right",
-      className: "toastify-success",
-    });
+    toast.success(message);
   },
   warning: (message) => {
     toast.warning(message);
