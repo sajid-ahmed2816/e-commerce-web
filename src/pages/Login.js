@@ -76,9 +76,11 @@ function Login() {
       <div
         style={{
           background: `url(${Images.bgSignup})`,
-          height: "100%",
+          minHeight: "100vh",
           backgroundSize: "cover",
-          backgroundPosition: "center bottom"
+          backgroundPosition: "center bottom",
+          display: "flex",
+          alignItems: "center"
         }}
       >
         <Container style={{ height: "100%" }}>

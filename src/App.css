@@ -11,6 +11,10 @@ body {
   height: 100%;
 }
 
+#root {
+  min-height: 100vh;
+}
+
 .announcement-bar {
   background-color: #1a1a1a;
   height: 40px;
@@ -56,7 +60,7 @@ body {
   z-index: 1001;
   background: #fff;
   box-shadow: 1px 1px 15px #2525253a;
-  z-index: 9999;
+  z-index: 9998;
 }
 
 section.header {
