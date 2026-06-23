@@ -57,10 +57,9 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1001;
   background: #fff;
   box-shadow: 1px 1px 15px #2525253a;
-  z-index: 9998;
+  z-index: 999;
 }
 
 section.header {
@@ -76,39 +75,46 @@ section.header {
   width: 240px;
 }
 
+.header-menu-button {
+  display: flex;
+  padding: 6px 12px;
+  outline: none;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  background: transparent;
+  transition: 0.3s all ease-in-out;
+}
+
+.header-menu-button:hover {
+  background: #000000;
+}
+
+.header-menu-icon {
+  font-size: 12px;
+  color: #000000;
+}
+
+.header-menu-button:hover .header-menu-icon {
+  color: #ffffff;
+}
+
 @media screen and (max-width: 768px) {
-  .header .logo {
-    padding: 10px;
-    font-size: 24px;
-    text-align: left;
-    display: flex;
-    align-self: flex-start;
-    min-width: 125px;
-    margin-top: 6px;
+  .header {
+    display: none;
   }
 
-  .header .navbar {
-    padding-block: 14px !important;
-  }
-
-  .mainLogo {
-    width: 200px;
-    height: 200px;
-  }
-
-  .loginRow {
-    transform: translate(0, 10px) !important;
+  header>* .header-menu-icon {
+    font-size: 16px;
   }
 }
 
-@media screen and (max-width: 443px) {
-  /* .header .logo {
-    display: none;
-  } */
+@media screen and (min-width: 768px) {
+  .header {
+    display: block;
+  }
 
-  .sticky-header .container {
-    display: flex;
-    justify-content: space-between;
+  header {
+    display: none;
   }
 }
 
@@ -169,16 +175,10 @@ hr {
 .navitem .search-btn {
   padding-inline: 10px;
   border-radius: 0px 6px 6px 0px;
-  background: #000000;
-  border-color: #000000;
-  color: #ffffff;
-  transition: all 0.3s ease-in-out;
 }
 
-.search-btn:hover {
-  background: #ffffff;
-  border-color: #adadad;
-  color: #000000
+.search-btn svg path {
+  fill: #909090;
 }
 
 .logo {
@@ -324,64 +324,6 @@ section.instagram .insta-images img {
 
 .footer-part-2 p {
   margin: 0 !important;
-}
-
-@media screen and (max-width: 991px) {
-  .header .container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .header .logo {
-    display: none;
-  }
-
-  .header .navbar {
-    flex-direction: row;
-    justify-content: space-between;
-    padding-block: 20px;
-    width: 100%
-  }
-
-  .header .navbar .navlinks {
-    flex-direction: column;
-    align-items: flex-start;
-    min-width: 230px;
-  }
-
-  .header hr {
-    display: none;
-  }
-
-  ul {
-    padding: 0 !important;
-  }
-
-  .navbar .logo-sm {
-    font-size: 20px;
-  }
-
-  .announcement-bar .greeting p {
-    font-size: 12px;
-  }
-
-  .navbar .navlinks .navitem {
-    display: flex;
-    width: 100%;
-  }
-
-  .navbar .navlinks .navitem input {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 992px) {
-  .navbar .logo-sm {
-    display: none;
-  }
 }
 
 .card-container {
@@ -720,4 +662,18 @@ input[type="number"]::-webkit-inner-spin-button {
   border-radius: 6px;
   padding: 4px;
   background: white;
+}
+
+.modal-content .modal-header {
+  align-items: baseline;
+}
+
+.card-style {
+  transition: 0.3s all ease-in-out;
+}
+
+.card-style:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+  cursor: pointer;
 }

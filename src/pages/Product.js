@@ -5,7 +5,7 @@ import { increment } from "../config/redux/reducer/cartSlice";
 import { Spinner } from "react-bootstrap";
 import Slider from "rc-slider";
 import ProductCard from "../components/ProductCard";
-import ProductService from "../api/product/ProductService";
+import ProductService from "../api/products/ProductService";
 import CategoryService from "../api/category/CategoryService";
 import toastify from "../components/Toastify";
 import "rc-slider/assets/index.css";
@@ -314,7 +314,7 @@ function Product() {
                 ) : (
                   <div className="col-12 text-center py-5">
                     {loading ? (
-                      <Spinner animation="grow" style={{ color: "#0d6efd" }} />
+                      <Spinner animation="grow" style={{ color: "#000000" }} />
                     ) : (
                       <div>
                         <i className="bi bi-box-seam display-1 text-muted"></i>
@@ -326,7 +326,7 @@ function Product() {
 
                 {loading && products.length > 0 && (
                   <div className="col-12 text-center py-3">
-                    <Spinner animation="border" size="sm" style={{ color: "#0d6efd" }} />
+                    <Spinner animation="border" size="sm" style={{ color: "#000000" }} />
                     <span className="ms-2 text-muted">Loading more...</span>
                   </div>
                 )}
