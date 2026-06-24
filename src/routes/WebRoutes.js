@@ -8,6 +8,7 @@ const Product = lazy(() => import("../pages/Product"));
 const Blogs = lazy(() => import("../pages/Blogs"));
 const Blog = lazy(() => import("../pages/Blog"));
 const Cart = lazy(() => import("../pages/Cart"));
+const Orders = lazy(() => import("../pages/Orders"));
 
 const WebRoutes = [
   {
@@ -25,6 +26,10 @@ const WebRoutes = [
   {
     path: "/blogs/blog/:slug",
     component: <Blog />
+  },
+  {
+    path: "/orders",
+    component: <Orders />
   },
   {
     path: "/cart",

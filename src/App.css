@@ -677,3 +677,7 @@ input[type="number"]::-webkit-inner-spin-button {
   transform: translateY(-4px);
   cursor: pointer;
 }
+
+.orders {
+  margin-block: 70px;
+}

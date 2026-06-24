@@ -181,6 +181,7 @@ function Cart() {
       state: formData?.state,
       city: formData?.city,
       zip: formData?.zip,
+      paymentMethod: paymentMethod,
       dc: deliveryCharges,
       total: grandTotal.toFixed(2),
       items: cartData?.map(d => ({

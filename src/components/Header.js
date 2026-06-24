@@ -475,7 +475,7 @@ function Header() {
 
                   <Dropdown.Menu>
                     <Dropdown.Item disabled>{name}</Dropdown.Item>
-                    <Dropdown.Item>Orders</Dropdown.Item>
+                    <Dropdown.Item onClick={() => navigate("/orders")}>Orders</Dropdown.Item>
                     <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
