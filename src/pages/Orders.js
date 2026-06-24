@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useCallback } from 'react';
 import OrderServices from '../api/order/OrderServices';
 import useAuth from '../hooks/useAuth';
 import toastify from '../components/Toastify';
@@ -20,7 +20,7 @@ function Orders() {
     setIsOrderDetailDialogOpen(prev => !prev);
   }
 
-  const getOrders = async () => {
+  const getOrders = useCallback(async () => {
     const params = {
       page: 1,
       limit: 10,
@@ -36,7 +36,7 @@ function Orders() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId]);
 
   const getOrderDetailById = async (id) => {
     setIsDetailLoading(true);
@@ -55,7 +55,7 @@ function Orders() {
 
   useEffect(() => {
     getOrders();
-  }, [userId]);
+  }, [getOrders]);
 
   return (
     <Fragment>
