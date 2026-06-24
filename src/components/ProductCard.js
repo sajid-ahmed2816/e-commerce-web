@@ -31,6 +31,9 @@ function ProductCard(props) {
     setModal(true);
   };
 
+  const finalPrice = data?.discountType === 'percentage'
+    ? data.price * (1 - data.discount / 100)
+    : data.price - data.discount;
 
   return (
     <Fragment>
@@ -90,7 +93,12 @@ function ProductCard(props) {
                 See more
               </button>
             </div>
-            <Card.Text style={{ margin: 0 }}>${Price}</Card.Text>
+            <div className="d-flex align-items-center gap-3">
+              {data?.discount > 0 ? (
+                <Card.Text style={{ margin: 0 }}>${finalPrice}</Card.Text>
+              ) : ""}
+              <Card.Text style={{ margin: 0, textDecoration: data?.discount > 0 ? "line-through" : "none", color: data?.discount > 0 ? "#adadad" : "#000000" }}>${Price}</Card.Text>
+            </div>
             {cartData?.some((p) => p._id === data?._id) ? (
               <div
                 style={{
