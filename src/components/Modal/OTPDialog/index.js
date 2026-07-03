@@ -28,15 +28,14 @@ function OTPDialog(props) {
     try {
       const obj = { email, otp };
       const result = await AuthServices.verifyOtp(obj);
-      console.log("🚀 ~ handleSubmit ~ result:", result)
       if (result.status) {
-        toastify.ToastifyVariants.success(result.message);
+        toastify.success(result.message);
         onHide();
         userLogin(result?.data);
         navigate("/");
       }
     } catch (error) {
-      toastify.ToastifyVariants.success(error);
+      toastify.success(error);
     };
   };
 
@@ -45,10 +44,10 @@ function OTPDialog(props) {
       const obj = { email };
       const result = await AuthServices.resendOtp(obj);
       if (result.status) {
-        toastify.ToastifyVariants.success(result.message);
+        toastify.success(result.message);
       }
     } catch (error) {
-      toastify.ToastifyVariants.success(error);
+      toastify.success(error);
     };
   };
 
