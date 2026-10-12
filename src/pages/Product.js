@@ -1,7 +1,5 @@
 import React, { useEffect, useState, Fragment, useRef, useCallback } from "react";
-import { useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { increment } from "../config/redux/reducer/cartSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import Slider from "rc-slider";
 import ProductCard from "../components/ProductCard";
@@ -12,7 +10,7 @@ import "rc-slider/assets/index.css";
 import "../App.css";
 
 function Product() {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { state } = useLocation();
 
   const [products, setProducts] = useState([]);
@@ -23,7 +21,7 @@ function Product() {
   const [filters, setFilters] = useState({
     category: state?.categoryId || "",
     minPrice: 0,
-    maxPrice: 10000,
+    maxPrice: 0,
   });
 
   const isFetchingNext = useRef(false);
@@ -34,10 +32,8 @@ function Product() {
   const isFetchingRef = useRef(false);
   const requestIdRef = useRef(0);
 
-  const handleAdd = (event, product) => {
-    event.stopPropagation();
-    dispatch(increment(product));
-    toastify.success("Product added to cart");
+  const handleClick = (id) => {
+    navigate(`/products/${id}`)
   };
 
   const fetchProducts = useCallback(
@@ -302,10 +298,10 @@ function Product() {
                           <ProductCard
                             data={x}
                             id={x._id}
-                            src={x.image}
-                            Price={x.price}
+                            src={x.thumbnail}
+                            Price={x?.minVariantPrice != null ? x?.minVariantPrice : "N/A"}
                             CardTitle={x.name}
-                            onClick={(e) => handleAdd(e, x)}
+                            onClick={() => handleClick(x._id)}
                           />
                         </div>
                       </div>

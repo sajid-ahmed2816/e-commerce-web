@@ -1,7 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Carousel, CarouselItem, Placeholder } from "react-bootstrap"
-import { useDispatch } from "react-redux";
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Images } from "../assets";
@@ -11,7 +10,6 @@ import ProductCard from "../components/ProductCard";
 import BannerService from "../api/banners/BannerService";
 import ProductService from "../api/products/ProductService";
 import CategoryService from "../api/category/CategoryService";
-import { increment } from "../config/redux/reducer/cartSlice";
 import "../App.css";
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -132,12 +130,12 @@ function Skeleton() {
 function Home() {
   const [index, setIndex] = useState(0);
   const [data, setData] = useState([]);
+  console.log("🚀 ~ Home ~ data:", data)
   const [featuredData, setFeaturedData] = useState([]);
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSelect = (selectedIndex) => {
@@ -152,10 +150,8 @@ function Home() {
     navigate("/products", { state: { categoryId: id } });
   };
 
-  const handleAdd = (event, product) => {
-    event.stopPropagation();
-    dispatch(increment(product));
-    toastify.success("Product added to cart")
+  const handleClick = (id) => {
+    navigate(`/products/${id}`)
   };
 
   const getData = async () => {
@@ -279,11 +275,11 @@ function Home() {
                   <div className="card-container h-100">
                     <ProductCard
                       data={x}
-                      Price={x.price}
+                      Price={x?.minVariantPrice != null ? x?.minVariantPrice : "N/A"}
                       id={x.id}
                       CardTitle={x.name}
-                      src={x.image}
-                      onClick={(e) => handleAdd(e, x)}
+                      src={x.thumbnail}
+                      onClick={() => handleClick(x._id)}
                     />
                   </div>
                 </SwiperSlide>
@@ -310,11 +306,11 @@ function Home() {
                 <div className="card-container">
                   <ProductCard
                     data={x}
-                    Price={x.price}
+                    Price={x?.minVariantPrice != null ? x?.minVariantPrice : "N/A"}
                     id={x.id}
                     CardTitle={x.name}
-                    src={x.image}
-                    onClick={(e) => handleAdd(e, x)}
+                    src={x.thumbnail}
+                    onClick={() => handleClick(x._id)}
                   />
                 </div>
               </div>

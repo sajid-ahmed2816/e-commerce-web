@@ -64,20 +64,28 @@ function Header() {
     setIsMenuOpen((prev) => !prev);
   };
 
-  const handleDecrease = (id) => {
-    dispatch(decrement(id));    // new action
+  const handleDecrease = (item) => {
+    dispatch(
+      decrement({
+        product: item.product,
+        variant: item.variant,
+      })
+    );
   };
 
-  const handleIncrease = (id) => {
-    // Find the item to pass the full object to add()
-    const item = cartData.find((item) => item._id === id);
-    if (item) {
-      dispatch(increment(item));
-    }
+  const handleIncrease = (item) => {
+    dispatch(
+      increment(item)
+    );
   };
 
-  const handleRemove = (id) => {
-    dispatch(remove(id));
+  const handleRemove = (item) => {
+    dispatch(
+      remove({
+        product: item.product,
+        variant: item.variant,
+      })
+    );
   };
 
   const handleLogout = () => {
@@ -110,7 +118,6 @@ function Header() {
       setIsSearching(false);
     }
   };
-
 
   useEffect(() => {
     getSearchResult(debouncedSearch);
@@ -178,7 +185,7 @@ function Header() {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div
                       className="del-item-btn"
-                      onClick={() => handleRemove(item._id)}
+                      onClick={() => handleRemove(item)}
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </div>
@@ -207,14 +214,14 @@ function Header() {
                     <div className="d-flex gap-4">
                       <button
                         className="decreaseBtn"
-                        onClick={() => handleDecrease(item._id)}
+                        onClick={() => handleDecrease(item)}
                       >
                         -
                       </button>
                       <span>{item.quantity}</span>
                       <button
                         className="IncreaseBtn"
-                        onClick={() => handleIncrease(item._id)}
+                        onClick={() => handleIncrease(item)}
                       >
                         +
                       </button>

@@ -126,20 +126,28 @@ function Cart() {
     navigate("/products");
   };
 
-  const handleDecrease = (id) => {
-    dispatch(decrement(id));    // new action
+  const handleDecrease = (item) => {
+    dispatch(
+      decrement({
+        product: item.product,
+        variant: item.variant,
+      })
+    );
   };
 
-  const handleIncrease = (id) => {
-    // Find the item to pass the full object to add()
-    const item = cartData.find((item) => item._id === id);
-    if (item) {
-      dispatch(increment(item));
-    }
+  const handleIncrease = (item) => {
+    dispatch(
+      increment(item)
+    );
   };
 
-  const handleRemove = (id) => {
-    dispatch(remove(id));
+  const handleRemove = (item) => {
+    dispatch(
+      remove({
+        product: item.product,
+        variant: item.variant,
+      })
+    );
   };
 
   const getTotalPrice = () => {
@@ -184,10 +192,12 @@ function Cart() {
       paymentMethod: paymentMethod,
       dc: deliveryCharges,
       total: grandTotal.toFixed(2),
-      items: cartData?.map(d => ({
-        product: d?._id,
+      items: cartData?.map((d) => ({
+        product: d?.product,
+        variant: d?.variant,
+        sku: d?.sku,
         quantity: d?.quantity,
-        price: d?.price
+        price: d?.price,
       }))
     };
     try {
@@ -808,7 +818,7 @@ function Cart() {
                           <div style={{ display: "flex", alignItems: "center" }}>
                             <div
                               className="del-item-btn"
-                              onClick={() => handleRemove(item._id)}
+                              onClick={() => handleRemove(item)}
                             >
                               <FontAwesomeIcon icon={faTrash} />
                             </div>
@@ -837,14 +847,14 @@ function Cart() {
                             <div className="d-flex gap-4">
                               <button
                                 className="decreaseBtn"
-                                onClick={() => handleDecrease(item._id)}
+                                onClick={() => handleDecrease(item)}
                               >
                                 -
                               </button>
                               <span>{item.quantity}</span>
                               <button
                                 className="IncreaseBtn"
-                                onClick={() => handleIncrease(item._id)}
+                                onClick={() => handleIncrease(item)}
                               >
                                 +
                               </button>

@@ -6,6 +6,11 @@ const ProductService = {
     const result = await get(Routes.getProducts, params);
     return result;
   },
+
+  getProductById: async (id) => {
+    const result = await get(Routes.getProductById(id));
+    return result;
+  },
 };
 
 export default ProductService;

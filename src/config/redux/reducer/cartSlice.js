@@ -7,30 +7,28 @@ const CartSlice = createSlice({
   reducers: {
     increment(state, action) {
       const item = action.payload;
-      const existingItem = state.find((x) => x._id === item._id);
+      const existingItem = state.find((x) => x.product === item.product && x.variant === item.variant);
       if (existingItem) {
-        // If already in cart, just increase quantity
         existingItem.quantity += 1;
       } else {
-        // New item – set quantity to 1
         state.push({ ...item, quantity: 1 });
       }
     },
     decrement(state, action) {
-      const id = action.payload;
-      const existingItem = state.find((x) => x._id === id);
+      const { product, variant } = action.payload;
+      const existingItem = state.find((x) => x.product === product && x.variant === variant);
       if (existingItem) {
         if (existingItem.quantity > 1) {
           existingItem.quantity -= 1;
         } else {
-          // Remove item when quantity becomes 0
           const index = state.indexOf(existingItem);
           state.splice(index, 1);
         }
       }
     },
     remove(state, action) {
-      const index = state.findIndex((x) => x._id === action.payload);
+      const { product, variant } = action.payload;
+      const index = state.findIndex((x) => x.product === product && x.variant === variant);
       if (index > -1) state.splice(index, 1);
     },
     reset(state) {

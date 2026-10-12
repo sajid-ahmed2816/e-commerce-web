@@ -3,20 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import { Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { add } from "../config/redux/reducer/cartSlice";
-import toastify from "../components/Toastify";
 
 function Search() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
   const data = location.state;
 
-  console.log(data);
-
-  const handleAdd = (product) => {
-    dispatch(add(product));
-    toastify.success();
+  const handleClick = (id) => {
+    navigate(`/products/${id}`)
   };
 
   const handleProductDescription = (event, product) => {
@@ -35,11 +29,11 @@ function Search() {
                   <ProductCard
                     data={item}
                     handleNavigate={(e) => handleProductDescription(e, item)}
-                    Price={item.price}
+                    Price={item?.minVariantPrice != null ? item?.minVariantPrice : "N/A"}
                     id={item.id}
                     CardTitle={item.title}
-                    src={item.image}
-                    onClick={() => handleAdd(item)}
+                    src={item.thumbnail}
+                    onClick={() => handleClick(item._id)}
                   />
                 </div>
               </div>

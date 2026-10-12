@@ -1,43 +1,17 @@
-import { Fragment, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Fragment } from "react";
 import Card from "react-bootstrap/Card";
-import MyModal from "./Modal";
 import PrimaryButton from "./PrimaryButton";
-import { decrement, increment } from "../config/redux/reducer/cartSlice";
 
 function ProductCard(props) {
-  let { CardTitle, src, Price, onClick, data } = props;
+  let { CardTitle, src, Price, data, onClick } = props;
 
-  const [modal, setModal] = useState(false);
-
-  const dispatch = useDispatch();
-  const cartData = useSelector((state) => state.Cart);
-
-  const handleDecrease = (id) => {
-    dispatch(decrement(id));    // new action
-  };
-
-  const handleIncrease = (id) => {
-    // Find the item to pass the full object to add()
-    const item = cartData.find((item) => item._id === id);
-    if (item) {
-      dispatch(increment(item));
-    }
-  };
-
-  const handleModal = () => {
-    setModal(true);
-  };
-
-  const finalPrice = data?.discountType === 'percentage'
-    ? data.price * (1 - data.discount / 100)
-    : data.price - data.discount;
+  const finalPrice =
+    data?.discountType === "percentage"
+      ? data.price * (1 - data.discount / 100)
+      : data.price - data.discount;
 
   return (
     <Fragment>
-      <MyModal show={modal} onHide={() => setModal(false)} data={data} />
       <Card>
         <Card.Body>
           <Card.Img
@@ -50,8 +24,10 @@ function ProductCard(props) {
             }}
           />
         </Card.Body>
+
         <Card.Body>
           <div className="d-flex flex-column gap-2">
+
             <Card.Title
               title={CardTitle}
               style={{
@@ -64,6 +40,7 @@ function ProductCard(props) {
             >
               {CardTitle}
             </Card.Title>
+
             <div>
               <p
                 style={{
@@ -79,72 +56,39 @@ function ProductCard(props) {
               >
                 {data?.description}
               </p>
-              <button
-                onClick={handleModal}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#007bff",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                  alignSelf: "flex-start",
-                }}
-              >
-                See more
-              </button>
             </div>
+
             <div className="d-flex align-items-center gap-3">
               {data?.discount > 0 ? (
-                <Card.Text style={{ margin: 0 }}>${finalPrice}</Card.Text>
-              ) : ""}
-              <Card.Text style={{ margin: 0, textDecoration: data?.discount > 0 ? "line-through" : "none", color: data?.discount > 0 ? "#adadad" : "#000000" }}>${Price}</Card.Text>
-            </div>
-            {cartData?.some((p) => p._id === data?._id) ? (
-              <div
+                <Card.Text style={{ margin: 0 }}>
+                  ${finalPrice}
+                </Card.Text>
+              ) : (
+                ""
+              )}
+
+              <Card.Text
                 style={{
-                  padding: "10px 16px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  border: "1px solid #000000",
-                  borderRadius: "6px",
-                  background: "#ffffff",
-                  color: "#000000",
+                  margin: 0,
+                  textDecoration:
+                    data?.discount > 0
+                      ? "line-through"
+                      : "none",
+                  color:
+                    data?.discount > 0
+                      ? "#adadad"
+                      : "#000000",
                 }}
               >
-                <button
-                  style={{
-                    outline: "none",
-                    border: "none",
-                    margin: 0,
-                    padding: 0,
-                    background: "transparent"
-                  }}
-                  onClick={() => handleDecrease(data?._id)}
-                >
-                  -
-                </button>
-                <p className="m-0">{cartData?.find((p) => p._id === data?._id)?.quantity}</p>
-                <button
-                  style={{
-                    outline: "none",
-                    border: "none",
-                    margin: 0,
-                    padding: 0,
-                    background: "transparent"
-                  }}
-                  onClick={() => handleIncrease(data?._id)}
-                >
-                  +
-                </button>
-              </div>
-            ) : (
-              <PrimaryButton
-                onClick={onClick}
-                icon={<FontAwesomeIcon icon={faCartShopping} />}
-                title={"Add To Cart"}
-              />
-            )}
+                {(Price != "N/A") ? `Starting from $${Price}` : Price}
+              </Card.Text>
+            </div>
+
+            <PrimaryButton
+              onClick={onClick}
+              title={"View Product"}
+            />
+
           </div>
         </Card.Body>
       </Card>

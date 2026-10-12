@@ -5,6 +5,7 @@ const stripePromise = loadStripe("pk_test_51RNzw1PrjmeW2KXhD524f791YmlYGn1VzEOxc
 
 const Home = lazy(() => import("../pages/Home"));
 const Product = lazy(() => import("../pages/Product"));
+const ProductDetail = lazy(() => import("../pages/ProductDetail"));
 const Blogs = lazy(() => import("../pages/Blogs"));
 const Blog = lazy(() => import("../pages/Blog"));
 const Cart = lazy(() => import("../pages/Cart"));
@@ -14,6 +15,10 @@ const WebRoutes = [
   {
     path: "/products",
     component: <Product />
+  },
+  {
+    path: "/products/:id",
+    component: <ProductDetail />
   },
   {
     path: "/",

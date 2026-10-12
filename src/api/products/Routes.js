@@ -1,5 +1,6 @@
 const Routes = {
-  getProducts: "/products"
+  getProducts: "/products",
+  getProductById: (id) => `/products/${id}`
 };
 
 export default Routes;
