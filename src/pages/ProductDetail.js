@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { increment } from "../config/redux/reducer/cartSlice";
@@ -7,12 +7,14 @@ import PrimaryButton from "../components/PrimaryButton";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import toastify from "../components/Toastify";
+import { Spinner } from "react-bootstrap";
 
 function ProductDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const [product, setProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [variants, setVariants] = useState([]);
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -23,13 +25,13 @@ function ProductDetail() {
     const fetchProduct = async () => {
       try {
         const response = await ProductService.getProductById(id);
-
         if (response?.status) {
           setProduct(response.data.product);
           setVariants(response.data.variants || []);
           setSelectedAttributes({});
           setSelectedVariant(null);
           setSelectedImageIndex(0);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Failed to fetch product:", error);
@@ -187,158 +189,173 @@ function ProductDetail() {
 
   return (
     <div className="container">
-      {product && (
-        <div className="row py-3">
-          {/* Product / Variant Image Gallery */}
-          <div className="col-md-6 mb-4">
-            <div
-              className="d-flex align-items-center justify-content-center border rounded"
-              style={{
-                minHeight: "400px",
-                padding: "20px",
-              }}
-            >
-              {currentImage ? (
-                <img
-                  src={currentImage}
-                  alt={product.name}
+      {isLoading ? (
+        <div
+          style={{
+            minHeight: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <Spinner animation="grow" style={{ color: "#000000" }} />
+        </div>
+      ) : (
+        <Fragment>
+          {product && (
+            <div className="row py-5">
+              {/* Product / Variant Image Gallery */}
+              <div className="col-md-6">
+                <div
+                  className="d-flex align-items-center justify-content-center border rounded"
                   style={{
-                    width: "100%",
-                    maxWidth: "400px",
-                    height: "400px",
-                    objectFit: "contain",
+                    minHeight: "400px",
+                    padding: "20px",
                   }}
-                />
-              ) : (
-                <p className="text-muted">No image available</p>
-              )}
-            </div>
-
-            {/* Image thumbnails */}
-            {galleryImages.length > 1 && (
-              <div
-                className="d-flex flex-wrap gap-2 mt-3"
-                aria-label="Product images"
-              >
-                {galleryImages.map((image, index) => (
-                  <button
-                    key={`${image}-${index}`}
-                    type="button"
-                    onClick={() => setSelectedImageIndex(index)}
-                    aria-label={`View image ${index + 1}`}
-                    aria-pressed={selectedImageIndex === index}
-                    className="p-1 bg-white rounded"
-                    style={{
-                      width: "75px",
-                      height: "75px",
-                      border:
-                        selectedImageIndex === index
-                          ? "2px solid #212529"
-                          : "1px solid #dee2e6",
-                    }}
-                  >
+                >
+                  {currentImage ? (
                     <img
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
+                      src={currentImage}
+                      alt={product.name}
                       style={{
                         width: "100%",
-                        height: "100%",
+                        maxWidth: "400px",
+                        height: "400px",
                         objectFit: "contain",
                       }}
                     />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {selectedVariant && variantImages.length > 1 && (
-              <p className="text-muted small mt-2">
-                {selectedImageIndex + 1} of {galleryImages.length} images
-              </p>
-            )}
-          </div>
-
-          {/* Product Information */}
-          <div className="col-md-6">
-            <h1>{product.name}</h1>
-
-            <p>{product.description}</p>
-
-            <p>
-              <strong>Category:</strong>{" "}
-              {product.category?.name}
-            </p>
-
-            {/* Price */}
-            <p>
-              <strong>Price:</strong>{" "}
-              {selectedVariant
-                ? `$${selectedVariant.price}`
-                : "Select all options to view price"}
-            </p>
-
-            {/* Attributes */}
-            {Object.entries(attributeOptions).map(
-              ([attributeName, values]) => (
-                <div
-                  key={attributeName}
-                  style={{ marginBottom: "20px" }}
-                >
-                  <h4>{attributeName}</h4>
-
-                  <div className="d-flex flex-wrap gap-2">
-                    {values.map((value) => {
-                      const isSelected =
-                        selectedAttributes[attributeName] === value;
-
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`btn btn-sm ${isSelected ? "btn-dark" : "btn-outline-dark"}`}
-                          style={{
-                            minWidth: attributeName === "Size" ? "40px" : "auto",
-                          }}
-                          aria-pressed={isSelected}
-                          onClick={() =>
-                            handleAttributeChange(attributeName, value)
-                          }
-                        >
-                          {value}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  ) : (
+                    <p className="text-muted">No image available</p>
+                  )}
                 </div>
-              )
-            )}
 
-            {/* Selected Variant Information */}
-            {selectedVariant && (
-              <div style={{ marginTop: "20px" }}>
-                <h4>Selected Variant</h4>
+                {/* Image thumbnails */}
+                {galleryImages.length > 1 && (
+                  <div
+                    className="d-flex flex-wrap gap-2 mt-3"
+                    aria-label="Product images"
+                  >
+                    {galleryImages.map((image, index) => (
+                      <button
+                        key={`${image}-${index}`}
+                        type="button"
+                        onClick={() => setSelectedImageIndex(index)}
+                        aria-label={`View image ${index + 1}`}
+                        aria-pressed={selectedImageIndex === index}
+                        className="p-1 bg-white rounded"
+                        style={{
+                          width: "75px",
+                          height: "75px",
+                          border:
+                            selectedImageIndex === index
+                              ? "2px solid #212529"
+                              : "1px solid #dee2e6",
+                        }}
+                      >
+                        <img
+                          src={image}
+                          alt={`${product.name} ${index + 1}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
 
-                <p>
-                  <strong>SKU:</strong>{" "}
-                  {selectedVariant.sku}
-                </p>
-
-                <p>
-                  <strong>Stock:</strong>{" "}
-                  {selectedVariant.stock > 0
-                    ? `${selectedVariant.stock} available`
-                    : "Out of stock"}
-                </p>
-
-                <PrimaryButton
-                  icon={<FontAwesomeIcon icon={faCartShopping} />}
-                  onClick={handleAddToCart}
-                  title="Add to Cart"
-                />
+                {selectedVariant && variantImages.length > 1 && (
+                  <p className="text-muted small mt-2">
+                    {selectedImageIndex + 1} of {galleryImages.length} images
+                  </p>
+                )}
               </div>
-            )}
-          </div>
-        </div>
+
+              {/* Product Information */}
+              <div className="col-md-6">
+                <h1>{product.name}</h1>
+
+                <p>{product.description}</p>
+
+                <p>
+                  <strong>Category:</strong>{" "}
+                  {product.category?.name}
+                </p>
+
+                {/* Price */}
+                <p>
+                  <strong>Price:</strong>{" "}
+                  {selectedVariant
+                    ? `$${selectedVariant.price}`
+                    : "Select all options to view price"}
+                </p>
+
+                {/* Attributes */}
+                {Object.entries(attributeOptions).map(
+                  ([attributeName, values]) => (
+                    <div
+                      key={attributeName}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      <h4>{attributeName}</h4>
+
+                      <div className="d-flex flex-wrap gap-2">
+                        {values.map((value) => {
+                          const isSelected =
+                            selectedAttributes[attributeName] === value;
+
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              className={`btn btn-sm ${isSelected ? "btn-dark" : "btn-outline-dark"}`}
+                              style={{
+                                minWidth: attributeName === "Size" ? "40px" : "auto",
+                              }}
+                              aria-pressed={isSelected}
+                              onClick={() =>
+                                handleAttributeChange(attributeName, value)
+                              }
+                            >
+                              {value}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )
+                )}
+
+                {/* Selected Variant Information */}
+                {selectedVariant && (
+                  <div style={{ marginTop: "20px" }}>
+                    <h4>Selected Variant</h4>
+
+                    <p>
+                      <strong>SKU:</strong>{" "}
+                      {selectedVariant.sku}
+                    </p>
+
+                    <p>
+                      <strong>Stock:</strong>{" "}
+                      {selectedVariant.stock > 0
+                        ? `${selectedVariant.stock} available`
+                        : "Out of stock"}
+                    </p>
+
+                    <PrimaryButton
+                      icon={<FontAwesomeIcon icon={faCartShopping} />}
+                      onClick={handleAddToCart}
+                      title="Add to Cart"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </Fragment>
       )}
     </div>
   );
