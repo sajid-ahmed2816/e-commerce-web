@@ -80,7 +80,7 @@ function ProductCard(props) {
                       : "#000000",
                 }}
               >
-                {(Price != "N/A") ? `Starting from $${Price}` : Price}
+                {(Price !== "N/A") ? `Starting from $${Price}` : Price}
               </Card.Text>
             </div>
 
