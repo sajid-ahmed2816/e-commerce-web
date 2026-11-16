@@ -1,10 +1,6 @@
 export const ErrorHandler = (error) => {
   if (error?.response) {
-    if (error?.response?.status === 401) {
-      localStorage.clear();
-      window.location.reload();
-    }
-    return error?.response?.data?.message;
+    return error?.response?.data?.message || error?.response?.data?.error || error?.message || "Request failed";
   } else if (error?.request) {
     return error?.message;
   } else {
