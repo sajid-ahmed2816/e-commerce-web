@@ -5,12 +5,14 @@ import AuthServices from "../api/auth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { auth, provider, signInWithPopup } from "../config/firebase";
+import Axios from "../config/axios";
 import useAuth from "../hooks/useAuth";
 import toastify from "../components/Toastify";
 import OTPDialog from "../components/Modal/OTPDialog";
 
 function Login() {
   const [form, setForm] = useState({});
+  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
   const [isOTPDialogOpen, setIsOTPDialogOpen] = useState(false);
   const [email, setEmail] = useState(false);
   const handleOTPDialog = () => {
@@ -41,28 +43,52 @@ function Login() {
   };
 
   const handleGoogleLogin = async () => {
+    setGoogleLoginLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
+      if (!result?.user) {
+        throw new Error("Google sign-in did not return a user.");
+      }
+
       const token = await result.user.getIdToken();
+      if (!token) {
+        throw new Error("Google sign-in did not return an authentication token.");
+      }
+
+      console.info("Google sign-in completed; contacting the backend at:", Axios.defaults.baseURL);
       const response = await AuthServices.google({ token: token });
       if (response?.status) {
-        const name = `${response?.data?.user.firstName} ${response?.data?.user.lastName}`
+        const user = response?.data?.user;
+        if (!response?.data?.token || !user) {
+          throw new Error("The backend returned an incomplete login response.");
+        }
+
+        const name = `${user.firstName || ""} ${user.lastName || ""}`.trim();
         const obj = {
           token: response?.data?.token,
-          firstName: response?.data?.user.firstName,
-          lastName: response?.data?.user.lastName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           name: name,
-          picture: response?.data?.user.picture,
-          email: response?.data?.user.email,
-          _id: response?.data?.user?._id
+          picture: user.picture,
+          email: user.email,
+          _id: user?._id
         }
         userLogin(obj);
         toastify.success("Login Successfully");
         const path = state?.path ? state?.path : "/"
         navigate(path);
+      } else {
+        toastify.error(response?.message || "The backend could not complete Google sign-in.");
       }
     } catch (error) {
-      toastify.error(error);
+      console.error("Google sign-in failed:", error?.code || error?.message || error);
+      toastify.error(
+        typeof error === "string"
+          ? error
+          : error?.message || "Google sign-in failed. Please try again."
+      );
+    } finally {
+      setGoogleLoginLoading(false);
     }
   };
 
@@ -169,6 +195,8 @@ function Login() {
                   <div style={{ width: "100%" }}>
                     <button
                       onClick={handleGoogleLogin}
+                      type="button"
+                      disabled={googleLoginLoading}
                       className="login-btn"
                       style={{
                         display: "flex",
@@ -190,7 +218,7 @@ function Login() {
                         src={Images.google}
                         style={{ width: 20, height: 20, objectFit: "contain" }}
                       />
-                      Continue with Google
+                      {googleLoginLoading ? "Signing in with Google…" : "Continue with Google"}
                     </button>
                   </div>
                   <div

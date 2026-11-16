@@ -1,10 +1,14 @@
 import axios from "axios";
 
-const server = process.env.REACT_APP_API_URL || (
-  process.env.NODE_ENV === "production"
-    ? "https://e-commerce-backend-rho-flame.vercel.app/api"
-    : "http://localhost:3030/api"
+const configuredServer = process.env.REACT_APP_API_URL?.trim();
+const isLocalServer = /^https?:\/\/(localhost|127(?:\.\d{1,3}){3}|\[::1\])(?::\d+)?(?:\/|$)/i.test(
+  configuredServer || ""
 );
+const server = process.env.NODE_ENV === "production"
+  ? configuredServer && !isLocalServer
+    ? configuredServer
+    : "https://e-commerce-backend-rho-flame.vercel.app/api"
+  : configuredServer || "http://localhost:3030/api";
 export const baseUrl = server.replace(/\/api\/?$/, "");
 
 const instance = axios.create({
