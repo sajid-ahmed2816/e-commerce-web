@@ -17,7 +17,6 @@ export const post = async (endPoint, data) => {
     if (result.status === 200 || result.status === 201) return result.data;
     else throw result
   } catch (e) {
-    console.log("🚀 ~ post ~ e:", e)
     throw ErrorHandler(e)
   }
 };

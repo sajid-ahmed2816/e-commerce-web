@@ -50,7 +50,7 @@ function Login() {
         throw new Error("Google sign-in did not return a user.");
       }
 
-      const token = await result.user.getIdToken();
+      const token = await result.user.getIdToken(true);
       if (!token) {
         throw new Error("Google sign-in did not return an authentication token.");
       }

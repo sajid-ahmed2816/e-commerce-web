@@ -41,7 +41,7 @@ function Signup() {
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const token = await result.user.getIdToken();
+      const token = await result.user.getIdToken(true);
       const response = await AuthServices.google({ token: token });
       if (response.status === true) {
         const name = `${response?.data?.user?.firstName} ${response?.data?.user?.lastName}`
